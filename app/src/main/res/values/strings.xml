@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">SkybandECR</string>
+
+    <string-array name="connection_type">
+        <item>type</item>
+        <item>bluetooth</item>
+        <item>wifi</item>
+
+    </string-array>
+
+    <string-array name="com_port">
+        <item>COM Port</item>
+        <item>bluetooth</item>
+        <item>wifi</item>
+
+    </string-array>
+
+    <string-array name="baud_rate">
+        <item>Baud rate</item>
+        <item>bluetooth</item>
+        <item>wifi</item>
+
+    </string-array>
+</resources>
