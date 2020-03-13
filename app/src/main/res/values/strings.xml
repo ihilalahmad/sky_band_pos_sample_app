@@ -2,10 +2,8 @@
     <string name="app_name">SkybandECR</string>
 
     <string-array name="connection_type">
-        <item>type</item>
-        <item>bluetooth</item>
-        <item>wifi</item>
-
+        <item>Socket</item>
+        <item>Serial</item>
     </string-array>
 
     <string-array name="com_port">
@@ -21,4 +19,17 @@
         <item>wifi</item>
 
     </string-array>
+
+    <string-array name="transaction_type">
+        <item>Select Transaction Type</item>
+        <item>purchase</item>
+        <item>Purchase Cashback</item>
+        <item>Settlement</item>
+        <item>Authorisation</item>
+        <item>Advice</item>
+        <item>cash advance</item>
+        <item>Reversal</item>
+
+    </string-array>
+
 </resources>
