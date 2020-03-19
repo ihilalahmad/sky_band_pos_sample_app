@@ -88,13 +88,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Matcher matcher = IP_ADDRESS.matcher(ipAddress);
 
                     if (!matcher.matches()) {
-                        Toast.makeText(getApplicationContext(), "Please enter valid ip Address", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.enter_valid_ip, Toast.LENGTH_LONG).show();
 
                         return;
                     }
 
                     if(portNumber.trim().equals("")){
-                        Toast.makeText(getApplicationContext(), "Please enter port no", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.enter_port_no, Toast.LENGTH_LONG).show();
 
                         return;
                     }
@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         @Override
                         public void run() {
 
-                            logger.debug("");
                             socketHostConnector = new SocketHostConnector(ipAddress, portNo);
 
                             try {
@@ -131,13 +130,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         }
                     }).start();
                 } else
-                    Toast.makeText(getApplicationContext(), "Please select connection type as Socket", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.select_connect_type_as_socket, Toast.LENGTH_LONG).show();
             }
         });
 
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (socketHostConnector != null) {
                     try {
                         socketHostConnector.cleanup();
@@ -145,13 +145,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         e.printStackTrace();
                     }
                     connectButton.setText(R.string.connect);
-                    Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.disconnected, Toast.LENGTH_LONG).show();
                     socketHostConnector = null;
 
                 } else
-                    Toast.makeText(getApplicationContext(), "Socket is already Disconnected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
             }
-
         });
         transactionTypeSpinner.setOnItemSelectedListener(this);
         connectionTypeSpinner.setOnItemSelectedListener(this);
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (selectedItem.equals(getString(R.string.purchase))) {
 
                     if (payAmount.trim().equals("")) {
-                        Toast.makeText(getApplicationContext(), "PayAmount not entered", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.pay_amt_not_entered, Toast.LENGTH_LONG).show();
                         return;
                     }
                     tranType = 0;
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 } else if (selectedItem.equals(getString(R.string.purchase_cashback))) {
 
                     if (payAmount.trim().equals("") || cashBackAmt.trim().equals("")) {
-                        Toast.makeText(getApplicationContext(), "PayAmount or CashBack not Entered", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.payamt_cashback_not_entered, Toast.LENGTH_LONG).show();
 
                         return;
                     }
@@ -206,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     reqData = print + ";" + ecrReferenceNo + "!";
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Transaction Type Not Selected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.transaction_type_not_selected, Toast.LENGTH_LONG).show();
 
                     return;
                 }
@@ -223,9 +222,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                     @Override
                                     public void run() {
                                         if (finalResponse.isEmpty())
-                                            Toast.makeText(getApplicationContext(), "Socket is not connected", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
                                         else
-                                            Toast.makeText(getApplicationContext(), "Response is: " + finalResponse, Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), getString(R.string.response) + finalResponse, Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -250,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }).start();
 
                 } else
-                    Toast.makeText(getApplicationContext(), "Socket is not connected ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
                ///////////////TO DO//////////////////
                 //  Intent intent = new Intent(MainActivity.this, TransactionStatus.class);
                 //startActivity(intent);
