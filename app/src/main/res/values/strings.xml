@@ -1,5 +1,28 @@
 <resources>
     <string name="app_name">SkybandECR</string>
+    <string name="socket">Socket</string>
+    <string name="connect">Connect</string>
+    <string name="connected">Connected</string>
+    <string name="date_pattern">yyMMddHHmmss</string>
+    <string name="purchase">purchase</string>
+    <string name="purchase_cashback">Purchase Cashback</string>
+    <string name="settlement">Settlement</string>
+    <string name="ip_address">Ip Address</string>
+    <string name="port">Port</string>
+    <string name="port_no">port no</string>
+    <string name="com_port">COM Port</string>
+    <string name="baud_rate">Baud Rate</string>
+    <string name="com_port_connections_completed">COM Port Connections Completed</string>
+    <string name="s_n">S/N</string>
+    <string name="ecr_ref">ECR Ref#</string>
+    <string name="app_id">APP ID</string>
+    <string name="get_info">Get Info</string>
+    <string name="transaction">Transaction</string>
+    <string name="type">Type</string>
+    <string name="pay_amt">Pay Amt</string>
+    <string name="cashback">CashBack</string>
+    <string name="ecr_ref_no">Ecr Ref No</string>
+    <string name="print">Print</string>
 
     <string-array name="connection_type">
         <item>Socket</item>

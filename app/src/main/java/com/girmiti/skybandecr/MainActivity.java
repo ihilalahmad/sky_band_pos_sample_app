@@ -3,7 +3,6 @@ package com.girmiti.skybandecr;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,31 +14,36 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.girmiti.skybandecr.sdk.SocketHostConnector;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    SocketHostConnector socketHostConnector;
-    Button transactionButton;
-    Button connectButton;
-    Button disconnectButton;
-    Spinner transactionTypeSpinner;
-    Spinner connectionTypeSpinner;
-    EditText ipEditText;
-    EditText portNoEditText;
-    EditText payAmtEditText;
-    EditText cashBackAmtEditText;
-    CheckBox printCheckBox;
-    TextView responseTextView;
-    EditText ecrRefNoEditText;
+    private Logger logger = Logger.getNewLogger(MainActivity.class.getName());
 
-    String socketConnectionResponse;
-    String ipAddress;
-    int portNo;
+    private SocketHostConnector socketHostConnector;
+    private Button transactionButton;
+    private Button connectButton;
+    private Button disconnectButton;
+    private Spinner transactionTypeSpinner;
+    private Spinner connectionTypeSpinner;
+    private EditText ipEditText;
+    private EditText portNoEditText;
+    private EditText payAmtEditText;
+    private EditText cashBackAmtEditText;
+    private CheckBox printCheckBox;
+    private TextView responseTextView;
+    private EditText ecrRefNoEditText;
+
+    private String socketConnectionResponse;
+    private String ipAddress;
+    private int portNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,20 +73,47 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
 
                 String connectionTyp = connectionTypeSpinner.getSelectedItem().toString();
-                if (connectionTyp.equals("Socket")) {
+
+                if (connectionTyp.equals(getString(R.string.socket))) {
+
                     ipAddress = ipEditText.getText().toString();
+                    String portNumber=portNoEditText.getText().toString();
+
+                     final Pattern IP_ADDRESS
+                            = Pattern.compile(
+                            "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
+                                    + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
+                                    + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
+                                    + "|[1-9][0-9]|[0-9]))");
+                    Matcher matcher = IP_ADDRESS.matcher(ipAddress);
+
+                    if (!matcher.matches()) {
+                        Toast.makeText(getApplicationContext(), "Please enter valid ip Address", Toast.LENGTH_LONG).show();
+
+                        return;
+                    }
+
+                    if(portNumber.trim().equals("")){
+                        Toast.makeText(getApplicationContext(), "Please enter port no", Toast.LENGTH_LONG).show();
+
+                        return;
+                    }
                     portNo = Integer.parseInt(portNoEditText.getText().toString());
+
+
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("msg", "Entered");
+
+                            logger.debug("");
                             socketHostConnector = new SocketHostConnector(ipAddress, portNo);
+
                             try {
                                 socketConnectionResponse = socketHostConnector.createConnection();
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        connectButton.setText("Connected");
+                                        connectButton.setText(R.string.connected);
                                         Toast.makeText(getApplicationContext(), "" + socketConnectionResponse, Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -93,9 +124,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                         Toast.makeText(getApplicationContext(), "" + e, Toast.LENGTH_LONG).show();
                                     }
                                 });
-                                Log.d("error>>", String.valueOf(e));
+                                logger.severe("IOException:Socket Connection",e);
                                 e.printStackTrace();
                             }
+
                         }
                     }).start();
                 } else
@@ -112,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    connectButton.setText("connect");
+                    connectButton.setText(R.string.connect);
                     Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_LONG).show();
                     socketHostConnector = null;
 
@@ -138,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             String reqData;
             String payAmount;
             String cashBackAmt;
-            String ecrReferenceNo = new SimpleDateFormat("yyMMddHHmmss", Locale.getDefault()).format(new Date());
+            String ecrReferenceNo = new SimpleDateFormat(getString(R.string.date_pattern), Locale.getDefault()).format(new Date());
             String finalResponse;
 
             @Override
@@ -150,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     print = 1;
                 }
 
-                if (selectedItem.equals("purchase")) {
+                if (selectedItem.equals(getString(R.string.purchase))) {
 
                     if (payAmount.trim().equals("")) {
                         Toast.makeText(getApplicationContext(), "PayAmount not entered", Toast.LENGTH_LONG).show();
@@ -159,20 +191,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     tranType = 0;
                     reqData = payAmount + ";" + print + ";" + ecrReferenceNo + "!";
 
-                } else if (selectedItem.equals("Purchase Cashback")) {
+                } else if (selectedItem.equals(getString(R.string.purchase_cashback))) {
+
                     if (payAmount.trim().equals("") || cashBackAmt.trim().equals("")) {
                         Toast.makeText(getApplicationContext(), "PayAmount or CashBack not Entered", Toast.LENGTH_LONG).show();
+
                         return;
                     }
                     tranType = 1;
                     reqData = payAmount + ";" + cashBackAmt + print + ";" + ecrReferenceNo + "!";
 
-                } else if (selectedItem.equals("Settlement")) {
+                } else if (selectedItem.equals(getString(R.string.settlement))) {
                     tranType = 10;
                     reqData = print + ";" + ecrReferenceNo + "!";
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Transaction Type Not Selected", Toast.LENGTH_LONG).show();
+
                     return;
                 }
 
@@ -180,10 +215,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.e("msg", "Entered");
+
                             try {
                                 finalResponse = socketHostConnector.tcpIpSend(reqData, tranType, szEcrBuffer);
-                                Log.e("msg", "Got Response");
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -193,12 +228,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                             Toast.makeText(getApplicationContext(), "Response is: " + finalResponse, Toast.LENGTH_LONG).show();
                                     }
                                 });
-                                System.out.println(finalResponse);
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (finalResponse.contains("ü")) {
                                             String[] array = finalResponse.split("ü");
+
                                             for (int i = 0; i < array.length; i++)
                                                 unpack = "" + (array[i]);
                                             responseTextView.setText(unpack);
@@ -208,13 +244,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                     }
                                 });
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                logger.severe("IOException:Sending Data >>>",e);
                             }
                         }
                     }).start();
 
                 } else
                     Toast.makeText(getApplicationContext(), "Socket is not connected ", Toast.LENGTH_LONG).show();
+               ///////////////TO DO//////////////////
                 //  Intent intent = new Intent(MainActivity.this, TransactionStatus.class);
                 //startActivity(intent);
             }
@@ -223,6 +260,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }

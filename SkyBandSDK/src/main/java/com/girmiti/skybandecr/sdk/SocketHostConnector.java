@@ -1,17 +1,17 @@
 package com.girmiti.skybandecr.sdk;
 
-import android.util.Log;
+import com.girmiti.skybandecr.sdk.logger.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.logging.Logger;
 
 public class SocketHostConnector {
 
-    private Logger logger;
+    private Logger logger = Logger.getNewLogger(SocketHostConnector.class.getName());
+
     public Socket socket;
     private OutputStream output;
     private InputStream input;
@@ -31,34 +31,38 @@ public class SocketHostConnector {
 
     public String createConnection() throws IOException {
 
+        logger.debug(getClass() + "::Connecting to IP: " + SERVER_IP+ " and port: " + SERVER_PORT);
         socket = new Socket();
         socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
-        Log.d("msg", "connected");
+        logger.debug(getClass() + "::" + "Created connection");
         return "connected";
     }
 
     public void cleanup() throws IOException {
 
         if (input != null) {
+
             try {
                 input.close();
-                Log.e("msg", "inputStream Closed");
+                logger.debug( "InputStream Closed>>>");
             } catch (IOException e) {
-                logger.severe("IOException: inputStream");
+                logger.severe("IOException: inputStream",e);
             }
         }
 
         if (output != null) {
+
             output.close();
-            Log.e("msg", "OutputStream Closed");
+            logger.debug( "OutputStream Closed>>>");
         }
 
         if (socket != null) {
+
             try {
                 socket.close();
-                Log.e("msg", "Socket successfully Closed");
+                logger.debug("Socket successfully Closed>>>");
             } catch (IOException e) {
-                logger.severe("IOException: socket");
+                logger.severe("IOException: socket",e);
             }
         }
         input = null;
@@ -67,36 +71,42 @@ public class SocketHostConnector {
     }
 
     public String sendPacketToTerminal(byte[] in) throws IOException {
-        System.out.println("Is Connected");
 
         output = socket.getOutputStream();
         input = socket.getInputStream();
         output.write(in);
         output.flush();
-        Log.e("msg", "sent");
+
+        logger.debug("Write Data >>:" + new String(in));
 
         byte[] responseBytes = new byte[15000];
         int noOfBytesRead = input.read(responseBytes);
-        System.out.println("Reading data >>: " + noOfBytesRead);
+
+        logger.debug("Reading data >>: " + noOfBytesRead);
 
         byte[] finalResponse = new byte[noOfBytesRead];
         System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
-
-        for (int i = 0; i < finalResponse.length; i++) {
-            System.out.println("Output" + i + "<<" + finalResponse[i]);
-
-        }
-
         String a = new String(finalResponse);
-        System.out.println("Final Output is<<" + a);
-        System.out.println("Final Output2 is<<" + Arrays.toString(finalResponse));
+
+        logger.debug("Response Data >>: " + a);
+
         return a;
     }
 
     public String tcpIpSend(String reqData, int tranType, String szEcrBuffer) throws IOException {
 
+        logger.debug("Calling Pack >>>");
+
        byte[] packedData= pack(reqData,tranType,szEcrBuffer);
+       String packData=new String(packedData);
+
+       logger.debug("Packed Data:"+ packData);
+       logger.debug("Sending Packed Data to Terminal>>>");
+
        String terminalResponse=sendPacketToTerminal(packedData);
+
+       logger.debug("Terminal Response:"+ terminalResponse);
+
        return terminalResponse;
     }
 
