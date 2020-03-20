@@ -1,4 +1,4 @@
-package com.raj.skybandecr;
+package com.girmiti.skybandecr;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.raj.skybandecr", appContext.getPackageName());
+        assertEquals("com.girmiti.skybandecr", appContext.getPackageName());
     }
 }

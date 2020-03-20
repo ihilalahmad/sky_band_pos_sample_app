@@ -1,4 +1,4 @@
-package com.raj.skybandecr;
+package com.girmiti.skybandecr;
 
 import org.junit.Test;
 
