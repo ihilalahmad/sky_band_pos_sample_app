@@ -1,8 +1,6 @@
 package com.girmiti.skybandecr;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.os.Bundle;
 
@@ -14,6 +12,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
     }
 }

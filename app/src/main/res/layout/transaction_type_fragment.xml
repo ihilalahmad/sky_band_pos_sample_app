@@ -49,7 +49,6 @@
                             android:layout_width="@dimen/dp0"
                             android:layout_height="@dimen/dp50"
                             android:layout_weight="50"
-                            android:background=""
                             android:src="@drawable/ic_group_780" />
 
                         <ImageView
@@ -57,7 +56,6 @@
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp50"
                             android:layout_weight="50"
-                            android:background=""
                             android:src="@drawable/ic_group_782"
                             android:text="Disconnect" />
 

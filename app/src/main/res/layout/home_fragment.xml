@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,9 +13,10 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/dp35"
+        android:textSize="@dimen/dp25"
         android:layout_marginTop="@dimen/dp80"
         android:textColor="@color/white"
         android:gravity="center"
@@ -23,11 +25,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/dp35"
-        android:layout_marginTop="@dimen/dp50"
+        android:textSize="@dimen/dp25"
+        android:layout_marginTop="@dimen/dp35"
         android:textColor="@color/white"
         android:gravity="center"
         android:text="ECR transaction Settings"/>
 </LinearLayout>
 
 </FrameLayout>
+</layout>
