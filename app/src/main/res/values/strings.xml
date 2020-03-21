@@ -18,7 +18,7 @@
     <string name="app_id">APP ID</string>
     <string name="get_info">Get Info</string>
     <string name="transaction">Transaction</string>
-    <string name="type">Type</string>
+    <string name="type">Transaction Type</string>
     <string name="pay_amt">Pay Amt</string>
     <string name="cashback">CashBack</string>
     <string name="ecr_ref_no">Ecr Ref No</string>
@@ -35,7 +35,7 @@
     <string name="response">\"Response is: \"</string>
 
     <string-array name="connection_type">
-        <item>Socket</item>
+        <item>TC/IP</item>
         <item>Serial</item>
     </string-array>
 
@@ -54,7 +54,6 @@
     </string-array>
 
     <string-array name="transaction_type">
-        <item>Select Transaction Type</item>
         <item>purchase</item>
         <item>Purchase Cashback</item>
         <item>Settlement</item>

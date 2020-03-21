@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.transaction.TransactionTypeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp15"
+                        android:text="Transaction Types"
+                        android:textSize="@dimen/dp25"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp15"
+                        android:src="@drawable/ic_group_536" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="100">
+
+                        <ImageView
+                            android:id="@+id/connect_button"
+                            android:layout_width="@dimen/dp0"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="50"
+                            android:background=""
+                            android:src="@drawable/ic_group_780" />
+
+                        <ImageView
+                            android:id="@+id/disconnect_button"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp50"
+                            android:layout_weight="50"
+                            android:background=""
+                            android:src="@drawable/ic_group_782"
+                            android:text="Disconnect" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp35"
+                        android:text="@string/type"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/transaction_spinner"
+                        style="@style/spinner_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp15"
+                        android:entries="@array/transaction_type" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="RRN" />
+
+                    <EditText
+                        android:id="@+id/rrn_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="021365"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Date [DDMMYY]" />
+
+                    <EditText
+                        android:id="@+id/date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="19-03-2020"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Amount" />
+
+                    <EditText
+                        android:id="@+id/pay_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="536.02"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Cash Back" />
+
+                    <EditText
+                        android:id="@+id/cash_back_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="120"
+                        android:padding="@dimen/dp10" />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/transaction_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp50"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/dp15"
+            android:background="@color/blue"
+            android:text="Do Transaction"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</FrameLayout>
