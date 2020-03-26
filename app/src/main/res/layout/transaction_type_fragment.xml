@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.transaction.TransactionTypeFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".fragment.transaction.TransactionTypeFragment">
+        >
 
         <ScrollView
+            android:layout_above="@+id/transaction_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -31,14 +31,15 @@
                         android:textSize="@dimen/dp25"
                         android:textStyle="bold" />
 
-                    <ImageView
+                <!--    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dp15"
-                        android:src="@drawable/ic_group_536" />
+                        android:src="@drawable/ic_group_536" />-->
 
                     <LinearLayout
+                        android:layout_marginTop="@dimen/dp25"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -62,6 +63,24 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/ecr_ref_no_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="ECR Ref No" />
+
+                    <EditText
+                        android:id="@+id/ecr_ref_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint=""
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
@@ -79,45 +98,12 @@
                         android:entries="@array/transaction_type" />
 
                     <TextView
+                        android:id="@+id/pay_amt_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="RRN" />
-
-                    <EditText
-                        android:id="@+id/rrn_no"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp10"
-                        android:background="@drawable/border"
-                        android:hint="021365"
-                        android:padding="@dimen/dp10" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp25"
-                        android:text="Date [DDMMYY]" />
-
-                    <EditText
-                        android:id="@+id/date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp10"
-                        android:background="@drawable/border"
-                        android:hint="19-03-2020"
-                        android:padding="@dimen/dp10" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp25"
-                        android:text="Amount" />
+                        android:text="Pay Amount" />
 
                     <EditText
                         android:id="@+id/pay_amt"
@@ -130,6 +116,7 @@
                         android:padding="@dimen/dp10" />
 
                     <TextView
+                        android:id="@+id/cash_back_amt_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
@@ -143,8 +130,243 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="120"
+                        android:hint="CashBack Amt"
                         android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/refund_amt_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Refund Amt" />
+
+                    <EditText
+                        android:id="@+id/refund_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Refund Amt"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/cash_advance_amt_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Original Approval Code" />
+
+                    <EditText
+                        android:id="@+id/cash_advance_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Approve Code"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/rrn_no_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="RRN" />
+
+                    <EditText
+                        android:id="@+id/rrn_no_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="RRN NO"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/orig_refund_date_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Original Refund Date" />
+
+                    <EditText
+                        android:id="@+id/orig_refund_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="DDMMYYYY"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/auth_amt_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Authorization Amount" />
+
+                    <EditText
+                        android:id="@+id/auth_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Authorization Amount"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/orig_transaction_amt_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Original Approval Code" />
+
+                    <EditText
+                        android:id="@+id/orig_transaction_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Approve Code"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/vendor_id_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="RRN" />
+
+                    <EditText
+                        android:id="@+id/vendor_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Vendor ID"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/vendor_terminal_type_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Vendor Terminal Type" />
+
+                    <EditText
+                        android:id="@+id/vendor_terminal_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Vendor Terminal Type"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/trsm_id_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="TRSM ID" />
+
+                    <EditText
+                        android:id="@+id/trsm_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Vendor Terminal Type"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/vendor_key_index_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Vendor Key Index" />
+
+                    <EditText
+                        android:id="@+id/vendor_key_index"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Vendor Key Index"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/sama_key_index_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Vendor Key Index" />
+
+                    <EditText
+                        android:id="@+id/sama_key_index"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Vendor Key Index"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/orig_transaction_date_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Original Transaction Date" />
+
+                    <EditText
+                        android:id="@+id/orig_transaction_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="DDMMYY"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/orig_approve_code_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="Original Approval Code" />
+
+                    <EditText
+                        android:id="@+id/orig_approve_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:hint="Approve Code"
+                        android:padding="@dimen/dp10" />
+
 
                 </LinearLayout>
             </RelativeLayout>
@@ -153,12 +375,12 @@
         <Button
             android:id="@+id/transaction_btn"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp50"
+            android:layout_height="@dimen/dp70"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/dp15"
             android:background="@color/blue"
             android:text="Do Transaction"
+            android:textSize="@dimen/dp25"
             android:textColor="@color/white" />
     </RelativeLayout>
-
-</FrameLayout>
+</layout>

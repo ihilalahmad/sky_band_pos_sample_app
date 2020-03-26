@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.connectsetting.ConnectSettingFragment">
+<layout>
 
+    <data>
+        <variable
+            name="connectSetting"
+            type="com.girmiti.skybandecr.fragment.connectsetting.ConnectSettingViewModel" />
+    </data>
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".fragment.connectsetting.ConnectSettingFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp35"
+                android:inputType="number"
                 android:layout_marginTop="@dimen/dp15"
                 android:background="@drawable/border"
                 android:hint="@string/port_no"
@@ -87,8 +92,9 @@
             <Button
                 android:id="@+id/connect_button"
                 android:layout_width="@dimen/dp0"
-                android:layout_height="70dp"
+                android:layout_height="@dimen/dp60"
                 android:layout_weight="50"
+                android:textSize="@dimen/dp15"
                 android:textColor="@color/white"
                 android:background="@color/blue"
                 android:text="Connect" />
@@ -96,8 +102,10 @@
             <Button
                 android:id="@+id/disconnect_button"
                 android:layout_width="@dimen/dp0"
-                android:layout_height="70dp"
+                android:layout_height="@dimen/dp60"
+                android:textSize="@dimen/dp15"
                 android:layout_weight="50"
+                android:background="@color/white"
                 android:textColor="@color/blue"
                 android:text="Disconnect" />
 
@@ -106,4 +114,4 @@
 
     </RelativeLayout>
 
-</FrameLayout>
+</layout>

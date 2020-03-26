@@ -13,16 +13,18 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/connection_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dp25"
+        android:clickable="true"
         android:layout_marginTop="@dimen/dp80"
         android:textColor="@color/white"
         android:gravity="center"
         android:text="Connection Settings"/>
 
     <TextView
+        android:id="@+id/ecr_transaction_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dp25"

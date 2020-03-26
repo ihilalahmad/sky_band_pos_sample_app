@@ -54,13 +54,23 @@
     </string-array>
 
     <string-array name="transaction_type">
-        <item>purchase</item>
-        <item>Purchase Cashback</item>
-        <item>Settlement</item>
-        <item>Authorisation</item>
-        <item>Advice</item>
+        <item>Purchase</item>
+        <item>Purchase CashBack</item>
+        <item>Refund</item>
+        <item>Pre Authorisation</item>
+        <item>Pre Auth Completion</item>
+        <item>Pre Auth Extension</item>
+        <item>Pre Auth Void</item>
         <item>cash advance</item>
         <item>Reversal</item>
+        <item>Settlement</item>
+        <item>Parameter Download</item>
+        <item>Set Parameter</item>
+        <item>Get Parameter</item>
+        <item>Set Terminal Language</item>
+        <item>Terminal Status</item>
+        <item>Previous Transaction Details</item>
+        <item>Register</item>
 
     </string-array>
 
