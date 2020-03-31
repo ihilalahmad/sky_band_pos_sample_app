@@ -15,52 +15,46 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
+import com.girmiti.skybandecr.fragment.home.HomeViewModel;
 
 public class BufferResponseFragment extends Fragment {
 
-    private BufferResponseViewModel mViewModel;
+    private BufferResponseViewModel bufferResponseViewModel;
     protected NavController navController;
     private BufferResponseFragmentBinding bufferResponseFragmentBinding;
-
-    private Button okButton;
-
-    public static BufferResponseFragment newInstance() {
-        return new BufferResponseFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        bufferResponseFragmentBinding= DataBindingUtil.inflate(inflater,R.layout.buffer_response_fragment,container,false);
+        bufferResponseViewModel = ViewModelProviders.of(this).get(BufferResponseViewModel.class);
+        bufferResponseFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.buffer_response_fragment, container, false);
+
+        bufferResponseFragmentBinding.bufferSend.setText(HomeViewModel.getReqData());
+
+        String receiveData = HomeViewModel.getParseData();
+        bufferResponseFragmentBinding.bufferReceive.setText(receiveData);
+        HomeViewModel.setParseData("");
+
         setupListeners();
+
         return bufferResponseFragmentBinding.getRoot();
     }
 
     private void setupListeners() {
 
-        navController= Navigation.findNavController(getActivity(),R.id.nav_host_fragment);
-        okButton=bufferResponseFragmentBinding.okButton;
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
-        okButton.setOnClickListener(new View.OnClickListener() {
+        bufferResponseFragmentBinding.okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                navController.navigate(R.id.action_bufferResponseFragment_to_homeFragment);
+                NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
+                navController.navigate(R.id.action_bufferResponseFragment_to_homeFragment, null, options);
 
             }
         });
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(BufferResponseViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue"
+    tools:context=".fragment.setting.SettingFragment">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/connection_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dp25"
+        android:clickable="true"
+        android:layout_marginTop="@dimen/dp80"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="Connection Settings"/>
+
+    <TextView
+        android:id="@+id/ecr_transaction_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dp25"
+        android:layout_marginTop="@dimen/dp35"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="ECR transaction Settings"/>
+</LinearLayout>
+
+</FrameLayout>
+</layout>

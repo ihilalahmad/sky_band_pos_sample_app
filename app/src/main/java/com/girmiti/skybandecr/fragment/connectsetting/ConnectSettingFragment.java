@@ -1,6 +1,5 @@
 package com.girmiti.skybandecr.fragment.connectsetting;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.ConnectSettingFragmentBinding;
 
@@ -29,15 +27,17 @@ public class ConnectSettingFragment extends Fragment {
     private ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     protected NavController navController;
+    private String ipAddress = "";
+    private String portNo = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        getActivity().findViewById(R.id.home_logo).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.home_logo).setVisibility(View.INVISIBLE);
         getActivity().findViewById(R.id.left).setVisibility(View.VISIBLE);
 
-        connectSettingFragmentBinding= DataBindingUtil.inflate(inflater,R.layout.connect_setting_fragment,container,false);
+        connectSettingFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.connect_setting_fragment, container, false);
         connectSettingViewModel = ViewModelProviders.of(this).get(ConnectSettingViewModel.class);
 
         setupListeners();
@@ -47,37 +47,47 @@ public class ConnectSettingFragment extends Fragment {
 
     private void setupListeners() {
 
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
-        navController= Navigation.findNavController(getActivity(),R.id.nav_host_fragment);
-
-       connectSettingFragmentBinding.connectButton.setOnClickListener(new View.OnClickListener() {
+        connectSettingFragmentBinding.connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final ProgressDialog dialog = ProgressDialog.show(getActivity(), "connecting", "Please wait...", true);
+                ipAddress = connectSettingFragmentBinding.ipAddress.getText().toString();
+                portNo = connectSettingFragmentBinding.portNo.getText().toString();
 
+                if (!connectSettingViewModel.validateIp(ipAddress) || !connectSettingViewModel.validatePort(portNo) || ipAddress.equals("") || portNo.equals("")) {
+                    Toast.makeText(getContext(), "IP or Port is not valid", Toast.LENGTH_LONG).show();
+
+                    return;
+                }
+
+                final ProgressDialog dialog = ProgressDialog.show(getActivity(), "connecting", "Please wait...", true);
+                dialog.setCancelable(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
 
-                try {
+                        try {
 
-                    if(connectSettingViewModel.getConnectResponse(connectSettingFragmentBinding.ipAddress.getText().toString(), Integer.parseInt(connectSettingFragmentBinding.portNo.getText().toString()))){
-                        dialog.dismiss();
-                        navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
-                    }
+                            if (connectSettingViewModel.getConnection(ipAddress, Integer.parseInt(portNo))) {
+                                dialog.dismiss();
 
-                } catch (final IOException e) {
-                    e.printStackTrace();
+                                navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                            }
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.dismiss();
-                            Toast.makeText(getContext().getApplicationContext(), "Unable to Connect", Toast.LENGTH_LONG).show();
+
+                        } catch (final IOException e) {
+                            e.printStackTrace();
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    Toast.makeText(getContext().getApplicationContext(), "Unable to Connect", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
-                    });
-                }
                     }
                 }).start();
             }
@@ -86,10 +96,14 @@ public class ConnectSettingFragment extends Fragment {
         connectSettingFragmentBinding.disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
                     connectSettingViewModel.disConnectSocket();
+                    Toast.makeText(getContext().getApplicationContext(), "Soccet Disconnected", Toast.LENGTH_LONG).show();
+
                 } catch (final IOException e) {
                     e.printStackTrace();
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -100,12 +114,4 @@ public class ConnectSettingFragment extends Fragment {
             }
         });
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // TODO: Use the ViewModel
-    }
-
 }
