@@ -48,7 +48,7 @@ public class ThreadPoolExecutorService {
         executor.execute(runnable);
     }
 
-    /*public void runOnUiThread(Runnable runnable) {
+    public void runOnUiThread(Runnable runnable) {
         if (handler == null) {
             handler = new Handler(Looper.getMainLooper());
         }
@@ -57,7 +57,7 @@ public class ThreadPoolExecutorService {
 
     public Handler getHandler() {
         return handler;
-    }*/
+    }
 
     public void remove(Runnable runnable) {
         if (runnable == null) return;
