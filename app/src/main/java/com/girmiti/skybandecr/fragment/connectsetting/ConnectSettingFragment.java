@@ -4,6 +4,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.ConnectSettingFragmentBinding;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
 
@@ -26,9 +28,10 @@ public class ConnectSettingFragment extends Fragment {
 
     private ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
-    protected NavController navController;
+    private NavController navController;
     private String ipAddress = "";
     private String portNo = "";
+    private Logger logger = Logger.getNewLogger(ConnectSettingFragment.class.getName());
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -64,6 +67,7 @@ public class ConnectSettingFragment extends Fragment {
 
                 final ProgressDialog dialog = ProgressDialog.show(getActivity(), "connecting", "Please wait...", true);
                 dialog.setCancelable(true);
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -72,21 +76,21 @@ public class ConnectSettingFragment extends Fragment {
 
                             if (connectSettingViewModel.getConnection(ipAddress, Integer.parseInt(portNo))) {
                                 dialog.dismiss();
-
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                             }
 
-
                         } catch (final IOException e) {
-                            e.printStackTrace();
+                            logger.severe("Exception during connection", e);
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.dismiss();
-                                    Toast.makeText(getContext().getApplicationContext(), "Unable to Connect", Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                        Toast.makeText(getContext(), "Unable to Connect", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
                         }
                     }
                 }).start();

@@ -12,26 +12,30 @@ public class SocketHostConnector {
 
     private Logger logger = Logger.getNewLogger(SocketHostConnector.class.getName());
 
-    public  Socket socket;
+    private static Socket socket;
     private OutputStream output;
     private InputStream input;
-    private String SERVER_IP ;
+    private String SERVER_IP;
     private int SERVER_PORT;
     private static final int SOCKET_TIMEOUT = 9000;
 
-    static {
+   /* static {
         System.loadLibrary("jniWrapper");
+    }*/
+
+    public  Socket getSocket() {
+        return socket;
     }
 
     public SocketHostConnector(String ip, int port) {
 
-        SERVER_IP=ip;
-        SERVER_PORT=port;
+        SERVER_IP = ip;
+        SERVER_PORT = port;
     }
 
     public void createConnection() throws IOException {
 
-        logger.debug(getClass() + "::Connecting to IP: " + SERVER_IP+ " and port: " + SERVER_PORT);
+        logger.debug(getClass() + "::Connecting to IP: " + SERVER_IP + " and port: " + SERVER_PORT);
         socket = new Socket();
         socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
         logger.debug(getClass() + "::" + "Created connection");
@@ -44,16 +48,16 @@ public class SocketHostConnector {
 
             try {
                 input.close();
-                logger.debug( "InputStream Closed>>>");
+                logger.debug("InputStream Closed>>>");
             } catch (IOException e) {
-                logger.severe("IOException: inputStream",e);
+                logger.severe("IOException: inputStream", e);
             }
         }
 
         if (output != null) {
 
             output.close();
-            logger.debug( "OutputStream Closed>>>");
+            logger.debug("OutputStream Closed>>>");
         }
 
         if (socket != null) {
@@ -62,7 +66,7 @@ public class SocketHostConnector {
                 socket.close();
                 logger.debug("Socket successfully Closed>>>");
             } catch (IOException e) {
-                logger.severe("IOException: socket",e);
+                logger.severe("IOException: socket", e);
             }
         }
         input = null;
@@ -77,52 +81,38 @@ public class SocketHostConnector {
 
         output.write(in);
         output.flush();
-
         logger.debug("Write Data >>:" + new String(in));
 
         byte[] responseBytes = new byte[15000];
+
         int noOfBytesRead = input.read(responseBytes);
-
         logger.debug("Reading data >>: " + noOfBytesRead);
-
+        if (noOfBytesRead <= 0) {
+            throw new IOException();
+        }
         byte[] finalResponse = new byte[noOfBytesRead];
         System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
-        String a = new String(finalResponse);
+        String terminalResponse = new String(finalResponse);
 
-        logger.debug("Response Data >>: " + a);
+        logger.debug("Response Data >>: " + terminalResponse);
 
-        return a;
+        return terminalResponse;
     }
 
-    public String tcpIpSend(String reqData, int tranType,String szSignature, String szEcrBuffer) throws IOException {
+   /* public byte[] getPackData(String reqData, int tranType, String szSignature, String szEcrBuffer) {
 
-         String respOutData = " ";
         logger.debug("Calling Pack >>>");
 
-       byte[] packedData= pack(reqData,tranType,szSignature,szEcrBuffer);
-       String packData=new String(packedData);
+        byte[] packedData = pack(reqData, tranType, szSignature, szEcrBuffer);
+        String packData = new String(packedData);
 
-       logger.debug("Packed Data:"+ packData);
-       logger.debug("Sending Packed Data to Terminal>>>");
+        logger.debug("Packed Data:" + packData);
+        logger.debug("Sending Packed Data to Terminal>>>");
 
-       String terminalResponse = sendPacketToTerminal(packedData);
-        logger.debug("Terminal Response:"+ terminalResponse);
-
-       /* byte[] parseData2= parse(terminalResponse,respOutData);
-        String parsedData=new String(parseData2);
-        logger.debug("parsed Data:"+ parsedData);*/
-
-       return terminalResponse;
-
-    }
-
-  /*  public String[] parse(String terminalResponse) {
-
-        String[] splittedArray = terminalResponse.split("�");
-
-        return splittedArray;
+        return packedData;
     }*/
 
-    public native byte[] pack(String inputReqData, int transactionType,String szSignature, String szEcrBuffer);
-  //  public native byte[] parse(String respData , String respOutData);
+
+ //   public native byte[] pack(String inputReqData, int transactionType, String szSignature, String szEcrBuffer);
+    //  public native byte[] parse(String respData , String respOutData);
 }

@@ -18,12 +18,14 @@ import android.view.ViewGroup;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.TransactionSettingFragmentBinding;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 public class TransactionSettingFragment extends Fragment {
 
     private TransactionSettingViewModel transactionSettingViewModel;
     private TransactionSettingFragmentBinding transactionSettingFragmentBinding;
     private NavController navController;
+    private Logger logger = Logger.getNewLogger(TransactionSettingFragment.class.getName());
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -38,6 +40,18 @@ public class TransactionSettingFragment extends Fragment {
     }
 
     private void setupListeners() {
+
+        if( TransactionSettingViewModel.getEcr() == 1) {
+            transactionSettingFragmentBinding.ecrRefNo.setChecked(true);
+        } else {
+            transactionSettingFragmentBinding.ecrRefNo.setChecked(false);
+        }
+
+        if( TransactionSettingViewModel.getPrint() == 1) {
+            transactionSettingFragmentBinding.terminalPrinter.setChecked(true);
+        } else {
+            transactionSettingFragmentBinding.terminalPrinter.setChecked(false);
+        }
 
         navController= Navigation.findNavController(getActivity(),R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();

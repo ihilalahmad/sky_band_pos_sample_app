@@ -32,13 +32,6 @@
                         android:textSize="@dimen/dp25"
                         android:textStyle="bold" />
 
-                    <!--    <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/dp15"
-                            android:src="@drawable/ic_group_536" />-->
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -78,8 +71,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="number"
                         android:hint=""
+                        android:inputType="number"
+                        android:maxLength="14"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -92,12 +86,14 @@
 
                     <Spinner
                         android:id="@+id/transaction_spinner"
-                        style="@style/spinner_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp15"
-                        android:entries="@array/transaction_type" />
+                        android:entries="@array/transaction_type"
+                        android:overlapAnchor="false"
+                        android:prompt="@string/transaction_type_prompt"
+                        android:spinnerMode="dropdown" />
 
                     <TextView
                         android:id="@+id/pay_amt_tv"
@@ -114,8 +110,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="number"
                         android:hint="536.02"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -133,8 +130,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="number"
                         android:hint="CashBack Amt"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -152,8 +150,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="number"
                         android:hint="Refund Amt"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -162,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Original Approval Code" />
+                        android:text="Cash Advance Amount" />
 
                     <EditText
                         android:id="@+id/cash_advance_amt"
@@ -171,8 +170,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="number"
-                        android:hint="Approve Code"
+                        android:hint="Cash Advance"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -189,9 +189,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
-                        android:inputType="number"
                         android:background="@drawable/border"
                         android:hint="RRN NO"
+                        android:inputType="number"
+                        android:maxLength="14"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -209,8 +210,8 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="date"
                         android:hint="DDMMYYYY"
+                        android:inputType="date"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -227,9 +228,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
-                        android:inputType="number"
                         android:background="@drawable/border"
                         android:hint="Authorization Amount"
+                        android:maxLength="12"
+                        android:inputType="numberDecimal"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -238,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Original Approval Code" />
+                        android:text="Original Transaction Amt" />
 
                     <EditText
                         android:id="@+id/orig_transaction_amt"
@@ -247,8 +249,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Approve Code"
-                        android:inputType="number"
+                        android:hint="Transaction Amt"
+                        android:maxLength="12"
+                        android:inputType="numberDecimal"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -257,7 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="RRN" />
+                        android:text="Vendor Id" />
 
                     <EditText
                         android:id="@+id/vendor_id"
@@ -303,7 +306,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint=""
+                        android:hint="TRSM ID"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -330,7 +333,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Vendor Key Index" />
+                        android:text="Sama Key Index" />
 
                     <EditText
                         android:id="@+id/sama_key_index"
@@ -339,7 +342,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Vendor Key Index"
+                        android:hint="Sama Key Index"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -357,8 +360,8 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:inputType="date"
                         android:hint="DDMMYY"
+                        android:inputType="date"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -375,9 +378,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
-                        android:inputType="number"
                         android:background="@drawable/border"
                         android:hint="Approve Code"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
                     <CheckBox
@@ -387,7 +391,6 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
                         android:text="Full Completion" />
-
 
                 </LinearLayout>
             </RelativeLayout>

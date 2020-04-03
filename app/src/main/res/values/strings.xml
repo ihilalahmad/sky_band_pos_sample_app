@@ -39,22 +39,10 @@
         <item>Serial</item>
     </string-array>
 
-    <string-array name="com_port">
-        <item>COM Port</item>
-        <item>bluetooth</item>
-        <item>wifi</item>
-
-    </string-array>
-
-    <string-array name="baud_rate">
-        <item>Baud rate</item>
-        <item>bluetooth</item>
-        <item>wifi</item>
-
-    </string-array>
-
+    <string name="transaction_type_prompt">Transaction type</string>
     <string-array name="transaction_type">
-        <item>Select Transaction</item>
+
+        <item>Register</item>
         <item>Purchase</item>
         <item>Purchase CashBack</item>
         <item>Refund</item>
@@ -64,14 +52,14 @@
         <item>Pre Auth Void</item>
         <item>Cash advance</item>
         <item>Reversal</item>
-        <item>Settlement</item>
+        <item>Reconciliation</item>
         <!--<item>Parameter Download</item>
         <item>Set Parameter</item>
         <item>Get Parameter</item>
         <item>Set Terminal Language</item>
         <item>Terminal Status</item>
         <item>Previous Transaction Details</item>-->
-        <item>Register</item>
+
 
     </string-array>
 

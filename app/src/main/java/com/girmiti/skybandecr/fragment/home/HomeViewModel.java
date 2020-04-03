@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel;
 import com.girmiti.skybandecr.databinding.HomeFragmentBinding;
 import com.girmiti.skybandecr.fragment.connectsetting.ConnectSettingViewModel;
 import com.girmiti.skybandecr.fragment.transactionsetting.TransactionSettingViewModel;
+import com.girmiti.skybandecr.sdk.CLibraryLoad;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -18,7 +20,7 @@ import java.util.Locale;
 public class HomeViewModel extends ViewModel {
 
     private HomeFragmentBinding homeFragmentBinding;
-
+    private Logger logger = Logger.getNewLogger(HomeViewModel.class.getName());
     private static String reqData = "";
     private int transactionType;
     private String szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -112,45 +114,58 @@ public class HomeViewModel extends ViewModel {
 
             homeFragmentBinding.payAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.payAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.payAmt.setText("");
+
+
 
         } else if (selectedItem.equals("Purchase CashBack")) {
 
             homeFragmentBinding.payAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.payAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.payAmt.setText("");
 
             homeFragmentBinding.cashBackAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.cashBackAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.cashBackAmt.setText("");
 
 
         } else if (selectedItem.equals("Refund")) {
 
             homeFragmentBinding.refundAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.refundAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.refundAmt.setText("");
 
             homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
             homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
+            homeFragmentBinding.rrnNoEditText.setText("");
 
             homeFragmentBinding.origRefundDate.setVisibility(View.VISIBLE);
             homeFragmentBinding.origRefundDateTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origRefundDate.setText("");
 
         } else if (selectedItem.equals("Pre Authorisation")) {
 
             homeFragmentBinding.authAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.authAmt.setText("");
 
         } else if (selectedItem.equals("Pre Auth Completion")) {
 
             homeFragmentBinding.authAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.authAmt.setText("");
 
             homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
             homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
+            homeFragmentBinding.rrnNoEditText.setText("");
 
             homeFragmentBinding.origTransactionDate.setVisibility(View.VISIBLE);
             homeFragmentBinding.origTransactionDateTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origTransactionDate.setText("");
 
             homeFragmentBinding.origApproveCode.setVisibility(View.VISIBLE);
             homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origApproveCode.setText("");
 
             homeFragmentBinding.typeOfCompletion.setVisibility(View.VISIBLE);
 
@@ -158,40 +173,49 @@ public class HomeViewModel extends ViewModel {
 
             homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
             homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
+            homeFragmentBinding.rrnNoEditText.setText("");
 
             homeFragmentBinding.origTransactionDate.setVisibility(View.VISIBLE);
             homeFragmentBinding.origTransactionDateTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origTransactionDate.setText("");
 
             homeFragmentBinding.origApproveCode.setVisibility(View.VISIBLE);
             homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origApproveCode.setText("");
 
         } else if (selectedItem.equals("Pre Auth Void")) {
 
             homeFragmentBinding.origTransactionAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.origTransactionAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origTransactionAmt.setText("");
 
             homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
             homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
+            homeFragmentBinding.rrnNoEditText.setText("");
 
             homeFragmentBinding.origTransactionDate.setVisibility(View.VISIBLE);
             homeFragmentBinding.origTransactionDateTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origTransactionDate.setText("");
 
             homeFragmentBinding.origApproveCode.setVisibility(View.VISIBLE);
             homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.origApproveCode.setText("");
 
-            homeFragmentBinding.typeOfCompletion.setVisibility(View.VISIBLE);
+        //    homeFragmentBinding.typeOfCompletion.setVisibility(View.VISIBLE);
 
         } else if (selectedItem.equals("Cash advance")) {
 
             homeFragmentBinding.cashAdvanceAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.cashBackAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.cashAdvanceAmt.setText("");
 
         } else if (selectedItem.equals("Reversal")) {
 
             homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
             homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
+            homeFragmentBinding.rrnNoEditText.setText("");
 
-        } else if (selectedItem.equals("Settlement")) {
+        } else if (selectedItem.equals("Reconciliation")) {
 
         } else if (selectedItem.equals("Parameter Download")) {
 
@@ -268,21 +292,22 @@ public class HomeViewModel extends ViewModel {
 
         } else if (selectedItem.equals("Pre Auth Extension")) {
             transactionType = 5;
-            reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode + ";" + print + ";" + ecrReferenceNo + "!";
+            reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText()+ ";" + print + ";" + ecrReferenceNo + "!";
 
         } else if (selectedItem.equals("Pre Auth Void")) {
             transactionType = 6;
-            reqData = date + ";" + homeFragmentBinding.origTransactionAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
+            reqData = date + ";" + homeFragmentBinding.origTransactionAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+         //   reqData = date + ";" + homeFragmentBinding.origTransactionAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
 
         } else if (selectedItem.equals("cash advance")) {
             transactionType = 8;
-            reqData = date + ";" + homeFragmentBinding.cashAdvanceAmt.getText() + print + ";" + ecrReferenceNo + "!";
+            reqData = date + ";" + homeFragmentBinding.cashAdvanceAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
 
         } else if (selectedItem.equals("Reversal")) {
             transactionType = 9;
             reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + ecrReferenceNo + "!";
 
-        } else if (selectedItem.equals("Settlement")) {
+        } else if (selectedItem.equals("Reconciliation")) {
             transactionType = 10;
             reqData = date + ";" + print + ";" + ecrReferenceNo + "!";
 
@@ -317,19 +342,25 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
-    public String sendData() throws IOException, NoSuchAlgorithmException {
+    public byte[] packData() throws NoSuchAlgorithmException {
 
         String combinedValue = "";
-
         if (transactionType != 17 && !terminalNumber.equals("")) {
             combinedValue = ecrReferenceNo + terminalNumber;
             szSignature = convertSHA(combinedValue);
         }
 
-        System.out.println("Signature: " + "Transactiontype" + transactionType + "" + "Szsignature" + szSignature);
-        String terminalResponse = ConnectSettingViewModel.getSocketHostConnector().tcpIpSend(reqData, transactionType, szSignature, szEcrBuffer);
+        logger.debug(":: Request data: " + reqData + ":: Transactiontype: " + transactionType  + ":: Szsignature: " + szSignature);
+        CLibraryLoad cLibraryLoad=new CLibraryLoad();
+        return cLibraryLoad.getPackData(reqData, transactionType, szSignature, szEcrBuffer);
+    }
 
-        //String terminalResponse= "�A0�00�MT280L3LBSPFBJ170�";
+
+    public String getTerminalResponse(byte[] packData) throws IOException {
+
+        logger.info("Sending Pack data");
+        String terminalResponse = ConnectSettingViewModel.getSocketHostConnector().sendPacketToTerminal(packData);
+
         if (transactionType == 17) {
 
             String[] splittedArray = terminalResponse.split("�");
@@ -344,6 +375,7 @@ public class HomeViewModel extends ViewModel {
         System.out.println("Terminal NumBer>>" + terminalNumber);
         return terminalResponse;
     }
+
 
     private String convertSHA(String combinedValue) throws NoSuchAlgorithmException {
 
@@ -361,71 +393,54 @@ public class HomeViewModel extends ViewModel {
         return resultSHA;
     }
 
+
     public boolean validateData(HomeFragmentBinding homeFragmentBinding) {
 
         System.out.println("Transaction type>>" + transactionType);
         System.out.println("Transaction type>>" + homeFragmentBinding.payAmt.getText().toString());
 
         if ((transactionType == 0) && homeFragmentBinding.payAmt.getText().toString().equals("")) {
-
             return false;
 
         } else if (transactionType == 1) {
-            if (homeFragmentBinding.payAmt.getText().toString().equals("") || homeFragmentBinding.cashBackAmt.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.payAmt.getText().toString().equals("") || homeFragmentBinding.cashBackAmt.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
 
         } else if (transactionType == 2) {
-            if (homeFragmentBinding.refundAmt.getText().toString().equals("") || homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origRefundDate.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.refundAmt.getText().toString().equals("") || homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origRefundDate.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
         } else if (transactionType == 3) {
-            if (homeFragmentBinding.authAmt.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.authAmt.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
+
         } else if (transactionType == 4) {
-            if (homeFragmentBinding.authAmt.getText().toString().equals("") || homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origTransactionDate.getText().toString().equals("") || homeFragmentBinding.origApproveCode.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.authAmt.getText().toString().equals("") || homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origTransactionDate.getText().toString().equals("") || homeFragmentBinding.origApproveCode.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
 
         } else if (transactionType == 5) {
-            if (homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origTransactionDate.getText().toString().equals("") || homeFragmentBinding.origApproveCode.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origTransactionDate.getText().toString().equals("") || homeFragmentBinding.origApproveCode.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
 
         } else if (transactionType == 6) {
-            if (homeFragmentBinding.origTransactionAmt.getText().toString().equals("") || homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origTransactionDate.getText().toString().equals("") || homeFragmentBinding.origApproveCode.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.origTransactionAmt.getText().toString().equals("") || homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || homeFragmentBinding.origTransactionDate.getText().toString().equals("") || homeFragmentBinding.origApproveCode.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
 
         } else if (transactionType == 8) {
-            if (homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
 
         } else if (transactionType == 9) {
-            if (homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || ecrReferenceNo.equals("")) {
-
+            if (homeFragmentBinding.rrnNoEditText.getText().toString().equals("") || ecrReferenceNo.equals(""))
                 return false;
-            }
 
-        } else if (transactionType == 10 && ecrReferenceNo.equals("")) {
-
+        } else if (transactionType == 10 && ecrReferenceNo.equals(""))
             return false;
-
-        }
 
         return true;
     }
 
     public void parse(String terminalResponse) {
+
         parseData = "";
         String[] splittedArray = terminalResponse.split("�");
 

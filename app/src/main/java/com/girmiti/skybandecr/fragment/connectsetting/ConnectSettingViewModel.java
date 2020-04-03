@@ -1,12 +1,9 @@
 package com.girmiti.skybandecr.fragment.connectsetting;
 
-import android.widget.EditText;
-import android.widget.Toast;
-
 import androidx.lifecycle.ViewModel;
 
-import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.sdk.SocketHostConnector;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -15,6 +12,7 @@ import java.util.regex.Pattern;
 public class ConnectSettingViewModel extends ViewModel {
 
     private static SocketHostConnector socketHostConnector;
+    private Logger logger = Logger.getNewLogger(ConnectSettingViewModel.class.getName());
 
     public static SocketHostConnector getSocketHostConnector() {
         return socketHostConnector;
@@ -30,9 +28,10 @@ public class ConnectSettingViewModel extends ViewModel {
 
     public void disConnectSocket() throws IOException {
 
-        if ( socketHostConnector !=null && socketHostConnector.socket.isConnected() ) {
+        if ( socketHostConnector !=null && socketHostConnector.getSocket().isConnected() ) {
 
             socketHostConnector.cleanup();
+            socketHostConnector = null;
         }
     }
 
@@ -53,17 +52,10 @@ public class ConnectSettingViewModel extends ViewModel {
 
         Pattern pattern;
         Matcher matcher;
-        String PORT="^([0-9]+)$";
+        String PORT="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
         pattern = Pattern.compile(PORT);
         matcher = pattern.matcher(portNo);
 
         return matcher.matches();
     }
-
-  /*  public String[] parse(String terminalResponse) {
-
-       String[] parsedData = socketHostConnector.parse(terminalResponse);
-
-       return parsedData;
-    }*/
 }

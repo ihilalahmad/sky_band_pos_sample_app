@@ -19,12 +19,14 @@ import android.view.ViewGroup;
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
 import com.girmiti.skybandecr.fragment.home.HomeViewModel;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 public class BufferResponseFragment extends Fragment {
 
     private BufferResponseViewModel bufferResponseViewModel;
-    protected NavController navController;
+    private NavController navController;
     private BufferResponseFragmentBinding bufferResponseFragmentBinding;
+    private Logger logger = Logger.getNewLogger(BufferResponseFragment.class.getName());
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -53,8 +55,7 @@ public class BufferResponseFragment extends Fragment {
             public void onClick(View v) {
                 NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
                 navController.navigate(R.id.action_bufferResponseFragment_to_homeFragment, null, options);
-
-            }
-        });
+     }
+});
     }
 }

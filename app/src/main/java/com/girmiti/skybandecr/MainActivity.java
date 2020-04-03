@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.home_logo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //         NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.settingFragment, true).build();
-                //       Navigation.findNavController(findViewById(R.id.nav_host_fragment)).navigate(R.id.settingFragment,null,options);
                 Navigation.findNavController(findViewById(R.id.nav_host_fragment)).navigate(R.id.settingFragment);
             }
         });

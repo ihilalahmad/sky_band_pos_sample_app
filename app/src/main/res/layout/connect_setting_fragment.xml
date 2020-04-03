@@ -57,6 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp35"
                 android:layout_marginTop="@dimen/dp15"
+                android:inputType="number|numberDecimal"
+                android:digits="0123456789."
                 android:background="@drawable/border"
                 android:hint="@string/ip_address"
                 android:padding="@dimen/dp10" />

@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.ConnectedFragmentBinding;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 public class ConnectedFragment extends Fragment {
 
     private ConnectedFragmentBinding connectedFragmentBinding;
     private NavController navController;
+    private Logger logger = Logger.getNewLogger(ConnectedFragment.class.getName());
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
