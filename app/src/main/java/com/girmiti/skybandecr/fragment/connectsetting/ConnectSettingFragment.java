@@ -4,7 +4,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,13 +19,14 @@ import android.widget.Toast;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.ConnectSettingFragmentBinding;
+import com.girmiti.skybandecr.fragment.home.HomeViewModel;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
 
 public class ConnectSettingFragment extends Fragment {
 
-    private ConnectSettingViewModel connectSettingViewModel;
+    public static ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     private NavController navController;
     private String ipAddress = "";
@@ -103,6 +103,7 @@ public class ConnectSettingFragment extends Fragment {
 
                 try {
                     connectSettingViewModel.disConnectSocket();
+                    HomeViewModel.setCashRegisterNo("");
                     Toast.makeText(getContext().getApplicationContext(), "Soccet Disconnected", Toast.LENGTH_LONG).show();
 
                 } catch (final IOException e) {

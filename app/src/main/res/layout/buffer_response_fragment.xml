@@ -62,10 +62,11 @@
         <Button
             android:id="@+id/ok_button"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp80"
+            android:layout_height="@dimen/dp60"
             android:layout_alignParentBottom="true"
             android:text="OK"
             android:textSize="@dimen/dp35"
+            android:gravity="center"
             android:textColor="@color/white"
             android:background="@color/blue"
             />

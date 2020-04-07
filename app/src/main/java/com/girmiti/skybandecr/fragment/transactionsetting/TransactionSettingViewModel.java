@@ -23,12 +23,15 @@ public class TransactionSettingViewModel extends ViewModel {
 
         if (transactionSettingFragmentBinding.ecrRefNo.isChecked()) {
             ecr = 1;
-        } else
+        } else {
             ecr = 0;
+        }
 
         if(transactionSettingFragmentBinding.terminalPrinter.isChecked()){
             print = 1;
-        } else
+        } else {
             print = 0;
+        }
+
     }
 }

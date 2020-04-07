@@ -2,6 +2,7 @@ package com.girmiti.skybandecr.fragment.connectsetting;
 
 import androidx.lifecycle.ViewModel;
 
+import com.girmiti.skybandecr.fragment.home.HomeViewModel;
 import com.girmiti.skybandecr.sdk.SocketHostConnector;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 

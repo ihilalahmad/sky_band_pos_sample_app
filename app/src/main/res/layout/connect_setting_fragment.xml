@@ -57,8 +57,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp35"
                 android:layout_marginTop="@dimen/dp15"
-                android:inputType="number|numberDecimal"
+                android:inputType="number"
                 android:digits="0123456789."
+                android:imeOptions="actionNext"
+                android:maxLines="1"
                 android:background="@drawable/border"
                 android:hint="@string/ip_address"
                 android:padding="@dimen/dp10" />
@@ -77,6 +79,8 @@
                 android:layout_marginHorizontal="@dimen/dp35"
                 android:inputType="number"
                 android:layout_marginTop="@dimen/dp15"
+                android:imeOptions="actionNext"
+                android:maxLength="5"
                 android:background="@drawable/border"
                 android:hint="@string/port_no"
                 android:padding="@dimen/dp10" />

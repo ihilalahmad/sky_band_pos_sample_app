@@ -26,12 +26,13 @@ public class StartTransaction implements Runnable {
         try {
             byte[] packData = homeViewModel.packData();
             String terminalResponse = homeViewModel.getTerminalResponse(packData);
+            logger.debug("Terminal response>>> " + terminalResponse);
             homeViewModel.parse(terminalResponse);
-            logger.info("Got Response");
+            logger.info("Response parsed");
             transactionListener.onSuccess();
         } catch (final IOException | NoSuchAlgorithmException e) {
             logger.severe("Exception on transaction", e);
-            transactionListener.onError(e.getMessage());
+            transactionListener.onError(e);
         }
     }
 }
