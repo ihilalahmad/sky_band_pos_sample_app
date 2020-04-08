@@ -31,7 +31,7 @@ public class BufferResponseViewModel extends ViewModel {
     private static final String VERSION = "Version:";
 
     public String purchase(String[] response) {
-        return RESPONSE_CODE + " " + response[  2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
+        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
                 + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
                 + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
                 + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"

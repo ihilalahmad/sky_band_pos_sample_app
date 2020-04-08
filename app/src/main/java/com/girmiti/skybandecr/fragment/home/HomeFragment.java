@@ -42,16 +42,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private Activity activity;
     private ThreadPoolExecutorService threadPoolExecutorService = null;
     private static int position;
-    private String currencySymbol = "$";
-    private int divider = 100;
-    private String amountFormat = "%.2f";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false);
-
 
         getActivity().findViewById(R.id.home_logo).setVisibility(View.VISIBLE);
         getActivity().findViewById(R.id.left).setVisibility(View.INVISIBLE);
@@ -129,14 +125,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                     if (selectedItem.equals(getString(R.string.register)) || selectedItem.equals(getString(R.string.start_session)) ||  selectedItem.equals(getString(R.string.end_session)) ) {
 
                                         if (selectedItem.equals(getString(R.string.register))) {
-                                            if(homeViewModel.getTerminalID().equals("")){
+                                            if(HomeViewModel.getTerminalID().equals("")){
                                                 Toast.makeText(activity, "Not Registered", Toast.LENGTH_LONG).show();
                                             } else {
                                                 HomeViewModel.isRegistered=true;
                                                 Toast.makeText(activity, R.string.registered_success, Toast.LENGTH_LONG).show();
                                             }
                                         } else if(selectedItem.equals(getString(R.string.start_session))) {
-                                            HomeViewModel.isSessionStarted = true;
+                                         HomeViewModel.isSessionStarted= true;
                                             Toast.makeText(activity, R.string.session_started, Toast.LENGTH_LONG).show();
                                         } else if(selectedItem.equals(getString(R.string.end_session))) {
                                             HomeViewModel.isSessionStarted = false;
@@ -165,6 +161,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                                     } catch (IOException e) {
                                         e.printStackTrace();
+                                        homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+                                        Toast.makeText(getActivity(), ""+e, Toast.LENGTH_LONG).show();
                                     }
 
                                 }
@@ -184,7 +182,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     private void addTextChanged() {
-
 
         homeFragmentBinding.payAmt.addTextChangedListener(new CustomTextWatcher());
         homeFragmentBinding.cashAdvanceAmt.addTextChangedListener(new CustomTextWatcher());
@@ -211,6 +208,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void afterTextChanged(Editable s) {
             if (!s.toString().equals( current )) {
 
+                String currencySymbol = "$";
                 String replaceable = String.format( "[%s,.\\s]", currencySymbol);
                 String cleanString = s.toString().replaceAll( replaceable, "" );
 
@@ -220,6 +218,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 } catch (NumberFormatException e) {
                     parsed = 0.00;
                 }
+                int divider = 100;
                 double da = parsed / divider;
                 String formatted = getFormattedAmount( BigDecimal.valueOf(da) );
                 current = formatted;
@@ -261,6 +260,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
 
         private String getFormattedAmount(BigDecimal amount) {
+            String amountFormat = "%.2f";
             return String.format(amountFormat, amount).replace(",",".");
         }
     };

@@ -29,7 +29,7 @@ public class BufferResponseFragment extends Fragment {
     private Logger logger = Logger.getNewLogger(BufferResponseFragment.class.getName());
 
     private String receiveData = "";
-    String parseData = "";
+    private String parseData = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -63,7 +63,7 @@ public class BufferResponseFragment extends Fragment {
 
         if (HomeViewModel.getTransactionType() == 0) {
             receiveData = bufferResponseViewModel.purchase(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 1) {
+        } /*else if (HomeViewModel.getTransactionType() == 1) {
             receiveData = bufferResponseViewModel.cashback(HomeViewModel.getSplittedArray());
         } else if (HomeViewModel.getTransactionType() == 2) {
             receiveData = bufferResponseViewModel.refund(HomeViewModel.getSplittedArray());
@@ -89,7 +89,7 @@ public class BufferResponseFragment extends Fragment {
             receiveData = bufferResponseViewModel.getParameter(HomeViewModel.getSplittedArray());
         } else if (HomeViewModel.getTransactionType() == 20) {
             receiveData = bufferResponseViewModel.billPayment(HomeViewModel.getSplittedArray());
-        } else {
+        }*/ else {
             for (String s : HomeViewModel.getSplittedArray()) {
                 parseData = parseData + "\n" + s;
             }

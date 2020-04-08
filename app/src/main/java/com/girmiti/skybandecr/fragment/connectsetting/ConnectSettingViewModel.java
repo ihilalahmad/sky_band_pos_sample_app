@@ -1,8 +1,6 @@
 package com.girmiti.skybandecr.fragment.connectsetting;
 
 import androidx.lifecycle.ViewModel;
-
-import com.girmiti.skybandecr.fragment.home.HomeViewModel;
 import com.girmiti.skybandecr.sdk.SocketHostConnector;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
@@ -10,14 +8,14 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.Getter;
+
 public class ConnectSettingViewModel extends ViewModel {
 
-    private static SocketHostConnector socketHostConnector;
     private Logger logger = Logger.getNewLogger(ConnectSettingViewModel.class.getName());
 
-    public static SocketHostConnector getSocketHostConnector() {
-        return socketHostConnector;
-    }
+    @Getter
+    private static SocketHostConnector socketHostConnector;
 
     public boolean getConnection(String ipAddress, int portNo) throws IOException {
 

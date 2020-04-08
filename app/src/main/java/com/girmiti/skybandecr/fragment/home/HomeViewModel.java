@@ -17,33 +17,34 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class HomeViewModel extends ViewModel {
 
     private HomeFragmentBinding homeFragmentBinding;
     private Logger logger = Logger.getNewLogger(HomeViewModel.class.getName());
-    private static String reqData = "";
-    private static int transactionType;
-    private String szSignature = "";
-    private String szEcrBuffer = "";
-    private static String cashRegisterNo;
-    private static String date1 = "";
-    public static boolean isSessionStarted = false;
-    public static boolean isRegistered = false;
 
+    @Getter
+    private static String reqData = "";
+
+    @Getter
+    private static int transactionType;
+
+    @Setter
+    private static String cashRegisterNo;
+
+    @Getter
     private static String terminalID = "";
-    private String ecrReferenceNo = "";
-    private int ecrSelected = TransactionSettingViewModel.getEcr();
+
+    @Getter
     private static String[] splittedArray;
 
-    public static void setCashRegisterNo(String cashRegisterNo) { HomeViewModel.cashRegisterNo = cashRegisterNo; }
-
-    public static String getReqData() { return reqData; }
-
-    public static String getTerminalID() { return terminalID; }
-
-    public static int getTransactionType() { return transactionType; }
-
-    public static String[] getSplittedArray() { return splittedArray; }
+    public static boolean isSessionStarted = false;
+    public static boolean isRegistered = false;
+    private String szSignature = "";
+    private String ecrReferenceNo = "";
+    private int ecrSelected = TransactionSettingViewModel.getEcr();
 
     public void resetVisibilityOfViews(HomeFragmentBinding homeFragmentBinding) {
         this.homeFragmentBinding = homeFragmentBinding;
@@ -286,12 +287,11 @@ public class HomeViewModel extends ViewModel {
     public void setReqData(String selectedItem) {
 
         String date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
-        date1 = new SimpleDateFormat("ddMMyy", Locale.getDefault()).format(new Date());
         int print = TransactionSettingViewModel.getPrint();
         String completion;
 
-        if(selectedItem.equals("Register")) {
-            cashRegisterNo=homeFragmentBinding.cashRegisterNo.getText().toString();
+        if (selectedItem.equals("Register")) {
+            cashRegisterNo = homeFragmentBinding.cashRegisterNo.getText().toString();
         }
 
         if (ecrSelected == 1 && !selectedItem.equals("Register")) {
@@ -308,8 +308,9 @@ public class HomeViewModel extends ViewModel {
 
         if (selectedItem.equals("Purchase")) {
             transactionType = 0;
+            System.out.println("reqdata"+reqData);
             reqData = date + ";" + homeFragmentBinding.payAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
-
+            System.out.println("reqdata"+reqData);
         } else if (selectedItem.equals("Purchase CashBack")) {
             transactionType = 1;
             reqData = date + ";" + homeFragmentBinding.payAmt.getText() + ";" + homeFragmentBinding.cashBackAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
@@ -378,13 +379,11 @@ public class HomeViewModel extends ViewModel {
         } else if (selectedItem.equals("Start Session")) {
             szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
             transactionType = 18;
-          //  isSessionStarted = true;
             reqData = date + ";" + cashRegisterNo + "!";
 
         } else if (selectedItem.equals("End Session")) {
             szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
             transactionType = 19;
-        //    isSessionStarted = false;
             reqData = date + ";" + cashRegisterNo + "!";
 
         } else if (selectedItem.equals("Bill Payment")) {
@@ -405,6 +404,7 @@ public class HomeViewModel extends ViewModel {
 
         logger.debug(":: Request data: " + reqData + ":: Transactiontype: " + transactionType + ":: Szsignature: " + szSignature);
         CLibraryLoad cLibraryLoad = new CLibraryLoad();
+        String szEcrBuffer = "";
         return cLibraryLoad.getPackData(reqData, transactionType, szSignature, szEcrBuffer);
     }
 
@@ -513,7 +513,7 @@ public class HomeViewModel extends ViewModel {
             /*// Need to delete
             isRegistered = true;
             //*/
-            System.out.println("Lngth of ECR In Register"+ecrReferenceNo.length());
+            System.out.println("Lngth of ECR In Register" + ecrReferenceNo.length());
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 18) {
@@ -521,7 +521,6 @@ public class HomeViewModel extends ViewModel {
            /* // Need to delete
             isSessionStarted = true;
             //*/
-
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 19) {
@@ -542,7 +541,7 @@ public class HomeViewModel extends ViewModel {
 
     public void parse(String terminalResponse) {
 
-       splittedArray = terminalResponse.split("�");
+        splittedArray = terminalResponse.split("�");
        /* for (String s : splittedArray) {
             parseData = parseData + "\n" + s;
         }*/

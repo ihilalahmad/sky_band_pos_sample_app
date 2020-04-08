@@ -21,7 +21,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:orientation="vertical">
@@ -94,6 +94,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp15"
                         android:entries="@array/transaction_type"
+                        android:dropDownVerticalOffset="40dp"
                         android:overlapAnchor="false"
                         android:prompt="@string/transaction_type_prompt"
                         android:spinnerMode="dropdown" />
