@@ -469,47 +469,36 @@ public class HomeViewModel extends ViewModel {
             }
 
         } else if (transactionType == 2) {
-            System.out.println("Transaction Type>>" + "2");
             return !homeFragmentBinding.refundAmt.getText().toString().equals("") && !homeFragmentBinding.refundAmt.getText().toString().equals("0.00") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origRefundDate.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 3) {
-            System.out.println("Transaction Type>>" + "3");
             return !homeFragmentBinding.authAmt.getText().toString().equals("") && !homeFragmentBinding.authAmt.getText().toString().equals("0.00") && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 4) {
-            System.out.println("Transaction Type>>" + "4");
             return !homeFragmentBinding.authAmt.getText().toString().equals("") && !homeFragmentBinding.authAmt.getText().toString().equals("0.00") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 5) {
-            System.out.println("Transaction Type>>" + "5");
             return homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 6) {
-            System.out.println("Transaction Type>>" + "6");
             return !homeFragmentBinding.origTransactionAmt.getText().toString().equals("") && !homeFragmentBinding.origTransactionAmt.getText().toString().equals("0.00") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 8) {
-            System.out.println("Transaction Type>>" + "8");
             return !homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("") && !homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("0.00") && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 9) {
-            System.out.println("Transaction Type>>" + "9");
             return homeFragmentBinding.rrnNoEditText.getText().length() == 12 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 10 || transactionType == 11) {
-            System.out.println("Transaction Type>>" + "10 and 11");
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 12) {
-            System.out.println("Transaction Type>>" + "12");
             return homeFragmentBinding.vendorId.getText().length() == 6 && homeFragmentBinding.vendorTerminalType.getText().length() == 1 && homeFragmentBinding.trsmId.getText().length() == 6 && homeFragmentBinding.vendorKeyIndex.getText().length() == 1 && homeFragmentBinding.samaKeyIndex.getText().length() == 1;
 
         } else if (transactionType == 13 || transactionType == 14 || transactionType == 15 || transactionType == 16) {
-            System.out.println("Transaction Type>>" + "13,14,15,16");
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 17 && homeFragmentBinding.cashRegisterNo.getText().length() == 8) {
-            System.out.println("Transaction Type>>" + "17");
             /*// Need to delete
             isRegistered = true;
             //*/
@@ -542,9 +531,6 @@ public class HomeViewModel extends ViewModel {
     public void parse(String terminalResponse) {
 
         splittedArray = terminalResponse.split("�");
-       /* for (String s : splittedArray) {
-            parseData = parseData + "\n" + s;
-        }*/
     }
 }
 

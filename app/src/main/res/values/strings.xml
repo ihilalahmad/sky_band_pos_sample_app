@@ -41,7 +41,6 @@
     <string name="req_data_validated">Request Data validated</string>
     <string name="invalid_input">Invalid Input</string>
     <string name="loading">Loading</string>
-    <string name="please_wait">Please wait...</string>
     <string name="register">Register</string>
     <string name="not_registered">Not Registered</string>
     <string name="registered_success">Registered Successful</string>
@@ -52,6 +51,11 @@
     <string name="end_session">End Session</string>
     <string name="session_started">Session Started</string>
     <string name="session_ended">Session Ended</string>
+    <string name="unable_to_connect">Unable to Connect</string>
+    <string name="Exception_during_connection">Exception during connection</string>
+    <string name="connecting">connecting</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="ip_port_invalid">IP or Port is not valid</string>
     <string-array name="transaction_type">
 
         <item>Register</item>

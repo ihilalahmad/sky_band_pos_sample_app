@@ -23,6 +23,7 @@ import com.girmiti.skybandecr.fragment.home.HomeViewModel;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ConnectSettingFragment extends Fragment {
 
@@ -50,7 +51,7 @@ public class ConnectSettingFragment extends Fragment {
 
     private void setupListeners() {
 
-        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
         connectSettingFragmentBinding.connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,12 +61,12 @@ public class ConnectSettingFragment extends Fragment {
                 portNo = connectSettingFragmentBinding.portNo.getText().toString();
 
                 if (!connectSettingViewModel.validateIp(ipAddress) || !connectSettingViewModel.validatePort(portNo) || ipAddress.equals("") || portNo.equals("")) {
-                    Toast.makeText(getContext(), "IP or Port is not valid", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.ip_port_invalid, Toast.LENGTH_LONG).show();
 
                     return;
                 }
 
-                final ProgressDialog dialog = ProgressDialog.show(getActivity(), "connecting", "Please wait...", true);
+                final ProgressDialog dialog = ProgressDialog.show(getActivity(), getString(R.string.connecting), getString(R.string.please_wait), true);
                 dialog.setCancelable(true);
 
                 new Thread(new Runnable() {
@@ -80,14 +81,14 @@ public class ConnectSettingFragment extends Fragment {
                             }
 
                         } catch (final IOException e) {
-                            logger.severe("Exception during connection", e);
+                            logger.severe(getString(R.string.Exception_during_connection), e);
 
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         dialog.dismiss();
-                                        Toast.makeText(getContext(), "Unable to Connect", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
@@ -104,7 +105,7 @@ public class ConnectSettingFragment extends Fragment {
                 try {
                     connectSettingViewModel.disConnectSocket();
                     HomeViewModel.setCashRegisterNo("");
-                    Toast.makeText(getContext().getApplicationContext(), "Soccet Disconnected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext().getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
 
                 } catch (final IOException e) {
                     e.printStackTrace();
