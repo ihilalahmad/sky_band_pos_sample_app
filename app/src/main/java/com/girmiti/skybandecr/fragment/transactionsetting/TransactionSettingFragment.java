@@ -15,16 +15,21 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.TransactionSettingFragmentBinding;
 import com.girmiti.skybandecr.sdk.logger.Logger;
+
+import lombok.Getter;
 
 public class TransactionSettingFragment extends Fragment {
 
     private TransactionSettingViewModel transactionSettingViewModel;
     private TransactionSettingFragmentBinding transactionSettingFragmentBinding;
     private NavController navController;
+    @Getter
+    private static String cashRegisterNO ="";
     private Logger logger = Logger.getNewLogger(TransactionSettingFragment.class.getName());
 
     @Override
@@ -53,6 +58,10 @@ public class TransactionSettingFragment extends Fragment {
             transactionSettingFragmentBinding.terminalPrinter.setChecked(false);
         }
 
+        if(!cashRegisterNO.equals("")) {
+            transactionSettingFragmentBinding.cashRegisterNo.setText(cashRegisterNO);
+        }
+
         navController= Navigation.findNavController(getActivity(),R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
 
@@ -61,7 +70,17 @@ public class TransactionSettingFragment extends Fragment {
             public void onClick(View v) {
 
                 transactionSettingViewModel.setData(transactionSettingFragmentBinding);
-                navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment,null,options);
+                 boolean isvalid =  transactionSettingViewModel.validCashRegisterno(transactionSettingFragmentBinding);
+
+                 if(isvalid) {
+                     cashRegisterNO = transactionSettingFragmentBinding.cashRegisterNo.getText().toString();
+                     navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment,null,options);
+                 }
+                 else {
+                     cashRegisterNO="";
+                     Toast.makeText(getActivity(), R.string.invalid_input, Toast.LENGTH_LONG).show();
+                 }
+
             }
         });
     }

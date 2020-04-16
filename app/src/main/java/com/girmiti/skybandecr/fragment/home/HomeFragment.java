@@ -3,8 +3,6 @@ package com.girmiti.skybandecr.fragment.home;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,6 @@ import com.girmiti.skybandecr.sdk.ThreadPoolExecutorService;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -49,8 +46,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false);
 
-        getActivity().findViewById(R.id.home_logo).setVisibility(View.VISIBLE);
-        getActivity().findViewById(R.id.left).setVisibility(View.INVISIBLE);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.home_logo).setVisibility(View.VISIBLE);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.left).setVisibility(View.INVISIBLE);
 
         return homeFragmentBinding.getRoot();
     }
@@ -62,6 +59,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         setupListeners();
         activity = getActivity();
         threadPoolExecutorService = ThreadPoolExecutorService.getInstance();
+
     }
 
     @Override
@@ -71,8 +69,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     private void setupListeners() {
-
-        addTextChanged();
 
         if (ConnectSettingViewModel.getSocketHostConnector() != null && ConnectSettingViewModel.getSocketHostConnector().getSocket() != null) {
 
@@ -96,6 +92,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                 homeViewModel.setReqData(selectedItem);
                 logger.info(getClass() + getString(R.string.request_data_set));
+
                 boolean validated = false;
 
                 try {
@@ -110,7 +107,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     Toast.makeText(getActivity(), R.string.invalid_input, Toast.LENGTH_LONG).show();
                     return;
                 }
-
                 if (ConnectSettingViewModel.getSocketHostConnector() != null && ConnectSettingViewModel.getSocketHostConnector().getSocket().isConnected()) {
 
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
@@ -122,29 +118,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                                    if (selectedItem.equals(getString(R.string.register)) || selectedItem.equals(getString(R.string.start_session)) ||  selectedItem.equals(getString(R.string.end_session)) ) {
-
                                         if (selectedItem.equals(getString(R.string.register))) {
                                             if(HomeViewModel.getTerminalID().equals("")){
-                                                Toast.makeText(activity, "Not Registered", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(activity,R.string.not_registered, Toast.LENGTH_LONG).show();
+                                                return;
                                             } else {
-                                                HomeViewModel.isRegistered=true;
-                                                Toast.makeText(activity, R.string.registered_success, Toast.LENGTH_LONG).show();
+                                                HomeViewModel.setRegistered(true);
                                             }
                                         } else if(selectedItem.equals(getString(R.string.start_session))) {
-                                         HomeViewModel.isSessionStarted= true;
-                                            Toast.makeText(activity, R.string.session_started, Toast.LENGTH_LONG).show();
-                                        } else if(selectedItem.equals(getString(R.string.end_session))) {
-                                            HomeViewModel.isSessionStarted = false;
-                                            Toast.makeText(activity, R.string.session_ended, Toast.LENGTH_LONG).show();
-                                        }
+                                         HomeViewModel.setSessionStarted(true);
 
-                                    } else {
-                                        navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
-                                    }
+                                        } else if(selectedItem.equals(getString(R.string.end_session))) {
+                                            HomeViewModel.setSessionStarted(false);
+
+                                        }
+                                    navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
                                 }
                             });
-
                             threadPoolExecutorService.remove(startTransaction);
                         }
 
@@ -157,16 +147,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                     try {
                                         ConnectSettingFragment.connectSettingViewModel.disConnectSocket();
                                         homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                        Toast.makeText(getActivity(), ""+errorMessage, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), "Connection Reset..Please Connect Again", Toast.LENGTH_LONG).show();
 
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                        Toast.makeText(getActivity(), ""+e, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
 
                                 }
                             });
+
                             threadPoolExecutorService.remove(startTransaction);
                         }
                     });
@@ -181,94 +172,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         homeFragmentBinding.transactionSpinner.setOnItemSelectedListener(this);
     }
 
-    private void addTextChanged() {
-
-        homeFragmentBinding.payAmt.addTextChangedListener(new CustomTextWatcher());
-        homeFragmentBinding.cashAdvanceAmt.addTextChangedListener(new CustomTextWatcher());
-        homeFragmentBinding.cashBackAmt.addTextChangedListener(new CustomTextWatcher());
-        homeFragmentBinding.refundAmt.addTextChangedListener(new CustomTextWatcher());
-        homeFragmentBinding.authAmt.addTextChangedListener(new CustomTextWatcher());
-        homeFragmentBinding.origTransactionAmt.addTextChangedListener(new CustomTextWatcher());
-        homeFragmentBinding.billPayAmt.addTextChangedListener(new CustomTextWatcher());
-    }
-
-
-    private class CustomTextWatcher implements TextWatcher {
-        private String current = "";
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (!s.toString().equals( current )) {
-
-                String currencySymbol = "$";
-                String replaceable = String.format( "[%s,.\\s]", currencySymbol);
-                String cleanString = s.toString().replaceAll( replaceable, "" );
-
-                double parsed;
-                try {
-                    parsed = Double.parseDouble( cleanString );
-                } catch (NumberFormatException e) {
-                    parsed = 0.00;
-                }
-                int divider = 100;
-                double da = parsed / divider;
-                String formatted = getFormattedAmount( BigDecimal.valueOf(da) );
-                current = formatted;
-
-                try {
-                    if(homeFragmentBinding.payAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.payAmt.setText( formatted );
-                        homeFragmentBinding.payAmt.setSelection( formatted.length() );
-
-                    } else if (homeFragmentBinding.cashBackAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.cashBackAmt.setText( formatted );
-                        homeFragmentBinding.cashBackAmt.setSelection( formatted.length() );
-
-                    } else if (homeFragmentBinding.cashAdvanceAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.cashAdvanceAmt.setText( formatted );
-                        homeFragmentBinding.cashAdvanceAmt.setSelection( formatted.length() );
-
-                    } else if (homeFragmentBinding.refundAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.refundAmt.setText( formatted );
-                        homeFragmentBinding.refundAmt.setSelection( formatted.length() );
-
-                    } else if (homeFragmentBinding.authAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.authAmt.setText( formatted );
-                        homeFragmentBinding.authAmt.setSelection( formatted.length() );
-
-                    } else if (homeFragmentBinding.origTransactionAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.origTransactionAmt.setText( formatted );
-                        homeFragmentBinding.origTransactionAmt.setSelection( formatted.length() );
-
-                    } else if (homeFragmentBinding.billPayAmt.getText().hashCode() == s.hashCode()){
-                        homeFragmentBinding.billPayAmt.setText( formatted );
-                        homeFragmentBinding.billPayAmt.setSelection( formatted.length() );
-                    }
-
-                } catch (StackOverflowError e) {
-                    logger.info(HomeFragment.this.getClass() + "::" + e.getMessage());
-                }
-            }
-        }
-
-        private String getFormattedAmount(BigDecimal amount) {
-            String amountFormat = "%.2f";
-            return String.format(amountFormat, amount).replace(",",".");
-        }
-    };
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        this.position=position;
+        HomeFragment.position =position;
         selectedItem = parent.getItemAtPosition(position).toString();
 
         homeViewModel.resetVisibilityOfViews(homeFragmentBinding);

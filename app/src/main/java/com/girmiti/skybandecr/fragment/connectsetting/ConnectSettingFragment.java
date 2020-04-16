@@ -30,8 +30,9 @@ public class ConnectSettingFragment extends Fragment {
     public static ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     private NavController navController;
-    private String ipAddress = "";
-    private String portNo = "";
+    private static String ipAddress = "";
+    private static String portNo = "";
+    private static boolean saveData = false;
     private Logger logger = Logger.getNewLogger(ConnectSettingFragment.class.getName());
 
     @Override
@@ -50,6 +51,15 @@ public class ConnectSettingFragment extends Fragment {
     }
 
     private void setupListeners() {
+
+        if(saveData) {
+            connectSettingFragmentBinding.ipAddress.setText(ipAddress);
+            connectSettingFragmentBinding.portNo.setText(portNo);
+        }
+        else {
+            connectSettingFragmentBinding.ipAddress.setText("");
+            connectSettingFragmentBinding.portNo.setText("");
+        }
 
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
@@ -77,6 +87,7 @@ public class ConnectSettingFragment extends Fragment {
 
                             if (connectSettingViewModel.getConnection(ipAddress, Integer.parseInt(portNo))) {
                                 dialog.dismiss();
+                                saveData = true;
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                             }
 
@@ -104,7 +115,7 @@ public class ConnectSettingFragment extends Fragment {
 
                 try {
                     connectSettingViewModel.disConnectSocket();
-                    HomeViewModel.setCashRegisterNo("");
+                    saveData = false;
                     Toast.makeText(getContext().getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
 
                 } catch (final IOException e) {

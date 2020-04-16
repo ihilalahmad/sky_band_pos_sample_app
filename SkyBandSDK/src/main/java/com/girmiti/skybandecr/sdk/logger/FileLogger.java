@@ -11,8 +11,8 @@ import java.io.IOException;
 public class FileLogger extends Logger {
 
     private static final boolean ISCONSOLELOG = false;
-    private static final String LOGFILEPATH = "/spire/log/";
-    private static final String LOGFILENAME = "spiresdk.log";
+    private static final String LOGFILEPATH = "/skyband/log/";
+    private static final String LOGFILENAME = "skybandsdk.log";
     private static File file = null;
     private static BufferedWriter bufWriter = null;
 

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data>
-        <variable
-            name="connectSetting"
-            type="com.girmiti.skybandecr.fragment.connectsetting.ConnectSettingViewModel" />
-    </data>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -26,14 +21,6 @@
                 android:text="Connection  Settings"
                 android:textSize="@dimen/sp20"
                 android:textStyle="bold" />
-
-            <Spinner
-                style="@style/spinner_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp35"
-                android:layout_marginTop="@dimen/dp50"
-                android:entries="@array/connection_type" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,6 +48,7 @@
                 android:digits="0123456789."
                 android:imeOptions="actionNext"
                 android:maxLines="1"
+                android:maxLength="15"
                 android:background="@drawable/border"
                 android:hint="@string/ip_address"
                 android:padding="@dimen/dp10" />
@@ -79,12 +67,10 @@
                 android:layout_marginHorizontal="@dimen/dp35"
                 android:inputType="number"
                 android:layout_marginTop="@dimen/dp15"
-                android:imeOptions="actionNext"
                 android:maxLength="5"
                 android:background="@drawable/border"
                 android:hint="@string/port_no"
                 android:padding="@dimen/dp10" />
-
 
         </LinearLayout>
 
@@ -117,7 +103,5 @@
 
         </LinearLayout>
 
-
     </RelativeLayout>
-
 </layout>

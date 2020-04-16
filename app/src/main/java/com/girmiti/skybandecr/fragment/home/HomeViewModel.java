@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.girmiti.skybandecr.databinding.HomeFragmentBinding;
 import com.girmiti.skybandecr.fragment.connectsetting.ConnectSettingViewModel;
+import com.girmiti.skybandecr.fragment.transactionsetting.TransactionSettingFragment;
 import com.girmiti.skybandecr.fragment.transactionsetting.TransactionSettingViewModel;
 import com.girmiti.skybandecr.sdk.CLibraryLoad;
 import com.girmiti.skybandecr.sdk.logger.Logger;
@@ -31,17 +32,20 @@ public class HomeViewModel extends ViewModel {
     @Getter
     private static int transactionType;
 
-    @Setter
-    private static String cashRegisterNo;
-
     @Getter
     private static String terminalID = "";
 
     @Getter
     private static String[] splittedArray;
 
-    public static boolean isSessionStarted = false;
-    public static boolean isRegistered = false;
+    @Setter
+    @Getter
+    private static boolean isSessionStarted = false;
+
+    @Setter
+    @Getter
+    private static boolean isRegistered = false;
+
     private String szSignature = "";
     private String ecrReferenceNo = "";
     private int ecrSelected = TransactionSettingViewModel.getEcr();
@@ -56,9 +60,6 @@ public class HomeViewModel extends ViewModel {
             this.homeFragmentBinding.ecrRefNo.setVisibility(View.VISIBLE);
             this.homeFragmentBinding.ecrRefNoTv.setVisibility(View.VISIBLE);
         }
-
-        this.homeFragmentBinding.cashRegisterNoTv.setVisibility(View.GONE);
-        this.homeFragmentBinding.cashRegisterNo.setVisibility(View.GONE);
 
         this.homeFragmentBinding.payAmt.setVisibility(View.GONE);
         this.homeFragmentBinding.payAmtTv.setVisibility(View.GONE);
@@ -232,45 +233,51 @@ public class HomeViewModel extends ViewModel {
 
             homeFragmentBinding.vendorId.setVisibility(View.VISIBLE);
             homeFragmentBinding.vendorIdTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.vendorId.setText("");
 
             homeFragmentBinding.vendorTerminalType.setVisibility(View.VISIBLE);
             homeFragmentBinding.vendorTerminalTypeTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.vendorTerminalType.setText("");
 
             homeFragmentBinding.trsmId.setVisibility(View.VISIBLE);
             homeFragmentBinding.trsmIdTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.trsmId.setText("");
 
             homeFragmentBinding.vendorKeyIndex.setVisibility(View.VISIBLE);
             homeFragmentBinding.vendorKeyIndexTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.vendorKeyIndex.setText("");
 
             homeFragmentBinding.samaKeyIndex.setVisibility(View.VISIBLE);
             homeFragmentBinding.samaKeyIndexTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.samaKeyIndex.setText("");
 
         } else if (selectedItem.equals("Get Parameter")) {
 
         } else if (selectedItem.equals("Set Terminal Language")) {
             homeFragmentBinding.terminalLanguage.setVisibility(View.VISIBLE);
             homeFragmentBinding.terminalLanguageTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.terminalLanguage.setText("");
 
         } else if (selectedItem.equals("Terminal Status")) {
 
         } else if (selectedItem.equals("Previous Transaction Details")) {
 
         } else if (selectedItem.equals("Register")) {
-            homeFragmentBinding.cashRegisterNoTv.setVisibility(View.VISIBLE);
-            homeFragmentBinding.cashRegisterNo.setVisibility(View.VISIBLE);
-
             homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
             homeFragmentBinding.ecrRefNo.setVisibility(View.GONE);
 
         } else if (selectedItem.equals("Bill Payment")) {
             homeFragmentBinding.billPayAmt.setVisibility(View.VISIBLE);
             homeFragmentBinding.billPayAmtTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.billPayAmt.setText("");
 
             homeFragmentBinding.billerId.setVisibility(View.VISIBLE);
             homeFragmentBinding.billerIdTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.billerId.setText("");
 
             homeFragmentBinding.billerNumber.setVisibility(View.VISIBLE);
             homeFragmentBinding.billerNumberTv.setVisibility(View.VISIBLE);
+            homeFragmentBinding.billerNumber.setText("");
 
         } else if (selectedItem.equals("Start Session")) {
             homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
@@ -280,9 +287,12 @@ public class HomeViewModel extends ViewModel {
             homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
             homeFragmentBinding.ecrRefNo.setVisibility(View.GONE);
 
+        } else if (selectedItem.equals("Print Detail Report")) {
+
+        } else if (selectedItem.equals("Print Summary Report")) {
+
         }
     }
-
 
     public void setReqData(String selectedItem) {
 
@@ -290,14 +300,10 @@ public class HomeViewModel extends ViewModel {
         int print = TransactionSettingViewModel.getPrint();
         String completion;
 
-        if (selectedItem.equals("Register")) {
-            cashRegisterNo = homeFragmentBinding.cashRegisterNo.getText().toString();
-        }
-
         if (ecrSelected == 1 && !selectedItem.equals("Register")) {
-            ecrReferenceNo = homeFragmentBinding.ecrRefNo.getText().toString();
+            ecrReferenceNo = TransactionSettingFragment.getCashRegisterNO() + homeFragmentBinding.ecrRefNo.getText().toString();
         } else {
-            ecrReferenceNo = cashRegisterNo + "000001";
+            ecrReferenceNo = TransactionSettingFragment.getCashRegisterNO() + "000001";
         }
 
         if (homeFragmentBinding.typeOfCompletion.isChecked()) {
@@ -308,9 +314,10 @@ public class HomeViewModel extends ViewModel {
 
         if (selectedItem.equals("Purchase")) {
             transactionType = 0;
-            System.out.println("reqdata"+reqData);
+            System.out.println("reqdata" + reqData);
             reqData = date + ";" + homeFragmentBinding.payAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
-            System.out.println("reqdata"+reqData);
+            System.out.println("reqdata" + reqData);
+
         } else if (selectedItem.equals("Purchase CashBack")) {
             transactionType = 1;
             reqData = date + ";" + homeFragmentBinding.payAmt.getText() + ";" + homeFragmentBinding.cashBackAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
@@ -374,21 +381,29 @@ public class HomeViewModel extends ViewModel {
         } else if (selectedItem.equals("Register")) {
             transactionType = 17;
             szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
-            reqData = date + ";" + cashRegisterNo + "!";
+            reqData = date + ";" + TransactionSettingFragment.getCashRegisterNO() + "!";
 
         } else if (selectedItem.equals("Start Session")) {
             szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
             transactionType = 18;
-            reqData = date + ";" + cashRegisterNo + "!";
+            reqData = date + ";" + TransactionSettingFragment.getCashRegisterNO() + "!";
 
         } else if (selectedItem.equals("End Session")) {
             szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
             transactionType = 19;
-            reqData = date + ";" + cashRegisterNo + "!";
+            reqData = date + ";" + TransactionSettingFragment.getCashRegisterNO() + "!";
 
         } else if (selectedItem.equals("Bill Payment")) {
             transactionType = 20;
             reqData = date + ";" + homeFragmentBinding.billPayAmt.getText() + ";" + homeFragmentBinding.billerId.getText() + ";" + homeFragmentBinding.billerNumber.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+
+        } else if (selectedItem.equals("Print Detail Report")) {
+            transactionType = 21;
+            reqData = date + ";" + ecrReferenceNo + "!";
+
+        } else if (selectedItem.equals("Print Summary Report")) {
+            transactionType = 21;
+            reqData = date + ";" + ecrReferenceNo + "!";
 
         }
     }
@@ -407,7 +422,6 @@ public class HomeViewModel extends ViewModel {
         String szEcrBuffer = "";
         return cLibraryLoad.getPackData(reqData, transactionType, szSignature, szEcrBuffer);
     }
-
 
     public String getTerminalResponse(byte[] packData) throws IOException {
 
@@ -428,7 +442,6 @@ public class HomeViewModel extends ViewModel {
         return terminalResponse;
     }
 
-
     private String convertSHA(String combinedValue) throws NoSuchAlgorithmException {
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -445,46 +458,45 @@ public class HomeViewModel extends ViewModel {
         return resultSHA;
     }
 
-
     public boolean validateData(HomeFragmentBinding homeFragmentBinding) throws Exception {
 
         if (transactionType != 17 && !isRegistered) {
             throw new Exception("Please Register First");
         } else if (transactionType != 17 && transactionType != 18 && !isSessionStarted) {
             throw new Exception("Please Start Session");
+        } else if (TransactionSettingFragment.getCashRegisterNO().length() != 8) {
+            throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
         }
-        System.out.println("Cash out length>>" + homeFragmentBinding.cashRegisterNo.getText().length());
-        System.out.println("Transaction Type>>" + transactionType);
 
         if (transactionType == 0) {
             System.out.println("Transaction Type>>" + "0");
-            return !homeFragmentBinding.payAmt.getText().toString().equals("") && !homeFragmentBinding.payAmt.getText().toString().equals("0.00") && ecrReferenceNo.length() == 14;
+            return !homeFragmentBinding.payAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 1) {
             System.out.println("Transaction Type>>" + "1");
-            if (!homeFragmentBinding.payAmt.getText().toString().equals("") && !homeFragmentBinding.payAmt.getText().toString().equals("0.00") && !homeFragmentBinding.cashBackAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14) {
+            if (!homeFragmentBinding.payAmt.getText().toString().equals("") && !homeFragmentBinding.cashBackAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14) {
                 if (Double.parseDouble(homeFragmentBinding.payAmt.getText().toString()) >= Double.parseDouble(homeFragmentBinding.cashBackAmt.getText().toString())) {
                     return true;
                 } else throw new Exception("CashBackAmt cannot be More than Purchase Amt");
             }
 
         } else if (transactionType == 2) {
-            return !homeFragmentBinding.refundAmt.getText().toString().equals("") && !homeFragmentBinding.refundAmt.getText().toString().equals("0.00") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origRefundDate.getText().length() == 6 && ecrReferenceNo.length() == 14;
+            return !homeFragmentBinding.refundAmt.getText().toString().equals("") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origRefundDate.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 3) {
-            return !homeFragmentBinding.authAmt.getText().toString().equals("") && !homeFragmentBinding.authAmt.getText().toString().equals("0.00") && ecrReferenceNo.length() == 14;
+            return !homeFragmentBinding.authAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 4) {
-            return !homeFragmentBinding.authAmt.getText().toString().equals("") && !homeFragmentBinding.authAmt.getText().toString().equals("0.00") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
+            return !homeFragmentBinding.authAmt.getText().toString().equals("") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 5) {
             return homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 6) {
-            return !homeFragmentBinding.origTransactionAmt.getText().toString().equals("") && !homeFragmentBinding.origTransactionAmt.getText().toString().equals("0.00") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
+            return !homeFragmentBinding.origTransactionAmt.getText().toString().equals("") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 8) {
-            return !homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("") && !homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("0.00") && ecrReferenceNo.length() == 14;
+            return !homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 9) {
             return homeFragmentBinding.rrnNoEditText.getText().length() == 12 && ecrReferenceNo.length() == 14;
@@ -495,42 +507,32 @@ public class HomeViewModel extends ViewModel {
         } else if (transactionType == 12) {
             return homeFragmentBinding.vendorId.getText().length() == 6 && homeFragmentBinding.vendorTerminalType.getText().length() == 1 && homeFragmentBinding.trsmId.getText().length() == 6 && homeFragmentBinding.vendorKeyIndex.getText().length() == 1 && homeFragmentBinding.samaKeyIndex.getText().length() == 1;
 
-        } else if (transactionType == 13 || transactionType == 14 || transactionType == 15 || transactionType == 16) {
+        } else if (transactionType == 13 || transactionType == 14 || transactionType == 15 || transactionType == 16 || transactionType == 21) {
             return ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == 17 && homeFragmentBinding.cashRegisterNo.getText().length() == 8) {
-            /*// Need to delete
-            isRegistered = true;
-            //*/
-            System.out.println("Lngth of ECR In Register" + ecrReferenceNo.length());
-            return ecrReferenceNo.length() == 14;
+        } else if (transactionType == 17) {
+
+            if (TransactionSettingFragment.getCashRegisterNO().length() == 8) {
+                return ecrReferenceNo.length() == 14;
+            } else
+                throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
 
         } else if (transactionType == 18) {
-            System.out.println("Transaction Type>>" + "18");
-           /* // Need to delete
-            isSessionStarted = true;
-            //*/
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 19) {
-            System.out.println("Transaction Type>>" + "19");
-          /*  //need to dlt
-            isSessionStarted = false;
-            //*/
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == 20) {
-            System.out.println("Transaction Type>>" + 20);
-            return !homeFragmentBinding.billPayAmt.getText().toString().equals("") && !homeFragmentBinding.billPayAmt.getText().toString().equals("0.00") && homeFragmentBinding.billerId.getText().length() == 6 && homeFragmentBinding.billerNumber.getText().length() == 6;
+            return !homeFragmentBinding.billPayAmt.getText().toString().equals("") && homeFragmentBinding.billerId.getText().length() == 6 && homeFragmentBinding.billerNumber.getText().length() == 6;
 
         }
-        System.out.println("Transaction Type>>" + "outside");
         return false;
     }
 
     public void parse(String terminalResponse) {
-
         splittedArray = terminalResponse.split("�");
+
     }
 }
 

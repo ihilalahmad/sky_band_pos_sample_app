@@ -31,7 +31,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dp15"
-                        android:text="Transaction Types"
+                        android:text="@string/transaction_type_prompt"
                         android:textSize="@dimen/dp25"
                         android:textStyle="bold" />
 
@@ -46,16 +46,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="@dimen/dp25"
-                            android:text="Connection status:"
+                            android:text="@string/connection_status"
                             android:textSize="@dimen/dp25" />
-
 
                         <ImageView
                             android:id="@+id/connection_status"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/dp50"
-                            android:src="@drawable/ic_group_782"
-                            android:text="Disconnect" />
+                            android:src="@drawable/ic_group_782" />
 
                     </LinearLayout>
 
@@ -76,12 +74,12 @@
                         android:background="@drawable/border"
                         android:hint="@string/ecr_ref_no"
                         android:inputType="number"
-                        android:maxLength="14"
+                        android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="127dp"
+                        android:layout_height="35dp"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp35"
                         android:text="@string/type"
@@ -92,33 +90,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp15"
+                        android:dropDownVerticalOffset="10dp"
                         android:entries="@array/transaction_type"
-                        android:dropDownVerticalOffset="40dp"
                         android:overlapAnchor="false"
                         android:prompt="@string/transaction_type_prompt"
                         android:spinnerMode="dropdown" />
-
-                    <TextView
-                        android:id="@+id/cash_register_no_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp25"
-                        android:text="@string/cash_register_number" />
-
-                    <EditText
-                        android:id="@+id/cash_register_no"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp10"
-                        android:background="@drawable/border"
-                        android:hint="@string/cash_register_number"
-                        android:inputType="number"
-                        android:maxLength="8"
-                        android:padding="@dimen/dp10"
-                        />
 
                     <TextView
                         android:id="@+id/pay_amt_tv"
@@ -126,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Pay Amount" />
+                        android:text="@string/pay_amt" />
 
                     <EditText
                         android:id="@+id/pay_amt"
@@ -135,9 +111,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Pay Amt"
+                        android:hint="@string/pay_amt"
                         android:inputType="number"
-                        android:maxLength="15"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -146,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Cash Back Amount" />
+                        android:text="@string/cash_back_amount" />
 
                     <EditText
                         android:id="@+id/cash_back_amt"
@@ -155,9 +131,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="CashBack Amt"
+                        android:hint="@string/cashback_amt"
                         android:inputType="number"
-                        android:maxLength="15"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -166,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Refund Amt" />
+                        android:text="@string/refund_amt" />
 
                     <EditText
                         android:id="@+id/refund_amt"
@@ -175,9 +151,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Refund Amt"
+                        android:hint="@string/refund_amt"
                         android:inputType="number"
-                        android:maxLength="15"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -186,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Cash Advance Amount" />
+                        android:text="@string/cash_advance_amount" />
 
                     <EditText
                         android:id="@+id/cash_advance_amt"
@@ -195,9 +171,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Cash Advance"
+                        android:hint="@string/cash_advance_amount"
                         android:inputType="number"
-                        android:maxLength="15"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -206,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="RRN" />
+                        android:text="@string/rrn" />
 
                     <EditText
                         android:id="@+id/rrn_no_edit_text"
@@ -215,7 +191,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="RRN NO"
+                        android:hint="@string/rrn"
                         android:inputType="number"
                         android:maxLength="12"
                         android:padding="@dimen/dp10" />
@@ -226,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Original Refund Date" />
+                        android:text="@string/original_refund_date" />
 
                     <EditText
                         android:id="@+id/orig_refund_date"
@@ -235,9 +211,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="DDMMYY"
-                        android:maxLength="6"
+                        android:hint="@string/ddmmyy"
                         android:inputType="date"
+                        android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -246,7 +222,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Authorization Amount" />
+                        android:text="@string/authorization_amount" />
 
                     <EditText
                         android:id="@+id/auth_amt"
@@ -255,9 +231,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Authorization Amount"
-                        android:maxLength="15"
+                        android:hint="@string/authorization_amount"
                         android:inputType="number"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -266,7 +242,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Original Transaction Amt" />
+                        android:text="@string/original_transaction_amt" />
 
                     <EditText
                         android:id="@+id/orig_transaction_amt"
@@ -275,9 +251,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Transaction Amt"
-                        android:maxLength="15"
+                        android:hint="@string/original_transaction_amt"
                         android:inputType="number"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -286,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Vendor Id" />
+                        android:text="@string/vendor_id" />
 
                     <EditText
                         android:id="@+id/vendor_id"
@@ -295,7 +271,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Vendor ID"
+                        android:hint="@string/vendor_id"
                         android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
@@ -306,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Vendor Terminal Type" />
+                        android:text="@string/vendor_terminal_type" />
 
                     <EditText
                         android:id="@+id/vendor_terminal_type"
@@ -315,9 +291,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:maxLength="1"
+                        android:hint="@string/vendor_terminal_type"
                         android:inputType="number"
-                        android:hint="Vendor Terminal Type"
+                        android:maxLength="1"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -326,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="TRSM ID" />
+                        android:text="@string/trsm_id" />
 
                     <EditText
                         android:id="@+id/trsm_id"
@@ -335,7 +311,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="TRSM ID"
+                        android:hint="@string/trsm_id"
                         android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
@@ -346,7 +322,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Vendor Key Index" />
+                        android:text="@string/vendor_key_index" />
 
                     <EditText
                         android:id="@+id/vendor_key_index"
@@ -355,9 +331,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
+                        android:hint="@string/vendor_key_index"
                         android:inputType="number"
                         android:maxLength="1"
-                        android:hint="Vendor Key Index"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -366,7 +342,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Sama Key Index" />
+                        android:text="@string/sama_key_index" />
 
                     <EditText
                         android:id="@+id/sama_key_index"
@@ -375,7 +351,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Sama Key Index"
+                        android:hint="@string/sama_key_index"
                         android:inputType="number"
                         android:maxLength="1"
                         android:padding="@dimen/dp10" />
@@ -386,7 +362,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Original Transaction Date" />
+                        android:text="@string/original_transaction_date" />
 
                     <EditText
                         android:id="@+id/orig_transaction_date"
@@ -395,9 +371,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="DDMMYY"
-                        android:maxLength="6"
+                        android:hint="@string/ddmmyy"
                         android:inputType="date"
+                        android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -406,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Original Approval Code" />
+                        android:text="@string/original_approval_code" />
 
                     <EditText
                         android:id="@+id/orig_approve_code"
@@ -415,7 +391,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Approve Code"
+                        android:hint="@string/original_approval_code"
                         android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
@@ -426,7 +402,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Terminal Language" />
+                        android:text="@string/terminal_language" />
 
                     <EditText
                         android:id="@+id/terminal_language"
@@ -435,10 +411,10 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:maxLength="1"
+                        android:digits="12"
                         android:hint="1 or 2"
                         android:inputType="number"
-                        android:digits="12"
+                        android:maxLength="1"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -447,7 +423,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Bill Payment Amount" />
+                        android:text="@string/bill_payment_amount" />
 
                     <EditText
                         android:id="@+id/bill_pay_amt"
@@ -456,9 +432,9 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Bill Payment Amount"
-                        android:maxLength="15"
+                        android:hint="@string/bill_payment_amount"
                         android:inputType="number"
+                        android:maxLength="12"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -467,7 +443,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Biller Id" />
+                        android:text="@string/biller_id" />
 
                     <EditText
                         android:id="@+id/biller_id"
@@ -476,7 +452,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Biller Id"
+                        android:hint="@string/biller_id"
                         android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
@@ -487,7 +463,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Biller Number" />
+                        android:text="@string/biller_number" />
 
                     <EditText
                         android:id="@+id/biller_number"
@@ -496,7 +472,7 @@
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
-                        android:hint="Biller Number"
+                        android:hint="@string/biller_number"
                         android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
@@ -507,7 +483,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
                         android:layout_marginTop="@dimen/dp25"
-                        android:text="Full Completion" />
+                        android:text="@string/full_completion" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -520,7 +496,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/dp15"
             android:background="@color/blue"
-            android:text="Do Transaction"
+            android:text="@string/do_transaction"
             android:textColor="@color/white"
             android:textSize="@dimen/dp25" />
     </RelativeLayout>

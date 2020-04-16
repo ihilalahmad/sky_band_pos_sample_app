@@ -34,4 +34,9 @@ public class TransactionSettingViewModel extends ViewModel {
         }
 
     }
+
+    public boolean validCashRegisterno(TransactionSettingFragmentBinding transactionSettingFragmentBinding) {
+            return transactionSettingFragmentBinding.cashRegisterNo.getText().length() == 8;
+
+    }
 }

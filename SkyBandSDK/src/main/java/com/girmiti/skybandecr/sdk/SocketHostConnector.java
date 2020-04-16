@@ -17,11 +17,7 @@ public class SocketHostConnector {
     private InputStream input;
     private String SERVER_IP;
     private int SERVER_PORT;
-    private static final int SOCKET_TIMEOUT = 9000;
-
-   /* static {
-        System.loadLibrary("jniWrapper");
-    }*/
+    private final int SOCKET_TIMEOUT = 10000;
 
     public  Socket getSocket() {
         return socket;
@@ -37,9 +33,12 @@ public class SocketHostConnector {
 
         logger.debug(getClass() + "::Connecting to IP: " + SERVER_IP + " and port: " + SERVER_PORT);
         socket = new Socket();
-        socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
-        logger.debug(getClass() + "::" + "Created connection");
+        socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT), SOCKET_TIMEOUT);
+        socket.setSoTimeout(SOCKET_TIMEOUT);
 
+        output = socket.getOutputStream();
+        input = socket.getInputStream();
+        logger.debug(getClass() + "::" + "Created connection");
     }
 
     public void cleanup() throws IOException {
@@ -76,9 +75,6 @@ public class SocketHostConnector {
 
     public String sendPacketToTerminal(byte[] in) throws IOException {
 
-        output = socket.getOutputStream();
-        input = socket.getInputStream();
-
         output.write(in);
         output.flush();
         logger.debug("Write Data >>:" + new String(in));
@@ -99,20 +95,4 @@ public class SocketHostConnector {
         return terminalResponse;
     }
 
-   /* public byte[] getPackData(String reqData, int tranType, String szSignature, String szEcrBuffer) {
-
-        logger.debug("Calling Pack >>>");
-
-        byte[] packedData = pack(reqData, tranType, szSignature, szEcrBuffer);
-        String packData = new String(packedData);
-
-        logger.debug("Packed Data:" + packData);
-        logger.debug("Sending Packed Data to Terminal>>>");
-
-        return packedData;
-    }*/
-
-
- //   public native byte[] pack(String inputReqData, int transactionType, String szSignature, String szEcrBuffer);
-    //  public native byte[] parse(String respData , String respOutData);
 }
