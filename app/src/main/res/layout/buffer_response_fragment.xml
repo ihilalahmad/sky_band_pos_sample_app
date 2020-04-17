@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.buffer.BufferResponseFragment">
+    tools:context=".ui.fragment.buffer.BufferResponseFragment">
 <ScrollView
     android:layout_width="match_parent"
     android:layout_above="@+id/ok_button"

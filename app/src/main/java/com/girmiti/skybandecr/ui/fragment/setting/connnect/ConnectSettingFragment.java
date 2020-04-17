@@ -1,0 +1,160 @@
+package com.girmiti.skybandecr.ui.fragment.setting.connnect;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.girmiti.skybandecr.R;
+import com.girmiti.skybandecr.cache.GeneralParamCache;
+import com.girmiti.skybandecr.constant.Constant;
+import com.girmiti.skybandecr.databinding.ConnectSettingFragmentBinding;
+import com.girmiti.skybandecr.sdk.ConnectionManager;
+import com.girmiti.skybandecr.sdk.logger.Logger;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ConnectSettingFragment extends Fragment implements Constant {
+
+    public static ConnectSettingViewModel connectSettingViewModel;
+    private ConnectSettingFragmentBinding connectSettingFragmentBinding;
+    private NavController navController;
+
+    private String ipAddress = "";
+    private String portNo = "";
+    private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
+
+    private Logger logger = Logger.getNewLogger(ConnectSettingFragment.class.getName());
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        getActivity().findViewById(R.id.home_logo).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.left).setVisibility(View.VISIBLE);
+
+        connectSettingFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.connect_setting_fragment, container, false);
+        connectSettingViewModel = ViewModelProviders.of(this).get(ConnectSettingViewModel.class);
+
+        setupListeners();
+
+        return connectSettingFragmentBinding.getRoot();
+    }
+
+    private void setupListeners() {
+
+        ipAddress = generalParamCache.getString(IP_ADDRESS);
+        portNo = generalParamCache.getString(PORT);
+        connectSettingFragmentBinding.ipAddress.setText(ipAddress);
+        connectSettingFragmentBinding.portNo.setText(portNo);
+
+        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
+
+        connectSettingFragmentBinding.connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ipAddress = connectSettingFragmentBinding.ipAddress.getText().toString();
+                portNo = connectSettingFragmentBinding.portNo.getText().toString();
+
+                if (!validateIp(ipAddress) || !validatePort(portNo) || ipAddress.equals("") || portNo.equals("")) {
+                    Toast.makeText(getContext(), R.string.ip_port_invalid, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                final ProgressDialog dialog = ProgressDialog.show(getActivity(), getString(R.string.connecting), getString(R.string.please_wait), true);
+                dialog.setCancelable(true);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+
+                            generalParamCache.putString(IP_ADDRESS, ipAddress);
+                            generalParamCache.putString(PORT, portNo);
+
+                            if (ConnectionManager.Instance(ipAddress, Integer.parseInt(portNo)) != null) {
+                                dialog.dismiss();
+                                navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                            }
+
+                        } catch (final IOException e) {
+                            logger.severe(getString(R.string.Exception_during_connection), e);
+
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                        Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).start();
+            }
+        });
+
+        connectSettingFragmentBinding.disconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    ConnectionManager.Instance(ipAddress,Integer.valueOf(portNo)).disconnect();
+                    Toast.makeText(getContext().getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+
+                } catch (final IOException e) {
+                    e.printStackTrace();
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext().getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private boolean validateIp(String ipAddress) {
+
+        final Pattern IP_ADDRESS
+                = Pattern.compile(
+                "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
+                        + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
+                        + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
+                        + "|[1-9][0-9]|[0-9]))");
+        Matcher matcher = IP_ADDRESS.matcher(ipAddress);
+
+        return matcher.matches();
+    }
+
+    private boolean validatePort(String portNo) {
+
+        Pattern pattern;
+        Matcher matcher;
+        String PORT = "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
+        pattern = Pattern.compile(PORT);
+        matcher = pattern.matcher(portNo);
+
+        return matcher.matches();
+    }
+}
