@@ -11,16 +11,22 @@ public class CLibraryLoad {
     }
 
     public byte[] getPackData(String reqData, int tranType, String szSignature, String szEcrBuffer) {
-        
-        logger.debug("Calling Pack >>> " + reqData + " szSignature >>> " + szSignature + " szEcrBuffer >>> " + szEcrBuffer);
 
-        byte[] packedData = pack(reqData, tranType, szSignature, szEcrBuffer);
-        String packData = new String(packedData);
+        // For for test
+        while ( true) {
+            logger.debug("Calling Pack >>> " + reqData + " szSignature >>> " + szSignature + " szEcrBuffer >>> " + szEcrBuffer);
 
-        logger.debug("Packed Data:" + packData);
-        logger.debug("Sending Packed Data to Terminal>>>");
+            byte[] packedData = pack(reqData, tranType, szSignature, szEcrBuffer);
+            String packData = new String(packedData);
 
-        return packedData;
+            logger.debug("Packed Data:" + packData);
+            logger.debug("Sending Packed Data to Terminal>>>");
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {}
+        }
+
+        // return packedData;
     }
 
     public native byte[] pack(String inputReqData, int transactionType, String szSignature, String szEcrBuffer);

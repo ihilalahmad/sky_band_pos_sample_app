@@ -13,6 +13,8 @@ extern char *getCommand(int tranType);
 
 EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer)
 {
+	vdLogPrintf("Inside pack :: %s txnType %d ", inputReqData, transactionType);
+
 	long long lnReqFields[REQFIELD_SIZE];
 	int inFieldsCount = 0, inReqPacketIndex = 0, inLCR = 0;
 	char szLCR[LCRBUFFER_SIZE], szLCR_Hex[LCRBUFFER_SIZE];
@@ -300,6 +302,8 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		ascToHexConv(szLCR_Hex, szLCR, 2);
 	memcpy(&szEcrBuffer[inReqPacketIndex], szLCR_Hex, LCR_SIZE);	//Excusive OR of each character of message including STX and ETX.
 		szEcrBuffer[inReqPacketIndex+1] = '\0';
+
+    vdLogPrintf("Exit pack << ");
 }
 
 EXPORT void parse(char *respData, char *respOutData)
