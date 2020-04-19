@@ -23,5 +23,16 @@ public class CLibraryLoad {
         return packedData;
     }
 
+    public String getParseData(String respData , String respOutData) {
+
+        byte[] parseData = parse(respData,respOutData);
+        String parsedData = new String(parseData);
+
+        logger.debug("Parse Dta" + parsedData);
+
+        return parsedData;
+    }
+
     public native byte[] pack(String inputReqData, int transactionType, String szSignature, String szEcrBuffer);
+    public native byte[] parse(String respData , String respOutData);
 }

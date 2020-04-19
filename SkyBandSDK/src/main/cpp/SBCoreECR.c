@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <android/log.h>
 #include "SBCoreECR.h"
 #include "Utilities.h"
 #include "ECRSrc.h"
@@ -323,4 +324,3 @@ EXPORT void parse(char *respData, char *respOutData)
 		}
 	}
 }
-

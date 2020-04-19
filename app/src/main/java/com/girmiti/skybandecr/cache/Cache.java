@@ -101,7 +101,7 @@ public class Cache {
     }
 
     public void clear() {
-        editor.clear().apply();
+        editor.clear().commit();
     }
 
     public void putStringSet(String key, Set<String> value) {

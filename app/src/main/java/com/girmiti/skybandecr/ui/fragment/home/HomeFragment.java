@@ -3,7 +3,6 @@ package com.girmiti.skybandecr.ui.fragment.home;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,12 +127,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
                                     if (selectedItem.equals(getString(R.string.register))) {
-                                        if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
+                                       /* if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
                                             Toast.makeText(activity, R.string.not_registered, Toast.LENGTH_LONG).show();
                                             return;
-                                        } else {
+                                        } else {*/
                                             ActiveTxnData.getInstance().setRegistered(true);
-                                        }
+                                 //       }
                                     } else if (selectedItem.equals(getString(R.string.start_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(true);
 
