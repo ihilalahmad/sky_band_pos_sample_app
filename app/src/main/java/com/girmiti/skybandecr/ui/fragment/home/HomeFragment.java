@@ -80,20 +80,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     private void setupListeners() {
+        logger.info("logger>>20");
 
         if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
         }
-
+        logger.info("logger>>21");
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
                 R.array.transaction_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         homeFragmentBinding.transactionSpinner.setAdapter(adapter);
-
+        logger.info("logger>>22");
         homeFragmentBinding.transactionBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -126,24 +127,31 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    logger.info("logger>>1");
                                     dialog.dismiss();
+                                    logger.info("logger>>2");
                                     if (selectedItem.equals(getString(R.string.register))) {
-                                        if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
+                                       /* if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
                                             Toast.makeText(activity, R.string.not_registered, Toast.LENGTH_LONG).show();
                                             return;
-                                        } else {
+                                        } else {*/
                                             ActiveTxnData.getInstance().setRegistered(true);
-                                        }
+                                        logger.info("logger>>3");
+                                      //  }
                                     } else if (selectedItem.equals(getString(R.string.start_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(true);
+                                        logger.info("logger>>4");
 
                                     } else if (selectedItem.equals(getString(R.string.end_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(false);
+                                        logger.info("logger>>5");
 
                                     }
                                     navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
+                                    logger.info("logger>>6");
                                 }
                             });
+                            logger.info("logger>>7");
                             threadPoolExecutorService.remove(startTransaction);
                         }
 
@@ -154,23 +162,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
                                     try {
+                                        logger.info("logger>>8");
                                         ConnectionManager.Instance().disconnect();
+                                        logger.info("logger>>9");
                                         homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
                                         Toast.makeText(getActivity(), "Connection Reset..Please Connect Again", Toast.LENGTH_LONG).show();
 
                                     } catch (IOException e) {
                                         e.printStackTrace();
+                                        logger.info("logger>>10");
                                         homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
                                         Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
 
                                 }
                             });
-
+                            logger.info("logger>>11");
                             threadPoolExecutorService.remove(startTransaction);
                         }
                     });
-
+                    logger.info("logger>>12");
                     threadPoolExecutorService.execute(startTransaction);
                 } else {
                     Toast.makeText(getActivity(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
@@ -185,14 +196,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         HomeFragment.position = position;
+        logger.info("logger>>13");
         selectedItem = parent.getItemAtPosition(position).toString();
 
         homeViewModel.resetVisibilityOfViews(homeFragmentBinding);
+        logger.info("logger>>14");
         homeViewModel.getVisibilityOfViews(selectedItem);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        logger.info("logger>>15");
         Toast.makeText(getActivity(), R.string.transactn_type_not_selected, Toast.LENGTH_LONG).show();
     }
 }

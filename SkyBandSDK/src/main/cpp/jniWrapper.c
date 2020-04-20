@@ -11,11 +11,12 @@ JNIEXPORT jbyteArray JNICALL
 Java_com_girmiti_skybandecr_sdk_CLibraryLoad_pack(JNIEnv *env, jobject obj, jstring requestData,
                                                   jint transactionType, jstring szSignature,
                                                   jstring szEcrBuffer) {
+    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "Under Jni ");
 
     char *inRequestStr = (*env)->GetStringUTFChars(env, requestData, NULL);
     char *inResponseStr = malloc(2000);// (*env)->GetStringUTFChars(env, szEcrBuffer, NULL);
     char *inSignStr = (*env)->GetStringUTFChars(env, szSignature, NULL);
-
+    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "Before Pack ");
     // create request packet from core
     pack(inRequestStr, transactionType, inSignStr, inResponseStr);
 
