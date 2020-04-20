@@ -13,7 +13,7 @@ Java_com_girmiti_skybandecr_sdk_CLibraryLoad_pack(JNIEnv *env, jobject obj, jstr
                                                   jstring szEcrBuffer) {
 
     char *inRequestStr = (*env)->GetStringUTFChars(env, requestData, NULL);
-    char *inResponseStr = (*env)->GetStringUTFChars(env, szEcrBuffer, NULL);
+    char *inResponseStr = malloc(2000);// (*env)->GetStringUTFChars(env, szEcrBuffer, NULL);
     char *inSignStr = (*env)->GetStringUTFChars(env, szSignature, NULL);
 
     // create request packet from core
