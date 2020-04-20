@@ -16,7 +16,7 @@ public class ActiveTxnData {
     private String ecrReferenceNo;
     private boolean registered;
     private boolean sessionStarted;
-    private String[] resData;
+    private String resData;
 
     private static ActiveTxnData activeTxnData;
 

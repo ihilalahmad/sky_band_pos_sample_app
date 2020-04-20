@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.girmiti.skybandecr.R;
+import com.girmiti.skybandecr.cache.GeneralParamCache;
 
 public class MainActivity extends AppCompatActivity {
 
     View view;
     Toolbar toolbar;
+    private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        generalParamCache.clear();
+        
         findViewById(R.id.left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

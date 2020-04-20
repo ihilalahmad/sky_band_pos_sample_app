@@ -10,20 +10,44 @@ public class CLibraryLoad {
         System.loadLibrary("ecrcore-lib");
     }
 
-    public byte[] getPackData(String reqData, int tranType, String szSignature, String szEcrBuffer) {
+    private static CLibraryLoad instance;
+    private CLibraryLoad() {
 
-        // For for test
+    }
 
-            logger.debug("Calling Pack >>> " + reqData + " szSignature >>> " + szSignature + " szEcrBuffer >>> " + szEcrBuffer);
+    public static CLibraryLoad getInstance() {
+        if ( instance == null ) {
+            instance = new CLibraryLoad();
+        }
+        return instance;
+    }
 
-            byte[] packedData = pack(reqData, tranType, szSignature, szEcrBuffer);
-            String packData = new String(packedData);
+    public byte[] getPackData(String reqData, int tranType, String szSignature) {
 
-            logger.debug("Packed Data:" + packData);
-            logger.debug("Sending Packed Data to Terminal>>>");
+        logger.debug("Calling Pack >>> " + reqData + " szSignature >>> " + szSignature);
 
-         return packedData;
+        byte[] packedData = pack(reqData, tranType, szSignature, null);
+        String packData = new String(packedData);
+
+        logger.debug("Packed Data:" + packData);
+        logger.debug("Sending Packed Data to Terminal>>>");
+
+        return packedData;
+    }
+
+    public String getParseData(String respData) {
+
+        logger.debug("Calling Parse >>> " + respData );
+
+        byte[] parseData = parse(respData, null);
+        String parsedData = new String(parseData);
+
+        logger.debug("Parse data" + parsedData);
+
+        return parsedData;
     }
 
     public native byte[] pack(String inputReqData, int transactionType, String szSignature, String szEcrBuffer);
+
+    public native byte[] parse(String respData, String respOutData);
 }

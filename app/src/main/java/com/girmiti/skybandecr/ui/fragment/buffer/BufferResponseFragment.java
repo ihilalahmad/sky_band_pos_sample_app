@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
+import com.girmiti.skybandecr.sdk.CLibraryLoad;
 import com.girmiti.skybandecr.transaction.TransactionType;
 import com.girmiti.skybandecr.ui.fragment.home.HomeViewModel;
 import com.girmiti.skybandecr.sdk.logger.Logger;
@@ -48,7 +49,8 @@ public class BufferResponseFragment extends Fragment {
     private void setupListeners() {
 
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
-        setResponse();
+        receiveData = CLibraryLoad.getInstance().getParseData(ActiveTxnData.getInstance().getResData());
+        receiveData = receiveData.replace("�","\n");
         bufferResponseFragmentBinding.bufferReceive.setText(receiveData);
 
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
@@ -61,43 +63,4 @@ public class BufferResponseFragment extends Fragment {
         });
     }
 
-    private void setResponse() {
-
-        if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.PURCHASE) {
-            receiveData = bufferResponseViewModel.purchase(ActiveTxnData.getInstance().getResData());
-        } /*else if (HomeViewModel.getTransactionType() == 1) {
-            receiveData = bufferResponseViewModel.cashback(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 2) {
-            receiveData = bufferResponseViewModel.refund(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 3) {
-            receiveData = bufferResponseViewModel.preAuth(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 4) {
-            receiveData = bufferResponseViewModel.preAuthAdvice(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 5) {
-            receiveData = bufferResponseViewModel.preAuthExtn(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 6) {
-            receiveData = bufferResponseViewModel.preAuthVoid(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 8) {
-            receiveData = bufferResponseViewModel.cashback(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 9) {
-            receiveData = bufferResponseViewModel.reversal(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 10) {
-            receiveData = bufferResponseViewModel.reconciliation(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 11) {
-            receiveData = bufferResponseViewModel.parameterDownload(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 12) {
-            receiveData = bufferResponseViewModel.setParameter(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 13) {
-            receiveData = bufferResponseViewModel.getParameter(HomeViewModel.getSplittedArray());
-        } else if (HomeViewModel.getTransactionType() == 20) {
-            receiveData = bufferResponseViewModel.billPayment(HomeViewModel.getSplittedArray());
-        } */else {
-
-            for (String s : ActiveTxnData.getInstance().getResData() ) {
-                parseData = parseData + "\n" + s;
-            }
-
-            receiveData = parseData;
-        }
-    }
 }

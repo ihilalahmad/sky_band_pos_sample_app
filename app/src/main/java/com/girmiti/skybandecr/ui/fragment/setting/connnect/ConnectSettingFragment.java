@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 public class ConnectSettingFragment extends Fragment implements Constant {
 
-    public static ConnectSettingViewModel connectSettingViewModel;
+    public  ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     private NavController navController;
 
@@ -45,8 +45,8 @@ public class ConnectSettingFragment extends Fragment implements Constant {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        getActivity().findViewById(R.id.home_logo).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.left).setVisibility(View.VISIBLE);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.home_logo).setVisibility(View.INVISIBLE);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.left).setVisibility(View.VISIBLE);
 
         connectSettingFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.connect_setting_fragment, container, false);
         connectSettingViewModel = ViewModelProviders.of(this).get(ConnectSettingViewModel.class);
@@ -78,7 +78,6 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                 }
 
                 final ProgressDialog dialog = ProgressDialog.show(getActivity(), getString(R.string.connecting), getString(R.string.please_wait), true);
-                dialog.setCancelable(true);
 
                 new Thread(new Runnable() {
                     @Override
@@ -89,15 +88,14 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                             generalParamCache.putString(IP_ADDRESS, ipAddress);
                             generalParamCache.putString(PORT, portNo);
 
-                            if (ConnectionManager.Instance(ipAddress, Integer.parseInt(portNo)) != null) {
+                            if (ConnectionManager.Instance(ipAddress, Integer.parseInt(portNo)).isConnected()) {
                                 dialog.dismiss();
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                             }
 
                         } catch (final IOException e) {
-                            logger.severe(getString(R.string.Exception_during_connection), e);
-
                             if (getActivity() != null) {
+                                logger.severe(getString(R.string.Exception_during_connection), e);
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -117,8 +115,8 @@ public class ConnectSettingFragment extends Fragment implements Constant {
             public void onClick(View v) {
 
                 try {
-                    ConnectionManager.Instance(ipAddress,Integer.valueOf(portNo)).disconnect();
-                    Toast.makeText(getContext().getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+                        ConnectionManager.Instance().disconnect();
+                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
 
                 } catch (final IOException e) {
                     e.printStackTrace();

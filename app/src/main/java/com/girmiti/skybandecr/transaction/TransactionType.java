@@ -8,7 +8,7 @@ public enum TransactionType {
     PURCHASE("Purchase"),
     PURCHASE_CASHBACK("Purchase CashBack"),
     REFUND("Refund"),
-    PRE_AUTH("Pre Authorisation"),
+    PRE_AUTHORISATION("Pre Authorisation"),
     PRE_AUTH_COMPLETION("Pre Auth Completion"),
     PRE_AUTH_EXTENSION("Pre Auth Extension"),
     PRE_AUTH_VOID("Pre Auth Void"),
@@ -26,8 +26,8 @@ public enum TransactionType {
     START_SESSION("Start Session"),
     END_SESSION("End Session"),
     BILL_PAYMENT("Bill Payment"),
-    PRINT_DETAIL_REPORT("Print Detail Report"),
-    PRINT_SUMMARY_REPORT("Print Summary Report");
+    PRINT_DETAIL_REPORT("Print Detail Report"),PRINT_SUMMARY_REPORT("Print Summary Report");
+
 
     @Getter
     @Setter

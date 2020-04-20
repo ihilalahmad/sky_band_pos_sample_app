@@ -3,7 +3,6 @@ package com.girmiti.skybandecr.ui.fragment.home;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,8 +135,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                             return;
                                         } else {*/
                                             ActiveTxnData.getInstance().setRegistered(true);
-                                        logger.info("logger>>3");
-                                      //  }
                                     } else if (selectedItem.equals(getString(R.string.start_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(true);
                                         logger.info("logger>>4");

@@ -45,7 +45,7 @@ Java_com_girmiti_skybandecr_sdk_CLibraryLoad_parse(JNIEnv *env, jobject obj, jst
                                                    jstring respOutData) {
 
     char *inRequestStr = (*env)->GetStringUTFChars(env, respData, NULL);
-    char *inResponseStr = (*env)->GetStringUTFChars(env, respOutData, NULL);
+    char *inResponseStr = malloc(2000);// (*env)->GetStringUTFChars(env, szEcrBuffer, NULL);
 
     // parse the request
     parse(inRequestStr, inResponseStr);
@@ -62,6 +62,9 @@ Java_com_girmiti_skybandecr_sdk_CLibraryLoad_parse(JNIEnv *env, jobject obj, jst
     (*env)->SetByteArrayRegion(env, arr, 0, n, (jbyte *) inResponseStr);
 
     __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "arr %d", n);
+
+    free(inRequestStr);
+    free(inResponseStr);
 
     return arr;
 }

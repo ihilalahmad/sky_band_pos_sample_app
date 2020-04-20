@@ -26,11 +26,7 @@ public class ConnectionManager {
         if (socketHostConnector == null) {
             socketHostConnector = new ConnectionManager(ip, port);
             socketHostConnector.createConnection();
-        }
-
-        // Second time onwards
-        if (socketHostConnector.socket != null && !socketHostConnector.socket.isConnected()) {
-            // create connection again
+        } else {
             socketHostConnector.cleanup();
             socketHostConnector = new ConnectionManager(ip, port);
             socketHostConnector.createConnection();
@@ -72,7 +68,7 @@ public class ConnectionManager {
 
         output = socket.getOutputStream();
         input = socket.getInputStream();
-        logger.debug(getClass() + "::" + "Created connection");
+        logger.debug(getClass() + "::" + "Created connection : Ip"+serverIp+ "port:" + serverPort);
     }
 
     public void disconnect() throws IOException {

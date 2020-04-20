@@ -36,7 +36,7 @@ public class HomeViewModel extends ViewModel implements Constant {
     public void resetVisibilityOfViews(HomeFragmentBinding homeFragmentBinding) {
 
         this.homeFragmentBinding = homeFragmentBinding;
-        if (ecrSelected == 0) {
+        if (ecrSelected != 1) {
             this.homeFragmentBinding.ecrRefNo.setVisibility(View.GONE);
             this.homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
         } else {
@@ -136,7 +136,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.origRefundDateTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origRefundDate.setText("");
                 break;
-            case PRE_AUTH:
+            case PRE_AUTHORISATION:
                 homeFragmentBinding.authAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmt.setText("");
@@ -227,6 +227,8 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.terminalLanguage.setText("");
                 break;
             case REGISTER:
+            case END_SESSION:
+            case START_SESSION:
                 homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
                 homeFragmentBinding.ecrRefNo.setVisibility(View.GONE);
                 break;
@@ -242,14 +244,6 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.billerNumber.setVisibility(View.VISIBLE);
                 homeFragmentBinding.billerNumberTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.billerNumber.setText("");
-                break;
-            case START_SESSION:
-                homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
-                homeFragmentBinding.ecrRefNo.setVisibility(View.GONE);
-                break;
-            case END_SESSION:
-                homeFragmentBinding.ecrRefNoTv.setVisibility(View.GONE);
-                homeFragmentBinding.ecrRefNo.setVisibility(View.GONE);
                 break;
 
         }
@@ -267,7 +261,8 @@ public class HomeViewModel extends ViewModel implements Constant {
         } else {
             ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + "000001";
         }
-
+           logger.debug("Ecr refrence no>>" + ecrReferenceNo);
+           logger.debug("Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) );
         if (homeFragmentBinding.typeOfCompletion.isChecked()) {
             completion = "1";
         } else {
@@ -284,7 +279,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             case REFUND:
                 reqData = date + ";" + homeFragmentBinding.refundAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
                 break;
-            case PRE_AUTH:
+            case PRE_AUTHORISATION:
                 reqData = date + ";" + homeFragmentBinding.authAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_COMPLETION:
@@ -342,18 +337,16 @@ public class HomeViewModel extends ViewModel implements Constant {
     public byte[] packData() throws NoSuchAlgorithmException {
 
         String combinedValue = "";
+        transactionType = ActiveTxnData.getInstance().getTransactionType();
 
-        if (transactionType != TransactionType.START_SESSION && transactionType != TransactionType.END_SESSION && transactionType != TransactionType.BILL_PAYMENT) {
+        if (transactionType != TransactionType.START_SESSION && transactionType != TransactionType.END_SESSION && transactionType != TransactionType.REGISTER) {
             combinedValue = "000001" + terminalID;
             logger.debug(":: Terminal No: " + terminalID);
             szSignature = convertSHA(combinedValue);
         }
 
         logger.debug(":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
-        CLibraryLoad cLibraryLoad = new CLibraryLoad();
-        String szEcrBuffer = "";
-
-        return cLibraryLoad.getPackData(reqData, transactionType.ordinal(), szSignature, szEcrBuffer);
+        return CLibraryLoad.getInstance().getPackData(reqData, transactionType.ordinal(), szSignature);
     }
 
     public String getTerminalResponse(byte[] packData) throws IOException {
@@ -398,7 +391,8 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Please Register First");
         } else if (transactionType != TransactionType.REGISTER && transactionType != TransactionType.START_SESSION && transactionType != TransactionType.END_SESSION && !ActiveTxnData.getInstance().isSessionStarted()) {
             throw new Exception("Please Start Session");
-        } else if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO).length() != 8) {
+        } else if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
+            logger.info("Cash Register No not entered");
             throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
         }
 
@@ -417,7 +411,7 @@ public class HomeViewModel extends ViewModel implements Constant {
         } else if (transactionType == TransactionType.REFUND) {
             return !homeFragmentBinding.refundAmt.getText().toString().equals("") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origRefundDate.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == TransactionType.PRE_AUTH) {
+        } else if (transactionType == TransactionType.PRE_AUTHORISATION) {
             return !homeFragmentBinding.authAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14;
 
         } else if (transactionType == TransactionType.PRE_AUTH_COMPLETION) {
@@ -429,35 +423,35 @@ public class HomeViewModel extends ViewModel implements Constant {
         } else if (transactionType == TransactionType.PRE_AUTH_VOID) {
             return !homeFragmentBinding.origTransactionAmt.getText().toString().equals("") && homeFragmentBinding.rrnNoEditText.getText().length() == 12 && homeFragmentBinding.origTransactionDate.getText().length() == 6 && homeFragmentBinding.origApproveCode.getText().length() == 6 && ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == TransactionType.REVERSAL) {
+        } else if (transactionType == TransactionType.CASH_ADVANCE) {
             return !homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("") && ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == TransactionType.RECONCILIATION) {
+        }else if (transactionType == TransactionType.REVERSAL) {
             return homeFragmentBinding.rrnNoEditText.getText().length() == 12 && ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == TransactionType.PARAMETER_DOWNLOAD || transactionType == TransactionType.SET_PARAMETER) {
+        }  else if (transactionType == TransactionType.RECONCILIATION || transactionType == TransactionType.PARAMETER_DOWNLOAD) {
             return ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == TransactionType.GET_PARAMETER) {
+        } else if (transactionType == TransactionType.SET_PARAMETER) {
             return homeFragmentBinding.vendorId.getText().length() == 6 && homeFragmentBinding.vendorTerminalType.getText().length() == 1 && homeFragmentBinding.trsmId.getText().length() == 6 && homeFragmentBinding.vendorKeyIndex.getText().length() == 1 && homeFragmentBinding.samaKeyIndex.getText().length() == 1;
 
-        } else if (transactionType == TransactionType.SET_TERMINAL_LANGUAGE || transactionType == TransactionType.TERMINAL_STATUS || transactionType == TransactionType.PREVIOUS_TRANSACTION_DETAILS || transactionType == TransactionType.REGISTER || transactionType == TransactionType.PRINT_SUMMARY_REPORT) {
+        } else if (transactionType == TransactionType.GET_PARAMETER || transactionType == TransactionType.SET_TERMINAL_LANGUAGE|| transactionType == TransactionType.TERMINAL_STATUS || transactionType == TransactionType.PREVIOUS_TRANSACTION_DETAILS || transactionType == TransactionType.PRINT_DETAIL_REPORT) {
             return ecrReferenceNo.length() == 14;
 
-        } else if (transactionType == TransactionType.START_SESSION) {
-
+        } else if (transactionType == TransactionType.REGISTER) {
+            logger.debug("Cash Register length>>"+GeneralParamCache.getInstance().getString(CASH_REGISTER_NO).length());
             if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO).length() == 8) {
                 return ecrReferenceNo.length() == 14;
             } else
                 throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
 
+        } else if (transactionType == TransactionType.START_SESSION) {
+            return ecrReferenceNo.length() == 14;
+
         } else if (transactionType == TransactionType.END_SESSION) {
             return ecrReferenceNo.length() == 14;
 
         } else if (transactionType == TransactionType.BILL_PAYMENT) {
-            return ecrReferenceNo.length() == 14;
-
-        } else if (transactionType == TransactionType.PRINT_DETAIL_REPORT) {
             return !homeFragmentBinding.billPayAmt.getText().toString().equals("") && homeFragmentBinding.billerId.getText().length() == 6 && homeFragmentBinding.billerNumber.getText().length() == 6;
 
         }
@@ -465,7 +459,7 @@ public class HomeViewModel extends ViewModel implements Constant {
     }
 
     public void parse(String terminalResponse) {
-        ActiveTxnData.getInstance().setResData(terminalResponse.split("�"));
+        ActiveTxnData.getInstance().setResData(terminalResponse);
     }
 }
 
