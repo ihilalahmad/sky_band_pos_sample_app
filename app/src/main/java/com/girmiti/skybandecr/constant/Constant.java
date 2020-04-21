@@ -11,4 +11,5 @@ public interface Constant {
     String CASH_REGISTER_NO = "CashRegNo";
     String ENABLE_PRINT = "EnablePrint";
     String ENABLE_ECR = "EnableECR";
+    String Active_Fragment = "ActiveFragment";
 }

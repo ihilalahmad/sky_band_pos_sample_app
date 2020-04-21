@@ -11,12 +11,13 @@ public class CLibraryLoad {
     }
 
     private static CLibraryLoad instance;
+
     private CLibraryLoad() {
 
     }
 
     public static CLibraryLoad getInstance() {
-        if ( instance == null ) {
+        if (instance == null) {
             instance = new CLibraryLoad();
         }
         return instance;
@@ -37,9 +38,9 @@ public class CLibraryLoad {
 
     public String getParseData(String respData) {
 
-        logger.debug("Calling Parse >>> " + respData );
+        logger.debug("Calling Parse >>> " + respData);
 
-        byte[] parseData = parse(respData, null);
+        byte[] parseData = parse(respData, "");
         String parsedData = new String(parseData);
 
         logger.debug("Parse data" + parsedData);

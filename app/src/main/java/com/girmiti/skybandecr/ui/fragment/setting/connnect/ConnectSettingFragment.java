@@ -21,7 +21,8 @@ import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.cache.GeneralParamCache;
 import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.databinding.ConnectSettingFragmentBinding;
-import com.girmiti.skybandecr.sdk.ConnectionManager;
+import com.girmiti.skybandecr.sdk.api.ECRImpl;
+import com.girmiti.skybandecr.sdk.api.listener.ECRCore;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ import java.util.regex.Pattern;
 
 public class ConnectSettingFragment extends Fragment implements Constant {
 
-    public  ConnectSettingViewModel connectSettingViewModel;
+    public ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     private NavController navController;
 
@@ -39,6 +40,11 @@ public class ConnectSettingFragment extends Fragment implements Constant {
     private String portNo = "";
     private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
 
+    public static ECRCore getEcrCore() {
+        return ecrCore;
+    }
+
+    private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ConnectSettingFragment.class.getName());
 
     @Override
@@ -82,28 +88,26 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-
+                        generalParamCache.putString(IP_ADDRESS, ipAddress);
+                        generalParamCache.putString(PORT, portNo);
+                        ecrCore = ECRImpl.getConnectInstance();
                         try {
-
-                            generalParamCache.putString(IP_ADDRESS, ipAddress);
-                            generalParamCache.putString(PORT, portNo);
-
-                            if (ConnectionManager.Instance(ipAddress, Integer.parseInt(portNo)).isConnected()) {
+                            int connectionStatus = ecrCore.doTCPIPConnection(ipAddress, Integer.parseInt(portNo));
+                            if (connectionStatus == 0) {
+                                logger.info("Socket Connected");
                                 dialog.dismiss();
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                            } else {
+                                logger.info("Socket Connection failed");
                             }
-
-                        } catch (final IOException e) {
-                            if (getActivity() != null) {
-                                logger.severe(getString(R.string.Exception_during_connection), e);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
+                        } catch (IOException e) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }
                 }).start();
@@ -115,18 +119,17 @@ public class ConnectSettingFragment extends Fragment implements Constant {
             public void onClick(View v) {
 
                 try {
-                        ConnectionManager.Instance().disconnect();
+                    if (ecrCore.doDisconnection() != 0) {
+                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Already disconnected", Toast.LENGTH_LONG).show();
+                        logger.info("Socket is Already Disconnected");
+                    } else {
+                        logger.info("Socket Disconnected");
+                        GeneralParamCache.getInstance().putString(CASH_REGISTER_NO,null);
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+                    }
 
                 } catch (final IOException e) {
-                    e.printStackTrace();
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext().getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });

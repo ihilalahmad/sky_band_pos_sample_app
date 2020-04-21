@@ -79,6 +79,8 @@
     <string name="biller_id">Biller Id</string>
     <string name="biller_number">Biller Number</string>
     <string name="full_completion">Full Completion</string>
+    <string name="home_fragment">HomeFragment</string>
+    <string name="id_not_received">Terminal id not received</string>
     <string-array name="transaction_type">
 
         <item>Register</item>

@@ -24,13 +24,12 @@ public class StartTransaction implements Runnable {
     @Override
     public void run() {
         try {
-            byte[] packData = homeViewModel.packData();
-            String terminalResponse = homeViewModel.getTerminalResponse(packData);
+            String terminalResponse = homeViewModel.getTerminalResponse();
             logger.debug("Terminal response>>> " + terminalResponse);
             homeViewModel.parse(terminalResponse);
             logger.info("Response parsed");
             transactionListener.onSuccess();
-        } catch (final IOException | NoSuchAlgorithmException e) {
+        } catch (final Exception e) {
             logger.severe("Exception on transaction", e);
             transactionListener.onError(e);
         }

@@ -19,6 +19,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.girmiti.skybandecr.R;
+import com.girmiti.skybandecr.cache.GeneralParamCache;
+import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.ConnectionManager;
 import com.girmiti.skybandecr.transaction.StartTransaction;
@@ -30,7 +32,9 @@ import com.girmiti.skybandecr.sdk.logger.Logger;
 import java.io.IOException;
 import java.util.Objects;
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+import lombok.Setter;
+
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener, Constant {
 
     private String selectedItem;
     private HomeViewModel homeViewModel;
@@ -39,7 +43,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private Logger logger = Logger.getNewLogger(HomeFragment.class.getName());
     private Activity activity;
     private ThreadPoolExecutorService threadPoolExecutorService = null;
-    private static int position;
+    @Setter
+    public static int position;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -49,6 +54,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         Objects.requireNonNull(getActivity()).findViewById(R.id.home_logo).setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).findViewById(R.id.left).setVisibility(View.INVISIBLE);
+        GeneralParamCache.getInstance().putString(Active_Fragment,getString(R.string.home_fragment));
 
         return homeFragmentBinding.getRoot();
     }
@@ -64,36 +70,36 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onStart() {
-        super.onStart();
         homeFragmentBinding.transactionSpinner.setSelection(position);
+
+        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
+        } else {
+            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+        }
+        super.onStart();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
-            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
-        } else {
-            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-        }
+    public void onPause() {
+        GeneralParamCache.getInstance().putString(Active_Fragment,null);
+        super.onPause();
     }
 
     private void setupListeners() {
-        logger.info("logger>>20");
 
         if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
         }
-        logger.info("logger>>21");
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
                 R.array.transaction_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         homeFragmentBinding.transactionSpinner.setAdapter(adapter);
-        logger.info("logger>>22");
+
         homeFragmentBinding.transactionBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -126,29 +132,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    logger.info("logger>>1");
                                     dialog.dismiss();
-                                    logger.info("logger>>2");
                                     if (selectedItem.equals(getString(R.string.register))) {
-                                       /* if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
-                                            Toast.makeText(activity, R.string.not_registered, Toast.LENGTH_LONG).show();
+                                    /*    if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
+                                            Toast.makeText(activity, R.string.id_not_received , Toast.LENGTH_LONG).show();
                                             return;
                                         } else {*/
                                             ActiveTxnData.getInstance().setRegistered(true);
                                     } else if (selectedItem.equals(getString(R.string.start_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(true);
-                                        logger.info("logger>>4");
 
                                     } else if (selectedItem.equals(getString(R.string.end_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(false);
-                                        logger.info("logger>>5");
 
                                     }
                                     navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
-                                    logger.info("logger>>6");
                                 }
                             });
-                            logger.info("logger>>7");
                             threadPoolExecutorService.remove(startTransaction);
                         }
 
@@ -159,26 +159,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
                                     try {
-                                        logger.info("logger>>8");
                                         ConnectionManager.Instance().disconnect();
-                                        logger.info("logger>>9");
                                         homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
                                         Toast.makeText(getActivity(), "Connection Reset..Please Connect Again", Toast.LENGTH_LONG).show();
 
                                     } catch (IOException e) {
                                         e.printStackTrace();
-                                        logger.info("logger>>10");
                                         homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
                                         Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
 
                                 }
                             });
-                            logger.info("logger>>11");
                             threadPoolExecutorService.remove(startTransaction);
                         }
                     });
-                    logger.info("logger>>12");
                     threadPoolExecutorService.execute(startTransaction);
                 } else {
                     Toast.makeText(getActivity(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
@@ -193,17 +188,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         HomeFragment.position = position;
-        logger.info("logger>>13");
         selectedItem = parent.getItemAtPosition(position).toString();
 
         homeViewModel.resetVisibilityOfViews(homeFragmentBinding);
-        logger.info("logger>>14");
         homeViewModel.getVisibilityOfViews(selectedItem);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        logger.info("logger>>15");
         Toast.makeText(getActivity(), R.string.transactn_type_not_selected, Toast.LENGTH_LONG).show();
     }
 }
