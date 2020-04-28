@@ -19,6 +19,8 @@ import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.ConnectedFragmentBinding;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
+import java.util.Objects;
+
 public class ConnectedFragment extends Fragment {
 
     private ConnectedFragmentBinding connectedFragmentBinding;
@@ -31,7 +33,7 @@ public class ConnectedFragment extends Fragment {
 
         connectedFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.connected_fragment, container, false);
 
-        getActivity().findViewById(R.id.home_logo).setVisibility(View.INVISIBLE);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.home_logo).setVisibility(View.INVISIBLE);
         getActivity().findViewById(R.id.left).setVisibility(View.INVISIBLE);
 
         setupListeners();
@@ -42,7 +44,7 @@ public class ConnectedFragment extends Fragment {
     private void setupListeners() {
 
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
-        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
         connectedFragmentBinding.buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override

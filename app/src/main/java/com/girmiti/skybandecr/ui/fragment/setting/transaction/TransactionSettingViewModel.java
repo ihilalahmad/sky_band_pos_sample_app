@@ -21,7 +21,7 @@ public class TransactionSettingViewModel extends ViewModel implements Constant {
 
     public void setData(TransactionSettingFragmentBinding transactionSettingFragmentBinding) {
 
-        if (transactionSettingFragmentBinding.ecrRefNo.isChecked()) {
+        if (transactionSettingFragmentBinding.ecrNo.isChecked()) {
             GeneralParamCache.getInstance().putInt(ENABLE_ECR, 1);
         } else {
             GeneralParamCache.getInstance().putInt(ENABLE_ECR, 0);

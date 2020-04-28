@@ -1,7 +1,9 @@
 package com.girmiti.skybandecr.ui.fragment.home;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -51,10 +55,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                              @Nullable Bundle savedInstanceState) {
 
         homeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false);
-
         Objects.requireNonNull(getActivity()).findViewById(R.id.home_logo).setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).findViewById(R.id.left).setVisibility(View.INVISIBLE);
-        GeneralParamCache.getInstance().putString(Active_Fragment,getString(R.string.home_fragment));
 
         return homeFragmentBinding.getRoot();
     }
@@ -62,6 +64,22 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                new AlertDialog.Builder(getContext())
+                        .setMessage("Are you sure.. you want to exit?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Objects.requireNonNull(getActivity()).finish();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         setupListeners();
         activity = getActivity();
@@ -72,18 +90,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onStart() {
         homeFragmentBinding.transactionSpinner.setSelection(position);
 
+        if (GeneralParamCache.getInstance().getString(Ecr_Number) == null) {
+            GeneralParamCache.getInstance().putString(Ecr_Number, getEcrNumberString());
+        }
+
         if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
         }
         super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        GeneralParamCache.getInstance().putString(Active_Fragment,null);
-        super.onPause();
     }
 
     private void setupListeners() {
@@ -113,6 +129,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 try {
                     validated = homeViewModel.validateData(homeFragmentBinding);
                 } catch (Exception e) {
+                    logger.severe("Exception on validating", e);
                     Toast.makeText(getActivity(), e.getMessage() + "", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -122,11 +139,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     Toast.makeText(getActivity(), R.string.invalid_input, Toast.LENGTH_LONG).show();
                     return;
                 }
-                if ( ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+                if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
 
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
+                    dialog.setCancelable(false);
                     final StartTransaction startTransaction = new StartTransaction(homeViewModel);
+
                     startTransaction.setTransactionListener(new TransactionListener() {
+
                         @Override
                         public void onSuccess() {
                             activity.runOnUiThread(new Runnable() {
@@ -134,10 +154,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
                                     if (selectedItem.equals(getString(R.string.register))) {
-                                    /*    if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
-                                            Toast.makeText(activity, R.string.id_not_received , Toast.LENGTH_LONG).show();
+                                        if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
+                                            Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
                                             return;
-                                        } else {*/
+                                        } else
                                             ActiveTxnData.getInstance().setRegistered(true);
                                     } else if (selectedItem.equals(getString(R.string.start_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(true);
@@ -158,17 +178,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                                    try {
-                                        ConnectionManager.Instance().disconnect();
-                                        homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                        Toast.makeText(getActivity(), "Connection Reset..Please Connect Again", Toast.LENGTH_LONG).show();
-
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                        homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                        Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                    }
-
+                         //           if (!Objects.equals(errorMessage.getMessage(), "Read timed out")) {
+                                        try {
+                                            if (ConnectionManager.Instance() != null) {
+                                                ConnectionManager.Instance().disconnect();
+                                            }
+                                            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+                                            Toast.makeText(activity,"Time Out...Please Connect Again", Toast.LENGTH_LONG).show();
+                                        } catch (IOException e) {
+                                            logger.severe("Exception on disconnecting socket", e);
+                                            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+                                            Toast.makeText(activity, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                  /*  } else {
+                                        Toast.makeText(activity, "" + errorMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                    }*/
                                 }
                             });
                             threadPoolExecutorService.remove(startTransaction);
@@ -196,6 +220,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(getActivity(), R.string.transactn_type_not_selected, Toast.LENGTH_LONG).show();
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String getEcrNumberString() {
+        // Random rnd = new Random();
+        // int number = rnd.nextInt(999999);
+        int number = 1;
+        // this will convert any number sequence into 6 character.
+        logger.debug("Ecr No Generated>>>" + String.format("%06d", number));
+        return String.format("%06d", number);
     }
 }

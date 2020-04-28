@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
-import com.girmiti.skybandecr.sdk.CLibraryLoad;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 import com.girmiti.skybandecr.ui.fragment.home.HomeFragment;
 
@@ -50,7 +49,11 @@ public class BufferResponseFragment extends Fragment {
     private void setupListeners() {
         HomeFragment.setPosition(0);
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
-        receiveData = CLibraryLoad.getInstance().getParseData(ActiveTxnData.getInstance().getResData());
+        receiveData = ActiveTxnData.getInstance().getResData();
+        String subString = new String(receiveData);
+
+
+        logger.debug(getClass()+"::"+"GetRespData>>> "+ receiveData);
         receiveData = receiveData.replace(";", "\n");
         bufferResponseFragmentBinding.bufferReceive.setText(receiveData);
 

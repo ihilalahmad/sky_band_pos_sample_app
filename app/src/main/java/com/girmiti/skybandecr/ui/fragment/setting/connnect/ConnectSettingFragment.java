@@ -100,11 +100,12 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                             } else {
                                 logger.info("Socket Connection failed");
                             }
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
+                                    logger.severe("Exception on Connecting",e);
                                     Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -117,18 +118,22 @@ public class ConnectSettingFragment extends Fragment implements Constant {
         connectSettingFragmentBinding.disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GeneralParamCache.getInstance().putString(IP_ADDRESS, null);
+                GeneralParamCache.getInstance().putString(PORT, null);
 
                 try {
-                    if (ecrCore.doDisconnection() != 0) {
+                    connectSettingFragmentBinding.ipAddress.getText().clear();
+                    connectSettingFragmentBinding.portNo.getText().clear();
+                    if (ecrCore != null && ecrCore.doDisconnection() != 1) {
+                        logger.info("Socket Disconnected");
+                        GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
+                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+                    } else {
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Already disconnected", Toast.LENGTH_LONG).show();
                         logger.info("Socket is Already Disconnected");
-                    } else {
-                        logger.info("Socket Disconnected");
-                        GeneralParamCache.getInstance().putString(CASH_REGISTER_NO,null);
-                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
                     }
-
                 } catch (final IOException e) {
+                    logger.severe("Exception on disconnecting",e);
                     Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
                 }
             }

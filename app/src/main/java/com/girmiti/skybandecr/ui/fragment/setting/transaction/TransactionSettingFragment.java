@@ -49,9 +49,9 @@ public class TransactionSettingFragment extends Fragment implements Constant {
     private void setupListeners() {
 
         if (TransactionSettingViewModel.getEcr() == 1) {
-            transactionSettingFragmentBinding.ecrRefNo.setChecked(true);
+            transactionSettingFragmentBinding.ecrNo.setChecked(true);
         } else {
-            transactionSettingFragmentBinding.ecrRefNo.setChecked(false);
+            transactionSettingFragmentBinding.ecrNo.setChecked(false);
         }
 
         if (TransactionSettingViewModel.getPrint() == 1) {

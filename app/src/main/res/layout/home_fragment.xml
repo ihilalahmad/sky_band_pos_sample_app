@@ -5,6 +5,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context=".ui.fragment.home.HomeFragment"
         tools:ignore="ExtraText">
         >
@@ -58,7 +60,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/ecr_ref_no_tv"
+                        android:id="@+id/ecr_no_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
@@ -66,7 +68,7 @@
                         android:text="@string/ecr_ref_no" />
 
                     <EditText
-                        android:id="@+id/ecr_ref_no"
+                        android:id="@+id/ecr_no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
@@ -212,7 +214,7 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/ddmmyy"
-                        android:inputType="date"
+                        android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
@@ -372,7 +374,7 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/ddmmyy"
-                        android:inputType="date"
+                        android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
 

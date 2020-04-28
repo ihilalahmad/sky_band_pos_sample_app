@@ -20,7 +20,7 @@
             />
 
         <CheckBox
-            android:id="@+id/ecr_ref_no"
+            android:id="@+id/ecr_no"
             android:layout_below="@id/terminal_printer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/cash_register_no_tv"
-            android:layout_below="@id/ecr_ref_no"
+            android:layout_below="@id/ecr_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp25"

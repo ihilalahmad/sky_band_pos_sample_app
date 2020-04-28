@@ -22,8 +22,7 @@ public class ConnectionManager {
     private static String serverIp;
     @Setter
     private static int serverPort;
-
-    private final int SOCKET_TIMEOUT = 5000;
+    private final int SOCKET_TIMEOUT = 70000;
     private static ConnectionManager socketHostConnector;
 
     public static ConnectionManager Instance(String ip, int port) throws IOException {
@@ -72,9 +71,6 @@ public class ConnectionManager {
         socket = new Socket();
         socket.connect(new InetSocketAddress(serverIp, serverPort), SOCKET_TIMEOUT);
         socket.setSoTimeout(SOCKET_TIMEOUT);
-
-        output = socket.getOutputStream();
-        input = socket.getInputStream();
         logger.debug(getClass() + "::" + "Created connection : Ip" + serverIp + "port:" + serverPort);
     }
 
@@ -119,6 +115,9 @@ public class ConnectionManager {
 
     public String sendAndRecv(byte[] in) throws IOException {
 
+        output = socket.getOutputStream();
+        input = socket.getInputStream();
+
         output.write(in);
         output.flush();
 
@@ -133,6 +132,7 @@ public class ConnectionManager {
         if (noOfBytesRead <= 0) {
             throw new IOException();
         }
+
 
         byte[] finalResponse = new byte[noOfBytesRead];
         System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);

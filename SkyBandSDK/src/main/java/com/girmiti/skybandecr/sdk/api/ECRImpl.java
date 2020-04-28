@@ -3,12 +3,14 @@ package com.girmiti.skybandecr.sdk.api;
 import com.girmiti.skybandecr.sdk.CLibraryLoad;
 import com.girmiti.skybandecr.sdk.ConnectionManager;
 import com.girmiti.skybandecr.sdk.api.listener.ECRCore;
+import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
 
 public class ECRImpl implements ECRCore {
 
     private static ECRCore ecrCore;
+    private Logger logger = Logger.getNewLogger(ECRImpl.class.getName());
 
     public static ECRCore getConnectInstance() {
         if (ecrCore == null) {
@@ -20,17 +22,24 @@ public class ECRImpl implements ECRCore {
 
     @Override
     public String doTCPIPTransaction(String ipAddress, int portNumber, String requestData, int transactionType, String signature) throws Exception {
+
         String terminalResponse = "";
         byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
-       if( ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()){
-           terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
-       } else {
-           throw new Exception("Socket not connected");
-       }
-        String parseData = CLibraryLoad.getInstance().getParseData(terminalResponse);
-        String replaceData = parseData.replace("�", ";");
 
-        return replaceData;
+        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+            terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
+        } else {
+            throw new Exception("Socket not connected");
+        }
+        //Library parsing is not giving correct response
+      /*  String parseData = CLibraryLoad.getInstance().getParseData(terminalResponse);
+        parseData = parseData.replace("�", ";");
+        logger.debug("After Replace  with ;>>"+parseData);
+        return parseData;*/
+        terminalResponse = terminalResponse.replace("�", ";");
+        logger.debug("After Replace  with ;>>" + terminalResponse);
+
+        return terminalResponse;
     }
 
     @Override
