@@ -129,7 +129,7 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                         GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Already disconnected", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();
                         logger.info("Socket is Already Disconnected");
                     }
                 } catch (final IOException e) {

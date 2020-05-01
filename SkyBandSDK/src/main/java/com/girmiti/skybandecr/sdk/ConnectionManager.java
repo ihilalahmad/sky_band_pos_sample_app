@@ -22,7 +22,7 @@ public class ConnectionManager {
     private static String serverIp;
     @Setter
     private static int serverPort;
-    private final int SOCKET_TIMEOUT = 70000;
+    private final int SOCKET_TIMEOUT = 120000;
     private static ConnectionManager socketHostConnector;
 
     public static ConnectionManager Instance(String ip, int port) throws IOException {

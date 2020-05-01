@@ -28,9 +28,11 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private String reqData = "";
     public TransactionType transactionTypeString = TransactionType.PURCHASE;
-    private  String terminalID = "";
+    private String terminalID = "";
     private String szSignature = "";
     private String ecrReferenceNo = "";
+    private String prevEcrNo = "";
+
 
     public void resetVisibilityOfViews(HomeFragmentBinding homeFragmentBinding) {
 
@@ -101,11 +103,16 @@ public class HomeViewModel extends ViewModel implements Constant {
         homeFragmentBinding.terminalLanguageTv.setVisibility(View.GONE);
 
         this.homeFragmentBinding.typeOfCompletion.setVisibility(View.GONE);
+
+        this.homeFragmentBinding.prevEcrNo.setVisibility(View.GONE);
+        this.homeFragmentBinding.prevEcrNoTv.setVisibility(View.GONE);
     }
 
+    @SuppressLint("DefaultLocale")
     public void getVisibilityOfViews(String selectedItem) {
 
         transactionTypeString = TransactionType.valueOf(selectedItem.toUpperCase().replace(" ", "_"));
+        prevEcrNo = String.format("%06d", Integer.parseInt(GeneralParamCache.getInstance().getString(Ecr_Number)) - 1);
 
         switch (transactionTypeString) {
             case PURCHASE:
@@ -244,6 +251,13 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.billerNumberTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.billerNumber.setText("");
                 break;
+            case CHECK_STATUS:
+                homeFragmentBinding.ecrNoTv.setVisibility(View.GONE);
+                homeFragmentBinding.ecrNo.setVisibility(View.GONE);
+                homeFragmentBinding.prevEcrNo.setVisibility(View.VISIBLE);
+                homeFragmentBinding.prevEcrNoTv.setVisibility(View.VISIBLE);
+                homeFragmentBinding.prevEcrNo.setText(prevEcrNo);
+                break;
         }
     }
 
@@ -254,13 +268,13 @@ public class HomeViewModel extends ViewModel implements Constant {
         String completion;
 
         if (ecrSelected == ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
-                ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
+            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
         } else {
             ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(Ecr_Number);
         }
 
-        logger.debug(getClass()+":: Ecr refrence no>>" + ecrReferenceNo);
-        logger.debug(getClass()+":: Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
+        logger.debug(getClass() + ":: Ecr refrence no>>" + ecrReferenceNo);
+        logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
 
         if (homeFragmentBinding.typeOfCompletion.isChecked()) {
             completion = "1";
@@ -314,6 +328,9 @@ public class HomeViewModel extends ViewModel implements Constant {
                 szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
                 reqData = date + ";" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + "!";
                 break;
+            case CHECK_STATUS:
+                reqData = date + ";" + prevEcrNo + ";" + ecrReferenceNo + "!";
+                break;
             case PARAMETER_DOWNLOAD:
             case GET_PARAMETER:
             case TERMINAL_STATUS:
@@ -343,20 +360,20 @@ public class HomeViewModel extends ViewModel implements Constant {
         transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
 
         if (transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && transactionTypeString != TransactionType.REGISTER) {
-            combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length()-SIX) +  ActiveTxnData.getInstance().getTerminalID();
-            logger.debug(getClass()+"::Combined value>>" + combinedValue);
-            logger.debug(getClass()+"::ECR Ref No. Length>>"+ecrReferenceNo.length());
+            combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length() - SIX) + ActiveTxnData.getInstance().getTerminalID();
+            logger.debug(getClass() + "::Combined value>>" + combinedValue);
+            logger.debug(getClass() + "::ECR Ref No. Length>>" + ecrReferenceNo.length());
             szSignature = convertSHA(combinedValue);
         }
 
-        logger.debug(getClass()+":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
+        logger.debug(getClass() + ":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
 
-        String terminalResponse = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
-
-        if(ecrSelected != ONE && transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION) {
+        if (ecrSelected != ONE && transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION) {
             int ecrNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Ecr_Number)) + 1;
             GeneralParamCache.getInstance().putString(Ecr_Number, String.format("%06d", ecrNumber));
         }
+
+        String terminalResponse = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
 
         if (transactionTypeString == TransactionType.REGISTER) {
             String[] splittedArray = terminalResponse.split(";");
@@ -369,7 +386,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             }
         }
 
-        logger.debug(getClass()+"::Terminal ID>>" + terminalID);
+        logger.debug(getClass() + "::Terminal ID>>" + terminalID);
         return terminalResponse;
     }
 
@@ -399,19 +416,19 @@ public class HomeViewModel extends ViewModel implements Constant {
             logger.info("Cash Register No. not entered");
             throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
         }
-
+        System.out.println("TransactiontypeString>>>" + transactionTypeString);
         if (transactionTypeString == TransactionType.PURCHASE) {
             return !homeFragmentBinding.payAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.payAmt.getText().toString())).equals("0") && ecrReferenceNo.length() == FOURTEEN;
 
         } else if (transactionTypeString == TransactionType.PURCHASE_CASHBACK) {
-            if (!homeFragmentBinding.payAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.payAmt.getText().toString())).equals("0") && !homeFragmentBinding.cashBackAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.cashBackAmt.getText().toString())).equals("0")&& ecrReferenceNo.length() == FOURTEEN) {
-                if (Long.parseLong(String.valueOf(homeFragmentBinding.payAmt.getText())) >= Long.parseLong(String.valueOf(homeFragmentBinding.cashBackAmt.getText()))) {
+            if (!homeFragmentBinding.payAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.payAmt.getText().toString())).equals("0") && !homeFragmentBinding.cashBackAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.cashBackAmt.getText().toString())).equals("0") && ecrReferenceNo.length() == FOURTEEN) {
+                if (Long.parseLong(String.valueOf(homeFragmentBinding.payAmt.getText())) > Long.parseLong(String.valueOf(homeFragmentBinding.cashBackAmt.getText()))) {
                     return true;
-                } else throw new Exception("CashBackAmt cannot be More than Purchase Amt");
+                } else throw new Exception("CashBackAmt cannot be More than or equal to Purchase Amt");
             }
 
         } else if (transactionTypeString == TransactionType.REFUND) {
-            return !homeFragmentBinding.refundAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.refundAmt.getText().toString())).equals("0")&& homeFragmentBinding.rrnNoEditText.getText().length() == TWELVE && homeFragmentBinding.origRefundDate.getText().length() == SIX && ecrReferenceNo.length() == FOURTEEN;
+            return !homeFragmentBinding.refundAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.refundAmt.getText().toString())).equals("0") && homeFragmentBinding.rrnNoEditText.getText().length() == TWELVE && homeFragmentBinding.origRefundDate.getText().length() == SIX && ecrReferenceNo.length() == FOURTEEN;
 
         } else if (transactionTypeString == TransactionType.PRE_AUTHORISATION) {
             return !homeFragmentBinding.authAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.authAmt.getText().toString())).equals("0") && ecrReferenceNo.length() == FOURTEEN;
@@ -455,6 +472,8 @@ public class HomeViewModel extends ViewModel implements Constant {
         } else if (transactionTypeString == TransactionType.BILL_PAYMENT) {
             return !homeFragmentBinding.billPayAmt.getText().toString().equals("") && !String.valueOf(Long.parseLong(homeFragmentBinding.billPayAmt.getText().toString())).equals("0") && homeFragmentBinding.billerId.getText().length() == SIX && homeFragmentBinding.billerNumber.getText().length() == SIX;
 
+        } else if (transactionTypeString == TransactionType.CHECK_STATUS) {
+            return ecrReferenceNo.length() == FOURTEEN;
         }
         return false;
     }

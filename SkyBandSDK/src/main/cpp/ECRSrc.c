@@ -108,6 +108,9 @@ char *getCommand(int tranType)
 		case TYPE_PRNT_SUMMARY_RPORT:
 			return CMD_PRNT_SUMMARY_RPORT;	//Print summary report
 
+		case TYPE_CHECK_STATUS:
+			return CMD_CHECK_STATUS;	//Check Status
+
 		default:
 			break;
 	}

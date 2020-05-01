@@ -12,14 +12,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.girmiti.skybandecr.HtmlLoading;
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
+import com.girmiti.skybandecr.transaction.TransactionType;
 import com.girmiti.skybandecr.ui.fragment.home.HomeFragment;
 
 import java.util.Objects;
@@ -50,10 +53,12 @@ public class BufferResponseFragment extends Fragment {
         HomeFragment.setPosition(0);
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
         receiveData = ActiveTxnData.getInstance().getResData();
-        String subString = new String(receiveData);
-
-
         logger.debug(getClass()+"::"+"GetRespData>>> "+ receiveData);
+        String[] receiveDataArray = receiveData.split(";");
+       /* if(ActiveTxnData.getInstance().getTransactionType()==TransactionType.PURCHASE) {
+            String purchase= HtmlLoading.purchaseHtml.replace("purchase amount",receiveDataArray[5]);
+            bufferResponseFragmentBinding.webView.setText(Html.fromHtml(purchase));
+        }*/
         receiveData = receiveData.replace(";", "\n");
         bufferResponseFragmentBinding.bufferReceive.setText(receiveData);
 
@@ -66,5 +71,4 @@ public class BufferResponseFragment extends Fragment {
             }
         });
     }
-
 }

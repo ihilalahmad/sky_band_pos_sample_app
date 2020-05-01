@@ -27,9 +27,20 @@ public class ECRImpl implements ECRCore {
         byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
         if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
-            terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
+            try {
+                terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
+            } catch (IOException e) {
+                try {
+                    ECRImpl.getConnectInstance().doDisconnection();
+                    ECRImpl.getConnectInstance().doTCPIPConnection(ipAddress, portNumber);
+                    throw new Exception("0");
+                } catch (IOException ex) {
+                    logger.severe("Exception in Disconnect and connect>>", ex);
+                    throw new Exception("1");
+                }
+            }
         } else {
-            throw new Exception("Socket not connected");
+            throw new Exception("2");
         }
         //Library parsing is not giving correct response
       /*  String parseData = CLibraryLoad.getInstance().getParseData(terminalResponse);

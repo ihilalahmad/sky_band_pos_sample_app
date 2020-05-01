@@ -33,7 +33,6 @@ import com.girmiti.skybandecr.transaction.listener.TransactionListener;
 import com.girmiti.skybandecr.sdk.ThreadPoolExecutorService;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import lombok.Setter;
@@ -154,7 +153,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
                                     if (selectedItem.equals(getString(R.string.register))) {
-                                        if (ActiveTxnData.getInstance().getTerminalID().equals("")) {
+                                        if (ActiveTxnData.getInstance().getTerminalID() == null) {
                                             Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
                                             return;
                                         } else
@@ -178,7 +177,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                         //           if (!Objects.equals(errorMessage.getMessage(), "Read timed out")) {
+                                 /*  if (!Objects.equals(errorMessage.getMessage(), "Read timed out")) {
                                         try {
                                             if (ConnectionManager.Instance() != null) {
                                                 ConnectionManager.Instance().disconnect();
@@ -190,9 +189,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
                                             Toast.makeText(activity, "" + e.getMessage(), Toast.LENGTH_LONG).show();
                                         }
-                                  /*  } else {
+                                    } else {
                                         Toast.makeText(activity, "" + errorMessage.getMessage(), Toast.LENGTH_LONG).show();
-                                    }*/
+                                   }*/
+                                    if (Objects.equals(errorMessage.getMessage(), "0")) {
+
+                                        Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+                                        Toast.makeText(activity, "Socket Disconnected..Please check Network", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                             threadPoolExecutorService.remove(startTransaction);
@@ -200,6 +206,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     });
                     threadPoolExecutorService.execute(startTransaction);
                 } else {
+                    homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
                     Toast.makeText(getActivity(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
                 }
             }

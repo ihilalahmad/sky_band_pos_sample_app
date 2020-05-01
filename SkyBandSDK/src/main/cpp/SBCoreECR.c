@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <android/log.h>
 #include "SBCoreECR.h"
 #include "Utilities.h"
 #include "ECRSrc.h"
@@ -14,8 +13,6 @@ extern char *getCommand(int tranType);
 
 EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer)
 {
-	vdLogPrintf("Inside pack :: %s txnType %d ", inputReqData, transactionType);
-
 	long long lnReqFields[REQFIELD_SIZE];
 	int inFieldsCount = 0, inReqPacketIndex = 0, inLCR = 0;
 	char szLCR[LCRBUFFER_SIZE], szLCR_Hex[LCRBUFFER_SIZE];
@@ -39,29 +36,28 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 	char szCashRegNum[CASHREGNUM_SIZE+1];
 	char szBillerID[BILLERID_SIZE+1];
 	char szBillNum[BILLNUM_SIZE+1];
-	vdLogPrintf("TranType = %d, Inside pack 1", transactionType);
+	char szPrevECRNum[ECRNUM_SIZE+1];
+
 	vdParseRequestData(inputReqData, lnReqFields, &inFieldsCount);
-	vdLogPrintf("TranType = %d, Inside pack 2", transactionType);
 
 	//STX ("02" Hex)
 	memcpy(szEcrBuffer, STX, STX_SIZE);
 	inReqPacketIndex++;
 	memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 	inReqPacketIndex++;
-	vdLogPrintf("TranType = %d, Inside pack 3", transactionType);
 
 	//Command
 	memcpy(&szEcrBuffer[inReqPacketIndex], getCommand(transactionType), CMD_SIZE);
 	inReqPacketIndex += CMD_SIZE;
 	memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 	inReqPacketIndex++;
-	vdLogPrintf("TranType = %d, Inside pack 4", transactionType);
 
 	if((transactionType != TYPE_RECONCILATION) && (transactionType != TYPE_REGISTER) && (transactionType != TYPE_REFUND)
 	   && (transactionType != TYPE_PRECOMP) && (transactionType != TYPE_PREAUTH_EXT) && (transactionType != TYPE_PREAUTH_VOID)
 	   && (transactionType != TYPE_PARAM_DOWNLOAD) && (transactionType != TYPE_GET_PARAM) && (transactionType != TYPE_SET_TERM_LANG)
 	   && (transactionType != TYPE_SET_PARAM) && (transactionType != TYPE_REVERSAL) && (transactionType != TYPE_START_SESSION)
-	   && (transactionType != TYPE_END_SESSION) && (transactionType != TYPE_PRNT_DETAIL_RPORT) && (transactionType != TYPE_PRNT_SUMMARY_RPORT))
+	   && (transactionType != TYPE_END_SESSION) && (transactionType != TYPE_PRNT_DETAIL_RPORT) && (transactionType != TYPE_PRNT_SUMMARY_RPORT)
+	   && (transactionType != TYPE_CHECK_STATUS))
 	{
 		if(transactionType == TYPE_BILL_PAY)
 		{
@@ -71,7 +67,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex += BILLERID_SIZE;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 5", transactionType);
 
 			memset(szBillNum, 0x00, sizeof(szBillNum));
 			sprintf(szBillNum, "%06lld", lnReqFields[3]);
@@ -79,8 +74,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex += BILLNUM_SIZE;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 6", transactionType);
-
 		}
 
 		memset(szAmountField, 0x00, sizeof(szAmountField));
@@ -89,7 +82,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += AMT_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 7", transactionType);
 
 		if(transactionType == TYPE_PURCHASE_CASHBACK)
 		{
@@ -99,8 +91,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex += AMT_SIZE;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 8", transactionType);
-
 		}
 	}
 
@@ -111,7 +101,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 	inReqPacketIndex += DATETIME_SIZE;
 	memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 	inReqPacketIndex++;
-	vdLogPrintf("TranType = %d, Inside pack 9", transactionType);
 
 	if((transactionType == TYPE_REGISTER) || (transactionType == TYPE_START_SESSION) || (transactionType == TYPE_END_SESSION))
 	{
@@ -122,8 +111,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += CASHREGNUM_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 10", transactionType);
-
 	}
 
 	if((transactionType == TYPE_REFUND) || (transactionType == TYPE_PRECOMP)
@@ -138,8 +125,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex += AMT_SIZE;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 11", transactionType);
-
 		}
 
 		//RRN
@@ -152,8 +137,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += RRN_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 12", transactionType);
-
 	}
 
 	if((transactionType == TYPE_PRECOMP) || (transactionType == TYPE_PREAUTH_EXT) || (transactionType == TYPE_PREAUTH_VOID))
@@ -168,8 +151,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += DATE_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 13", transactionType);
-
 
 		//Original Approval Code
 		memset(szOrigApprCode, 0x00, sizeof(szOrigApprCode));
@@ -181,7 +162,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += APPRCODE_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 14", transactionType);
 
 		if((transactionType != TYPE_PREAUTH_EXT) && (transactionType != TYPE_PREAUTH_VOID))
 		{
@@ -191,8 +171,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex++;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 15", transactionType);
-
 		}
 	}
 
@@ -205,7 +183,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += VENDORID_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 16", transactionType);
 
 		//Vendor Terminal type
 		memset(szVendorTermType, 0x00, sizeof(szVendorTermType));
@@ -214,7 +191,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex++;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 17", transactionType);
 
 		//TRSM ID
 		memset(szTRSMID, 0x00, sizeof(szTRSMID));
@@ -223,7 +199,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += TRSMID_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 18", transactionType);
 
 		//Vendor Key Index
 		memset(szVendorKeyIndex, 0x00, sizeof(szVendorKeyIndex));
@@ -232,7 +207,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex++;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 19", transactionType);
+
 		//SAMA Key Index
 		memset(szSAMAKeyIndex, 0x00, sizeof(szSAMAKeyIndex));
 		sprintf(szSAMAKeyIndex, "%lld", lnReqFields[5]);
@@ -240,8 +215,17 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex++;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 20", transactionType);
+	}
 
+	if(transactionType == TYPE_CHECK_STATUS)
+	{
+		//Previous ECR Number
+		memset(szPrevECRNum, 0x00, sizeof(szPrevECRNum));
+		sprintf(szPrevECRNum, "%06lld", lnReqFields[1]);
+		memcpy(&szEcrBuffer[inReqPacketIndex], szPrevECRNum, ECRNUM_SIZE);
+		inReqPacketIndex += ECRNUM_SIZE;
+		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, ECRNUM_SIZE); // Field separator
+		inReqPacketIndex++;
 	}
 
 	if((transactionType != TYPE_REGISTER) && (transactionType != TYPE_START_SESSION) && (transactionType != TYPE_END_SESSION))
@@ -252,7 +236,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			sprintf(szECRRefNum, "%14lld", lnReqFields[3]);
 		else if(transactionType == TYPE_PURCHASE_CASHBACK)
 			sprintf(szECRRefNum, "%14lld", lnReqFields[4]);
-		else if(transactionType == TYPE_RECONCILATION || transactionType == TYPE_SET_TERM_LANG)
+		else if(transactionType == TYPE_RECONCILATION || transactionType == TYPE_SET_TERM_LANG || transactionType == TYPE_CHECK_STATUS)
 			sprintf(szECRRefNum, "%14lld", lnReqFields[2]);
 		else if((transactionType == TYPE_REFUND) || (transactionType == TYPE_PREAUTH_EXT) || (transactionType == TYPE_BILL_PAY))
 			sprintf(szECRRefNum, "%14lld", lnReqFields[5]);
@@ -267,7 +251,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += REFNUM_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 21", transactionType);
 
 		if(transactionType == TYPE_SET_TERM_LANG)
 		{
@@ -278,12 +261,11 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex++;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 22", transactionType);
-
 		}
 
 		if((transactionType != TYPE_PARAM_DOWNLOAD) && (transactionType != TYPE_GET_PARAM) && (transactionType != TYPE_SET_TERM_LANG)
-		   && (transactionType != TYPE_SET_PARAM) && (transactionType != TYPE_PRNT_DETAIL_RPORT) && (transactionType != TYPE_PRNT_SUMMARY_RPORT))
+		   && (transactionType != TYPE_SET_PARAM) && (transactionType != TYPE_PRNT_DETAIL_RPORT) && (transactionType != TYPE_PRNT_SUMMARY_RPORT)
+		   && (transactionType != TYPE_CHECK_STATUS))
 		{
 			//Receipt print Flag
 			if(transactionType == TYPE_PURCHASE || transactionType == TYPE_PREAUTH || transactionType == TYPE_CASH_ADVANCE || transactionType == TYPE_REVERSAL)
@@ -302,8 +284,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			inReqPacketIndex++;
 			memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 			inReqPacketIndex++;
-			vdLogPrintf("TranType = %d, Inside pack 23", transactionType);
-
 		}
 
 		//Signature
@@ -311,8 +291,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		inReqPacketIndex += SIGNATURE_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
-		vdLogPrintf("TranType = %d, Inside pack 24", transactionType);
-
 	}
 
 	//Time Out
@@ -320,13 +298,10 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 	inReqPacketIndex += TIMEOUT_SIZE;
 	memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 	inReqPacketIndex++;
-	vdLogPrintf("TranType = %d, Inside pack 25", transactionType);
 
 	//ETX ("03" Hex)
 	memcpy(&szEcrBuffer[inReqPacketIndex], ETX, ETX_SIZE);
 	inReqPacketIndex++;
-	vdLogPrintf("TranType = %d, Inside pack 26", transactionType);
-
 
 	//LRC
 	xorOpBtwnChars ((unsigned char *)szEcrBuffer, inReqPacketIndex, &inLCR);
@@ -339,9 +314,6 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 		ascToHexConv(szLCR_Hex, szLCR, 2);
 	memcpy(&szEcrBuffer[inReqPacketIndex], szLCR_Hex, LCR_SIZE);	//Excusive OR of each character of message including STX and ETX.
 	szEcrBuffer[inReqPacketIndex+1] = '\0';
-	vdLogPrintf("TranType = %d, Inside pack 27", transactionType);
-
-	vdLogPrintf("Exit pack << ");
 }
 
 EXPORT void parse(char *respData, char *respOutData)
@@ -365,3 +337,4 @@ EXPORT void parse(char *respData, char *respOutData)
 		}
 	}
 }
+
