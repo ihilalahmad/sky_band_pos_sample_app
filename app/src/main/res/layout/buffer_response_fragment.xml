@@ -1,80 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.buffer.BufferResponseFragment">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_above="@+id/ok_button"
-    android:layout_marginBottom="@dimen/dp25"
-    android:layout_height="match_parent">
-        <LinearLayout
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.response.buffer.BufferResponseFragment">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ok_button"
+            android:layout_marginBottom="@dimen/dp25">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp15"
-                android:text="Amount"
-                android:textSize="@dimen/dp25"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp25"
-                android:layout_marginTop="@dimen/dp35"
-                android:text="Buffer Send" />
-
-            <TextView
-                android:id="@+id/buffer_send"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp25"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="@drawable/border"
-                android:padding="@dimen/dp10" />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp25"
-                android:layout_marginTop="@dimen/dp25"
-                android:text="Buffer Receive" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:text="Amount"
+                    android:textSize="@dimen/dp25"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/buffer_receive"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp25"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="@drawable/border"
-                android:padding="@dimen/dp10" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp25"
+                    android:layout_marginTop="@dimen/dp35"
+                    android:text="Buffer Send" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/web_view"/>
+                <TextView
+                    android:id="@+id/buffer_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp25"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/border"
+                    android:padding="@dimen/dp10" />
 
-        </LinearLayout>
-</ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp25"
+                    android:layout_marginTop="@dimen/dp25"
+                    android:text="Buffer Receive" />
+
+                <TextView
+                    android:id="@+id/buffer_receive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp25"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/border"
+                    android:padding="@dimen/dp10" />
+
+                <TextView
+                    android:id="@+id/web_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/print_receipt"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp60"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/dp25"
+            android:layout_above="@id/ok_button"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:text="Receipt"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp35" />
 
         <Button
             android:id="@+id/ok_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
             android:layout_alignParentBottom="true"
-            android:text="OK"
-            android:textSize="@dimen/dp35"
-            android:gravity="center"
-            android:textColor="@color/white"
             android:background="@color/blue"
-            />
+            android:gravity="center"
+            android:text="OK"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp35" />
 
     </RelativeLayout>
 </layout>

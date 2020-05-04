@@ -1,4 +1,4 @@
-package com.girmiti.skybandecr.ui.fragment.buffer;
+package com.girmiti.skybandecr.ui.fragment.response.buffer;
 
 import androidx.lifecycle.ViewModel;
 

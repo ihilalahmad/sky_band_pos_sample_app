@@ -177,21 +177,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                                 /*  if (!Objects.equals(errorMessage.getMessage(), "Read timed out")) {
-                                        try {
-                                            if (ConnectionManager.Instance() != null) {
-                                                ConnectionManager.Instance().disconnect();
-                                            }
-                                            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                            Toast.makeText(activity,"Time Out...Please Connect Again", Toast.LENGTH_LONG).show();
-                                        } catch (IOException e) {
-                                            logger.severe("Exception on disconnecting socket", e);
-                                            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                            Toast.makeText(activity, "" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(activity, "" + errorMessage.getMessage(), Toast.LENGTH_LONG).show();
-                                   }*/
+
                                     if (Objects.equals(errorMessage.getMessage(), "0")) {
 
                                         Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();

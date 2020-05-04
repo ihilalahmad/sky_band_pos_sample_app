@@ -21,6 +21,7 @@ import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.cache.GeneralParamCache;
 import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.databinding.TransactionSettingFragmentBinding;
+import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import lombok.Getter;
@@ -47,6 +48,12 @@ public class TransactionSettingFragment extends Fragment implements Constant {
     }
 
     private void setupListeners() {
+
+        if(ActiveTxnData.getInstance().isRegistered()) {
+            transactionSettingFragmentBinding.cashRegisterNo2.setText(GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
+            transactionSettingFragmentBinding.cashRegisterNo2.setVisibility(View.VISIBLE);
+            transactionSettingFragmentBinding.cashRegisterNo.setVisibility(View.GONE);
+        }
 
         if (TransactionSettingViewModel.getEcr() == 1) {
             transactionSettingFragmentBinding.ecrNo.setChecked(true);
