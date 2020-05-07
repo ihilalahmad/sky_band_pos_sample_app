@@ -126,7 +126,7 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                     connectSettingFragmentBinding.portNo.getText().clear();
                     if (ecrCore != null && ecrCore.doDisconnection() != 1) {
                         logger.info("Socket Disconnected");
-                        GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
+                  //      GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();

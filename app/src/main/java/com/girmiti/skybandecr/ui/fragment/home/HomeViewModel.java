@@ -9,6 +9,7 @@ import com.girmiti.skybandecr.cache.GeneralParamCache;
 import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.databinding.HomeFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
+import com.girmiti.skybandecr.sdk.ConnectionManager;
 import com.girmiti.skybandecr.transaction.TransactionType;
 import com.girmiti.skybandecr.ui.fragment.setting.connnect.ConnectSettingFragment;
 import com.girmiti.skybandecr.ui.fragment.setting.transaction.TransactionSettingViewModel;
@@ -32,6 +33,7 @@ public class HomeViewModel extends ViewModel implements Constant {
     private String szSignature = "";
     private String ecrReferenceNo = "";
     private String prevEcrNo = "";
+    private String date = "";
 
 
     public void resetVisibilityOfViews(HomeFragmentBinding homeFragmentBinding) {
@@ -263,7 +265,7 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     public void setReqData(String selectedItem) {
 
-        String date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
+        date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
         int print = TransactionSettingViewModel.getPrint();
         String completion;
 
@@ -331,12 +333,15 @@ public class HomeViewModel extends ViewModel implements Constant {
             case CHECK_STATUS:
                 reqData = date + ";" + prevEcrNo + ";" + ecrReferenceNo + "!";
                 break;
+            case PRINT_SUMMARY_REPORT:
+                reqData = date + ";" + "0"+ ";" +ecrReferenceNo + "!";
+                break;
             case PARAMETER_DOWNLOAD:
             case GET_PARAMETER:
             case TERMINAL_STATUS:
             case PREVIOUS_TRANSACTION_DETAILS:
             case PRINT_DETAIL_REPORT:
-            case PRINT_SUMMARY_REPORT:
+
             default:
                 reqData = date + ";" + ecrReferenceNo + "!";
                 break;
@@ -373,10 +378,23 @@ public class HomeViewModel extends ViewModel implements Constant {
             GeneralParamCache.getInstance().putString(Ecr_Number, String.format("%06d", ecrNumber));
         }
 
-        String terminalResponse = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+        StringBuilder terminalResponse =  new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
+
+        String[] responseArray = terminalResponse.toString().split(";");
+
+        if (Integer.parseInt(responseArray[1]) == 22 && Integer.parseInt(responseArray[5]) != 0) {
+
+            int count = Integer.parseInt(responseArray[5]);
+
+            for (int i =1 ; i <=count; i++) {
+                reqData = date + ";" + i + ";" +ecrReferenceNo + "!";
+                String response = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                terminalResponse.append(response);
+            }
+        }
 
         if (transactionTypeString == TransactionType.REGISTER) {
-            String[] splittedArray = terminalResponse.split(";");
+            String[] splittedArray = terminalResponse.toString().split(";");
 
             for (int i = 0; i < splittedArray.length; i++) {
                 if (i == 3) {
@@ -387,7 +405,7 @@ public class HomeViewModel extends ViewModel implements Constant {
         }
 
         logger.debug(getClass() + "::Terminal ID>>" + terminalID);
-        return terminalResponse;
+        return terminalResponse.toString();
     }
 
     private String convertSHA(String combinedValue) throws NoSuchAlgorithmException {

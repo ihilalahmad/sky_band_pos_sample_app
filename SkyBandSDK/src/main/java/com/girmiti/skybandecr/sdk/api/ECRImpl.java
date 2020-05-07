@@ -32,7 +32,9 @@ public class ECRImpl implements ECRCore {
             } catch (IOException e) {
                 try {
                     ECRImpl.getConnectInstance().doDisconnection();
+                    logger.info("Socket Disconnected");
                     ECRImpl.getConnectInstance().doTCPIPConnection(ipAddress, portNumber);
+                    logger.info("Socket connected");
                     throw new Exception("0");
                 } catch (IOException ex) {
                     logger.severe("Exception in Disconnect and connect>>", ex);
@@ -49,7 +51,79 @@ public class ECRImpl implements ECRCore {
         return parseData;*/
         terminalResponse = terminalResponse.replace("�", ";");
         logger.debug("After Replace  with ;>>" + terminalResponse);
+        terminalResponse = changeToTransactionType(terminalResponse);
+        logger.debug("After Replace with Transactiontype>>" + terminalResponse);
 
+        return terminalResponse;
+    }
+
+    private String changeToTransactionType(String terminalResponse) {
+        String[] response = terminalResponse.split(";");
+        switch (response[1]) {
+            case "A0":
+               terminalResponse= terminalResponse.replaceFirst("A0", String.valueOf(17));
+               break;
+            case "B6":
+                terminalResponse= terminalResponse.replaceFirst("B6", String.valueOf(18));
+                break;
+            case "B7":
+                terminalResponse= terminalResponse.replaceFirst("B7", String.valueOf(19));
+                break;
+            case "A1":
+                terminalResponse= terminalResponse.replaceFirst("A1", String.valueOf(0));
+                break;
+            case "A2":
+                terminalResponse= terminalResponse.replaceFirst("A2", String.valueOf(1));
+                break;
+            case "A3":
+                terminalResponse= terminalResponse.replaceFirst("A3", String.valueOf(8));
+                break;
+            case "A4":
+                terminalResponse= terminalResponse.replaceFirst("A4", String.valueOf(3));
+                break;
+            case "A5":
+                terminalResponse= terminalResponse.replaceFirst("A5", String.valueOf(9));
+                break;
+            case "A6":
+                terminalResponse= terminalResponse.replaceFirst("A6", String.valueOf(2));
+                break;
+            case "A7":
+                terminalResponse= terminalResponse.replaceFirst("A7", String.valueOf(4));
+                break;
+            case "A8":
+                terminalResponse= terminalResponse.replaceFirst("A8", String.valueOf(5));
+                break;
+            case "A9":
+                terminalResponse= terminalResponse.replaceFirst("A9", String.valueOf(6));
+                break;
+            case "B1":
+                terminalResponse= terminalResponse.replaceFirst("B1", String.valueOf(10));
+                break;
+            case "B2":
+                terminalResponse= terminalResponse.replaceFirst("B2", String.valueOf(11));
+                break;
+            case "B3":
+                terminalResponse= terminalResponse.replaceFirst("B3", String.valueOf(12));
+                break;
+            case "B4":
+                terminalResponse= terminalResponse.replaceFirst("B4", String.valueOf(13));
+                break;
+            case "B5":
+                terminalResponse= terminalResponse.replaceFirst("B5", String.valueOf(14));
+                break;
+            case "B8":
+                terminalResponse= terminalResponse.replaceFirst("B8", String.valueOf(20));
+                break;
+            case "B9":
+                terminalResponse= terminalResponse.replaceFirst("B9", String.valueOf(21));
+                break;
+            case "C1":
+                terminalResponse= terminalResponse.replaceFirst("C1", String.valueOf(22));
+                break;
+            case "C2":
+                terminalResponse= terminalResponse.replaceFirst("C2", String.valueOf(23));
+                break;
+        }
         return terminalResponse;
     }
 

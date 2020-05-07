@@ -37,6 +37,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 	char szBillerID[BILLERID_SIZE+1];
 	char szBillNum[BILLNUM_SIZE+1];
 	char szPrevECRNum[ECRNUM_SIZE+1];
+	char szReqAttemptNum[REQATTEMPTNUM_SIZE+1];
 
 	vdParseRequestData(inputReqData, lnReqFields, &inFieldsCount);
 
@@ -101,6 +102,17 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 	inReqPacketIndex += DATETIME_SIZE;
 	memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 	inReqPacketIndex++;
+
+	if(transactionType == TYPE_PRNT_SUMMARY_RPORT)
+	{
+		//Request Attempted Number
+		memset(szReqAttemptNum, 0x00, sizeof(szReqAttemptNum));
+		sprintf(szReqAttemptNum, "%03lld", lnReqFields[1]);
+		memcpy(&szEcrBuffer[inReqPacketIndex], szReqAttemptNum, REQATTEMPTNUM_SIZE);
+		inReqPacketIndex += REQATTEMPTNUM_SIZE;
+		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
+		inReqPacketIndex++;
+	}
 
 	if((transactionType == TYPE_REGISTER) || (transactionType == TYPE_START_SESSION) || (transactionType == TYPE_END_SESSION))
 	{
@@ -236,7 +248,8 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			sprintf(szECRRefNum, "%14lld", lnReqFields[3]);
 		else if(transactionType == TYPE_PURCHASE_CASHBACK)
 			sprintf(szECRRefNum, "%14lld", lnReqFields[4]);
-		else if(transactionType == TYPE_RECONCILATION || transactionType == TYPE_SET_TERM_LANG || transactionType == TYPE_CHECK_STATUS)
+		else if(transactionType == TYPE_RECONCILATION || transactionType == TYPE_SET_TERM_LANG || transactionType == TYPE_CHECK_STATUS
+				|| (transactionType == TYPE_PRNT_SUMMARY_RPORT))
 			sprintf(szECRRefNum, "%14lld", lnReqFields[2]);
 		else if((transactionType == TYPE_REFUND) || (transactionType == TYPE_PREAUTH_EXT) || (transactionType == TYPE_BILL_PAY))
 			sprintf(szECRRefNum, "%14lld", lnReqFields[5]);
@@ -244,8 +257,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 			sprintf(szECRRefNum, "%14lld", lnReqFields[7]);
 		else if((transactionType == TYPE_PREAUTH_VOID) || (transactionType == TYPE_SET_PARAM))
 			sprintf(szECRRefNum, "%14lld", lnReqFields[6]);
-		else if((transactionType == TYPE_PARAM_DOWNLOAD) || (transactionType == TYPE_GET_PARAM) || (transactionType == TYPE_PRNT_DETAIL_RPORT)
-				|| (transactionType == TYPE_PRNT_SUMMARY_RPORT))
+		else if((transactionType == TYPE_PARAM_DOWNLOAD) || (transactionType == TYPE_GET_PARAM) || (transactionType == TYPE_PRNT_DETAIL_RPORT))
 			sprintf(szECRRefNum, "%14lld", lnReqFields[1]);
 		memcpy(&szEcrBuffer[inReqPacketIndex], szECRRefNum, REFNUM_SIZE);
 		inReqPacketIndex += REFNUM_SIZE;

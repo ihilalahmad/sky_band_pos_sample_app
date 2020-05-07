@@ -66,6 +66,7 @@
 #define BILLERID_SIZE					6
 #define BILLNUM_SIZE					6
 #define ECRNUM_SIZE						6
+#define REQATTEMPTNUM_SIZE				3
 
 typedef enum
 {

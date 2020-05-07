@@ -24,8 +24,6 @@ import com.girmiti.skybandecr.databinding.TransactionSettingFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
-import lombok.Getter;
-
 public class TransactionSettingFragment extends Fragment implements Constant {
 
     private TransactionSettingViewModel transactionSettingViewModel;
@@ -88,7 +86,6 @@ public class TransactionSettingFragment extends Fragment implements Constant {
                     cashRegisterNO = "";
                     Toast.makeText(getActivity(), R.string.invalid_input, Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }

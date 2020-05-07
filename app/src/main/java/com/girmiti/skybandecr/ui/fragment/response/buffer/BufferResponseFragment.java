@@ -22,8 +22,6 @@ import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 import com.girmiti.skybandecr.ui.fragment.home.HomeFragment;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 
 import lombok.SneakyThrows;
@@ -35,8 +33,6 @@ public class BufferResponseFragment extends Fragment {
     private BufferResponseFragmentBinding bufferResponseFragmentBinding;
     private Logger logger = Logger.getNewLogger(BufferResponseFragment.class.getName());
 
-    private String receiveData = "";
-
     @SneakyThrows
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,20 +40,28 @@ public class BufferResponseFragment extends Fragment {
 
         bufferResponseViewModel = ViewModelProviders.of(this).get(BufferResponseViewModel.class);
         bufferResponseFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.buffer_response_fragment, container, false);
-
         setupListeners();
 
         return bufferResponseFragmentBinding.getRoot();
     }
 
-    private void setupListeners() throws IOException {
+    private void setupListeners() {
         HomeFragment.setPosition(0);
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
-        receiveData = ActiveTxnData.getInstance().getResData();
+        String receiveData = ActiveTxnData.getInstance().getResData();
+        String[] receiveDataArray = receiveData.split(";");
         logger.debug(getClass() + "::" + "GetRespData>>> " + receiveData);
         receiveData = receiveData.replace(";", "\n");
         bufferResponseFragmentBinding.bufferReceive.setText(receiveData);
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
+
+        if(receiveDataArray[1].equals("17") || receiveDataArray[1].equals("18") || receiveDataArray[1].equals("19") || receiveDataArray[1].equals("15") || receiveDataArray[1].equals("16") || receiveDataArray[1].equals("12")|| receiveDataArray[1].equals("13") || receiveDataArray[1].equals("23")) {
+            bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+        } else if (!(Integer.parseInt(receiveDataArray[2]) == 0))  {
+            bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+        } else {
+            bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+        }
 
         bufferResponseFragmentBinding.okButton.setOnClickListener(new View.OnClickListener() {
             @Override
