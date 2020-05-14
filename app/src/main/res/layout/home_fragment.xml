@@ -41,7 +41,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp25"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal" >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -58,6 +58,23 @@
                             android:src="@drawable/ic_group_782" />
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/prev_ecr_no_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="@string/prev_ecr_no" />
+
+                    <TextView
+                        android:id="@+id/prev_ecr_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:padding="@dimen/dp10" />
 
                     <TextView
                         android:id="@+id/ecr_no_tv"
@@ -77,23 +94,6 @@
                         android:hint="@string/ecr_ref_no"
                         android:inputType="number"
                         android:maxLength="6"
-                        android:padding="@dimen/dp10" />
-
-                    <TextView
-                        android:id="@+id/prev_ecr_no_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp25"
-                        android:text="@string/prev_ecr_no" />
-
-                    <TextView
-                        android:id="@+id/prev_ecr_no"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp10"
-                        android:background="@drawable/border"
                         android:padding="@dimen/dp10" />
 
                     <TextView

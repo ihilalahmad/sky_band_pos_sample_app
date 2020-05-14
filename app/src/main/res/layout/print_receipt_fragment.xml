@@ -27,6 +27,6 @@
             android:background="@color/blue"
             android:text="OK"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp15" />
+            android:textSize="@dimen/dp35" />
     </RelativeLayout>
 </layout>

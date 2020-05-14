@@ -11,7 +11,11 @@ public interface Constant {
     String CASH_REGISTER_NO = "CashRegNo";
     String ENABLE_PRINT = "EnablePrint";
     String ENABLE_ECR = "EnableECR";
-    String Ecr_Number = "EcrNumber";
+    String ECR_NUMBER = "EcrNumber";
+    String CONNECTION_STATUS = "ConnectionStatus";
+    String CONNECTED = "Connected";
+    String DISCONNECTED = "Disconnected";
+    String PREV_ECR_NO = "prevECRNO";
 
     int TWELVE = 12;
     int FOURTEEN = 14;

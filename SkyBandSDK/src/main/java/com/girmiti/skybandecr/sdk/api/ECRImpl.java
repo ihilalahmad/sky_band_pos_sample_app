@@ -24,20 +24,27 @@ public class ECRImpl implements ECRCore {
     public String doTCPIPTransaction(String ipAddress, int portNumber, String requestData, int transactionType, String signature) throws Exception {
 
         String terminalResponse = "";
+
+        try {
+            ECRImpl.getConnectInstance().doTCPIPConnection(ipAddress, portNumber);
+        } catch(Exception e) {
+            throw new Exception("3");
+        }
+
         byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
-        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+        logger.info("Socket connected");
+
+        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected())                                                       {
             try {
                 terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
             } catch (IOException e) {
                 try {
                     ECRImpl.getConnectInstance().doDisconnection();
                     logger.info("Socket Disconnected");
-                    ECRImpl.getConnectInstance().doTCPIPConnection(ipAddress, portNumber);
-                    logger.info("Socket connected");
                     throw new Exception("0");
                 } catch (IOException ex) {
-                    logger.severe("Exception in Disconnect and connect>>", ex);
+                    logger.severe("Exception in Disconnect >>", ex);
                     throw new Exception("1");
                 }
             }
@@ -59,10 +66,11 @@ public class ECRImpl implements ECRCore {
 
     private String changeToTransactionType(String terminalResponse) {
         String[] response = terminalResponse.split(";");
+        String index1 = response[1];
         switch (response[1]) {
             case "A0":
-               terminalResponse= terminalResponse.replaceFirst("A0", String.valueOf(17));
-               break;
+                terminalResponse= terminalResponse.replaceFirst("A0", String.valueOf(17));
+                break;
             case "B6":
                 terminalResponse= terminalResponse.replaceFirst("B6", String.valueOf(18));
                 break;
@@ -122,6 +130,12 @@ public class ECRImpl implements ECRCore {
                 break;
             case "C2":
                 terminalResponse= terminalResponse.replaceFirst("C2", String.valueOf(23));
+                break;
+            case "D1":
+                terminalResponse=terminalResponse.replaceFirst("D1",String.valueOf(30));
+                break;
+            default:
+                terminalResponse=terminalResponse.replaceFirst(index1,String.valueOf(40));
                 break;
         }
         return terminalResponse;

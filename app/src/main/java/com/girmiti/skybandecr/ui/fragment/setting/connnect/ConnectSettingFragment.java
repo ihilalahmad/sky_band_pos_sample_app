@@ -78,8 +78,17 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                 ipAddress = connectSettingFragmentBinding.ipAddress.getText().toString();
                 portNo = connectSettingFragmentBinding.portNo.getText().toString();
 
-                if (!validateIp(ipAddress) || !validatePort(portNo) || ipAddress.equals("") || portNo.equals("")) {
-                    Toast.makeText(getContext(), R.string.ip_port_invalid, Toast.LENGTH_LONG).show();
+                if (ipAddress.equals("")) {
+                    Toast.makeText(getContext(), "Ip should not be Empty", Toast.LENGTH_LONG).show();
+                    return;
+                } else if(portNo.equals("")) {
+                    Toast.makeText(getContext(), "Port should not be Empty", Toast.LENGTH_LONG).show();
+                    return;
+                } else if (!validateIp(ipAddress)) {
+                    Toast.makeText(getContext(), R.string.ip_invalid, Toast.LENGTH_LONG).show();
+                    return;
+                } else if (!validatePort(portNo)) {
+                    Toast.makeText(getContext(), "Port is not valid", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -96,6 +105,7 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                             if (connectionStatus == 0) {
                                 logger.info("Socket Connected");
                                 dialog.dismiss();
+                                generalParamCache.putString(CONNECTION_STATUS, CONNECTED);
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                             } else {
                                 logger.info("Socket Connection failed");
@@ -105,7 +115,7 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                                    logger.severe("Exception on Connecting",e);
+                                    logger.severe("Exception on Connecting", e);
                                     Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -126,14 +136,15 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                     connectSettingFragmentBinding.portNo.getText().clear();
                     if (ecrCore != null && ecrCore.doDisconnection() != 1) {
                         logger.info("Socket Disconnected");
-                  //      GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
+                        //      GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+                        generalParamCache.putString(CONNECTION_STATUS, DISCONNECTED);
                     } else {
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();
                         logger.info("Socket is Already Disconnected");
                     }
                 } catch (final IOException e) {
-                    logger.severe("Exception on disconnecting",e);
+                    logger.severe("Exception on disconnecting", e);
                     Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
                 }
             }

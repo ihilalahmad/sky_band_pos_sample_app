@@ -38,7 +38,7 @@ import java.util.Objects;
 import lombok.Setter;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener, Constant {
-
+    private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
     private String selectedItem;
     private HomeViewModel homeViewModel;
     private HomeFragmentBinding homeFragmentBinding;
@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private ThreadPoolExecutorService threadPoolExecutorService = null;
     @Setter
     public static int position;
+    private ArrayAdapter<CharSequence> adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -89,8 +90,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onStart() {
         homeFragmentBinding.transactionSpinner.setSelection(position);
 
-        if (GeneralParamCache.getInstance().getString(Ecr_Number) == null) {
-            GeneralParamCache.getInstance().putString(Ecr_Number, getEcrNumberString());
+        if (GeneralParamCache.getInstance().getString(ECR_NUMBER) == null) {
+            GeneralParamCache.getInstance().putString(ECR_NUMBER, getEcrNumberString());
         }
 
         if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
@@ -103,14 +104,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private void setupListeners() {
 
-        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+        if (Objects.equals(generalParamCache.getString(CONNECTION_STATUS), CONNECTED)) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
         }
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
+       ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
                 R.array.transaction_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         homeFragmentBinding.transactionSpinner.setAdapter(adapter);
@@ -126,7 +127,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 boolean validated = false;
 
                 try {
-                    validated = homeViewModel.validateData(homeFragmentBinding);
+                    validated = homeViewModel.validateData();
                 } catch (Exception e) {
                     logger.severe("Exception on validating", e);
                     Toast.makeText(getActivity(), e.getMessage() + "", Toast.LENGTH_LONG).show();
@@ -138,7 +139,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     Toast.makeText(getActivity(), R.string.invalid_input, Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+                if (Objects.equals(generalParamCache.getString(CONNECTION_STATUS), CONNECTED)) {
 
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
                     dialog.setCancelable(false);
@@ -163,7 +164,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                                     } else if (selectedItem.equals(getString(R.string.end_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(false);
-
                                     }
                                     navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
                                 }
@@ -179,11 +179,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                     dialog.dismiss();
 
                                     if (Objects.equals(errorMessage.getMessage(), "0")) {
-
                                         Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
+                                        logger.debug(getClass() + "Exception>>"+errorMessage);
+                                    } else if(Objects.equals(errorMessage.getMessage(), "1")){
+                                        Toast.makeText(activity, "Exception in disconnection", Toast.LENGTH_LONG).show();
+                                        logger.debug(getClass() + "Exception>>"+errorMessage);
+                                    } else if(Objects.equals(errorMessage.getMessage(), "3")){
+                                        Toast.makeText(activity, "Network Problem..Try Again", Toast.LENGTH_LONG).show();
+                                        logger.debug(getClass() + "Exception>>"+errorMessage);
+                                    } else if(Objects.equals(errorMessage.getMessage(), "2")){
+                                        Toast.makeText(activity, "Socket not Connected", Toast.LENGTH_LONG).show();
+                                        logger.debug(getClass() + "Exception>>"+errorMessage);
                                     } else {
-                                        homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                                        Toast.makeText(activity, "Socket Disconnected..Please check Network", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(activity, errorMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                        logger.debug(getClass() + "Exception>>"+errorMessage);
                                     }
                                 }
                             });
