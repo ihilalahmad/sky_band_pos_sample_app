@@ -190,7 +190,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 	{
 		//Vendor ID
 		memset(szVendorID, 0x00, sizeof(szVendorID));
-		sprintf(szVendorID, "%06lld", lnReqFields[1]);
+		sprintf(szVendorID, "%02lld", lnReqFields[1]);
 		memcpy(&szEcrBuffer[inReqPacketIndex], szVendorID, VENDORID_SIZE);
 		inReqPacketIndex += VENDORID_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -198,9 +198,9 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
 		//Vendor Terminal type
 		memset(szVendorTermType, 0x00, sizeof(szVendorTermType));
-		sprintf(szVendorTermType, "%lld", lnReqFields[2]);
+		sprintf(szVendorTermType, "%02lld", lnReqFields[2]);
 		memcpy(&szEcrBuffer[inReqPacketIndex], szVendorTermType, TERMTYPE_SIZE);
-		inReqPacketIndex++;
+		inReqPacketIndex += TERMTYPE_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
 
@@ -214,17 +214,17 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
 		//Vendor Key Index
 		memset(szVendorKeyIndex, 0x00, sizeof(szVendorKeyIndex));
-		sprintf(szVendorKeyIndex, "%lld", lnReqFields[4]);
+		sprintf(szVendorKeyIndex, "%02lld", lnReqFields[4]);
 		memcpy(&szEcrBuffer[inReqPacketIndex], szVendorKeyIndex, KEYINDEX_SIZE);
-		inReqPacketIndex++;
+		inReqPacketIndex += KEYINDEX_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
 
 		//SAMA Key Index
 		memset(szSAMAKeyIndex, 0x00, sizeof(szSAMAKeyIndex));
-		sprintf(szSAMAKeyIndex, "%lld", lnReqFields[5]);
+		sprintf(szSAMAKeyIndex, "%02lld", lnReqFields[5]);
 		memcpy(&szEcrBuffer[inReqPacketIndex], szSAMAKeyIndex, KEYINDEX_SIZE);
-		inReqPacketIndex++;
+		inReqPacketIndex += KEYINDEX_SIZE;
 		memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
 		inReqPacketIndex++;
 	}

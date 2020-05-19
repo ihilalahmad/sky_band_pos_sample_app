@@ -292,7 +292,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/vendor_id"
                         android:inputType="number"
-                        android:maxLength="6"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -312,7 +312,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/vendor_terminal_type"
                         android:inputType="number"
-                        android:maxLength="1"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -352,7 +352,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/vendor_key_index"
                         android:inputType="number"
-                        android:maxLength="1"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -372,7 +372,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/sama_key_index"
                         android:inputType="number"
-                        android:maxLength="1"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView

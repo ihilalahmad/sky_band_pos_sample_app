@@ -4,225 +4,140 @@ import androidx.lifecycle.ViewModel;
 
 public class BufferResponseViewModel extends ViewModel {
 
-    private static final String RESPONSE_CODE = "Response Code:";
-    private static final String RESPONSE_MESSAGE = "Response Message:";
-    private static final String PAN_NUMBER = "Pan Number:";
-    private static final String TRANSACTION_AMOUNT = "Transaction Amount:";
-    private static final String STAN_NO = "Stan Number:";
-    private static final String DATE_TIME = "Date And Time:";
-    private static final String CARD_EXP_DATE = "Card Expiry Date:";
-    private static final String RRN_NO = "RRN:";
-    private static final String AUTH_CODE = "Authorization Code:";
-    private static final String TERMINAL_ID = "TerminalId:";
-    private static final String MERCHANT_ID = "Merchant Id:";
-    private static final String BATCH_NO = "Batch Number:";
-    private static final String AID_NO = "AID:";
-    private static final String APPLN_CRYPTOGRAM = "Appln. Cryptogram:";
-    private static final String CRYPTOGRAM_INFO_DATA = "Cryptogram Info Data:";
-    private static final String CVR = "CVR:";
-    private static final String TVR = "TVR:";
-    private static final String TSI = "TSI:";
-    private static final String CARD_ENTRY_MODE = "Card Entry Mode:";
-    private static final String MERCHANT_CATEGORY_CODE = "Merchant Category Code:";
-    private static final String TRANSACTION_TYPE = "Transaction Type:";
-    private static final String SCHEME_LABEL = "Scheme Label:";
-    private static final String STORE_CASHIER_INFO = "Store & Cashier Info:";
-    private static final String PRODUCT_INFO = "Product Info:";
-    private static final String VERSION = "Version:";
-
-    public String purchase(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponsePurchase(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "PAN Number         : " + resp[4] + "\n" +
+                "Transaction Amount : " + resp[5] + "\n" +
+                "Stan No            : " + resp[6] + "\n" +
+                "Date & Time        : " + resp[7] + "\n" +
+                "Card Exp Date      : " + resp[8] + "\n" +
+                "RRN                : " + resp[9] + "\n" +
+                "Auth Code          : " + resp[10] + "\n" +
+                "TID                : " + resp[11] + "\n" +
+                "MID                : " + resp[12] + "\n" +
+                "Batch No           : " + resp[13] + "\n" +
+                "AID                : " + resp[14] + "\n" +
+                "Application Cryptogram : " + resp[15] + "\n" +
+                "CID                : " + resp[16] + "\n" +
+                "CVR                : " + resp[17] + "\n" +
+                "TVR                : " + resp[18] + "\n" +
+                "TSI                : " + resp[19] + "\n" +
+                "Card Entry Mode    : " + resp[20] + "\n" +
+                "Merchant Category Code : " + resp[21] + "\n" +
+                "Transaction Type   : " + resp[22] + "\n" +
+                "Scheme Label       : " + resp[23] + "\n" +
+                "Store and Cashier Info : " + resp[24] + "\n" +
+                "Product Info       : " + resp[25] + "\n" +
+                "Application Version: " + resp[26] + "\n" +
+                "ECR Transaction Reference Number: " + resp[27] + "\n" +
+                "Signature          : " + resp[28] + "\n";
     }
 
-    public String cashback(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponseRegister(String[] resp) {
+        return "TransactionType:" + resp[1] + "\n" + "ResponseCode:" + resp[2] + "\n" + "TerminalId:" + resp[3] + "\n";
     }
 
-    public String refund(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponseStartSession(String[] resp) {
+        return "TransactionType:" + resp[1] + "\n" + "ResponseCode:" + resp[2] + "\n";
     }
 
-    public String preAuth(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponsePurchaseCashBack(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "PAN Number         : " + resp[4] + "\n" +
+                "Transaction Amount : " + resp[5] + "\n" +
+                "Cash Back Amount   : " + resp[6] + "\n" +
+                "Total Amount       : " + resp[7] + "\n" +
+                "StanNo      		: " + resp[8] + "\n" +
+                "Date&Time          : " + resp[9] + "\n" +
+                "CardExpDate        : " + resp[10] + "\n" +
+                "RRN                : " + resp[11] + "\n" +
+                "AuthCode           : " + resp[12] + "\n" +
+                "TID           		: " + resp[13] + "\n" +
+                "MID                : " + resp[14] + "\n" +
+                "BatchNo			: " + resp[15] + "\n" +
+                "AID                : " + resp[16] + "\n" +
+                "Application Cryptogram : " + resp[17] + "\n" +
+                "CID                : " + resp[18] + "\n" +
+                "CVR               	: " + resp[19] + "\n" +
+                "TVR			    : " + resp[20] + "\n" +
+                "TSI				: " + resp[21] + "\n" +
+                "CardEntryMode	   	: " + resp[22] + "\n" +
+                "Merchant Category Code: " + resp[23] + "\n" +
+                "Transaction Type 	: " + resp[24] + "\n" +
+                "SchemeLabel       	: " + resp[25] + "\n" +
+                "Store and Cashier Info: " + resp[26] + "\n" +
+                "ProductInfo		: " + resp[27] + "\n" +
+                "ApplicationVersion : " + resp[28] + "\n" +
+                "EcrTransactionReference:" + resp[29] + "\n" +
+                "Signature			:" + resp[30] + "\n";
     }
 
-    public String preAuthAdvice(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponseReconcilation(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "Date&Time          : " + resp[4] + "\n" +
+                "TotalSchemeLength  :" + resp[5] + "\n" +
+                "SchemeName			:" + resp[6] + "\n" +
+                "TransactionAvaliableFlag:" + resp[7] + "\n" +
+                "Total Debit Count	:" + resp[8] + "\n" +
+                "Total Debit Amount :" + resp[9] + "\n" +
+                "Total Credit Count :" + resp[10] + "\n" +
+                "Total Credit Amount:" + resp[11] + "\n" +
+                "NAQD Count			:" + resp[12] + "\n" +
+                "NAQD Amount		:" + resp[13] + "\n" +
+                "C/ADV Count		:" + resp[14] + "\n" +
+                "C/ADV Amount		:" + resp[15] + "\n" +
+                "Auth Count			:" + resp[16] + "\n" +
+                "Auth Amount		:" + resp[17] + "\n" +
+                "ECR Transaction Reference Number:" + resp[18] + "\n" +
+                "Signature			:" + resp[19] + "\n";
     }
 
-    public String preAuthExtn(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponseParameterDownload(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "Date&Time          : " + resp[4] + "\n" +
+                "ECR Transaction Reference Number:" + resp[5] + "\n" +
+                "Signature			:" + resp[6] + "\n";
     }
 
-    public String preAuthVoid(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponseGetParameter(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "Date&Time          : " + resp[4] + "\n" +
+                "Vendor ID 			:" + resp[5] + "\n" +
+                "Vendor Terminal type:" + resp[6] + "\n" +
+                "TRSM ID			:" + resp[7] + "\n" +
+                "Vendor Key Index	:" + resp[8] + "\n" +
+                "SAMA Key Index		:" + resp[9] + "\n" +
+                "ECR Transaction Reference Number:" + resp[10] + "\n" +
+                "Signature			:" + resp[11] + "\n";
     }
 
-    public String cashAdvance(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+
+    String printResponseCheckStatus(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "Date&Time          : " + resp[4] + "\n" +
+                "PreviousTransactionResponse:" + resp[5] + "\n" +
+                "PreviousEcrNo		:" + resp[6] + "\n" +
+                "ECR Transaction Reference Number:" + resp[7] + "\n" +
+                "Signature			:" + resp[8] + "\n";
     }
 
-    public String reversal(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
-    }
-
-    public String reconciliation(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
-    }
-
-    public String parameterDownload(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
-    }
-
-    public String setParameter(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
-    }
-
-    public String getParameter(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
-    }
-
-    public String billPayment(String[] response) {
-        return RESPONSE_CODE + " " + response[2] + "\n" + RESPONSE_MESSAGE + " " + response[3] + "\n" + PAN_NUMBER + " "
-                + response[4] + "\n" + TRANSACTION_AMOUNT + " " + response[5] + "\n" + STAN_NO + " " + response[6]
-                + "\n" + DATE_TIME + " " + response[7] + "\n" + CARD_EXP_DATE + " " + response[8] + "\n" + RRN_NO + " "
-                + response[9] + "\n" + AUTH_CODE + " " + response[10] + "\n" + TERMINAL_ID + " " + response[11] + "\n"
-                + MERCHANT_ID + " " + response[12] + "\n" + BATCH_NO + " " + response[13] + "\n" + AID_NO + " "
-                + response[14] + "\n" + APPLN_CRYPTOGRAM + " " + response[15] + "\n" + CRYPTOGRAM_INFO_DATA + " "
-                + response[16] + "\n" + CVR + " " + response[17] + "\n" + TVR + " " + response[18] + "\n" + TSI + " "
-                + response[19] + "\n" + CARD_ENTRY_MODE + " " + response[20] + "\n" + MERCHANT_CATEGORY_CODE + " "
-                + response[21] + "\n" + TRANSACTION_TYPE + " " + response[22] + "\n" + SCHEME_LABEL + response[23]
-                + "\n" + STORE_CASHIER_INFO + " " + response[24] + "\n" + PRODUCT_INFO + " " + response[25] + "\n"
-                + VERSION + " " + response[27];
+    String printResponseBillPayment(String[] resp) {
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n";
     }
 }
+
+

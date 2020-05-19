@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private ThreadPoolExecutorService threadPoolExecutorService = null;
     @Setter
     public static int position;
-    private ArrayAdapter<CharSequence> adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

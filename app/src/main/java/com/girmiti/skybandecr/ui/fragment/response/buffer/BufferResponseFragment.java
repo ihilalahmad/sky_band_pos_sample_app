@@ -32,6 +32,7 @@ public class BufferResponseFragment extends Fragment {
     private NavController navController;
     private BufferResponseFragmentBinding bufferResponseFragmentBinding;
     private Logger logger = Logger.getNewLogger(BufferResponseFragment.class.getName());
+    private String receiveData;
 
     @SneakyThrows
     @Override
@@ -48,16 +49,16 @@ public class BufferResponseFragment extends Fragment {
     private void setupListeners() {
         HomeFragment.setPosition(0);
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
-        String receiveData = ActiveTxnData.getInstance().getResData();
+        receiveData = ActiveTxnData.getInstance().getResData();
         String[] receiveDataArray = receiveData.split(";");
         logger.debug(getClass() + "::" + "GetRespData>>> " + receiveData);
-        receiveData = receiveData.replace(";", "\n");
-        bufferResponseFragmentBinding.bufferReceive.setText(receiveData);
+        String BufferData = setResponse(receiveDataArray);
+        bufferResponseFragmentBinding.bufferReceive.setText(BufferData);
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
-        if(receiveDataArray[1].equals("17") || receiveDataArray[1].equals("18") || receiveDataArray[1].equals("19") || receiveDataArray[1].equals("15") || receiveDataArray[1].equals("16") || receiveDataArray[1].equals("12")|| receiveDataArray[1].equals("13") || receiveDataArray[1].equals("23")) {
+        if (receiveDataArray[1].equals("17") || receiveDataArray[1].equals("18") || receiveDataArray[1].equals("19") || receiveDataArray[1].equals("15") || receiveDataArray[1].equals("16") || receiveDataArray[1].equals("12") || receiveDataArray[1].equals("13") || receiveDataArray[1].equals("23")) {
             bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-        } else if (!(Integer.parseInt(receiveDataArray[2]) == 0))  {
+        } else if (!(Integer.parseInt(receiveDataArray[2]) == 0)) {
             bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
         } else {
             bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
@@ -78,5 +79,76 @@ public class BufferResponseFragment extends Fragment {
                 navController.navigate(R.id.action_bufferResponseFragment_to_printReceiptFragment, null, options);
             }
         });
+    }
+
+    private String setResponse(String[] receiveDataArray) {
+
+        switch (ActiveTxnData.getInstance().getTransactionType()) {
+            case PURCHASE:
+            case REFUND:
+            case PRE_AUTHORISATION:
+            case ADVICE:
+            case CASH_ADVANCE:
+            case REVERSAL:
+                if(receiveData.length() > 27) {
+                    return bufferResponseViewModel.printResponsePurchase(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case PURCHASE_CASHBACK:
+                if(receiveData.length() > 29) {
+                    return bufferResponseViewModel.printResponsePurchaseCashBack(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case REGISTER:
+                if(receiveData.length() > 2) {
+                    return bufferResponseViewModel.printResponseRegister(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case START_SESSION:
+                if (receiveData.length() > 1) {
+                    return  bufferResponseViewModel.printResponseStartSession(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case RECONCILIATION:
+                if (receiveData.length() > 18) {
+                    return bufferResponseViewModel.printResponseReconcilation(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case PARAMETER_DOWNLOAD:
+            case SET_PARAMETER:
+                if (receiveData.length() > 5) {
+                    return bufferResponseViewModel.printResponseParameterDownload(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case GET_PARAMETER:
+                if (receiveData.length() > 10) {
+                    return bufferResponseViewModel.printResponseGetParameter(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case CHECK_STATUS:
+                if (receiveData.length() > 7) {
+                    return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            case BILL_PAYMENT:
+            case PRE_AUTH_EXTENSION:
+            case PRE_AUTH_VOID:
+                if (receiveData.length() > 2) {
+                    return bufferResponseViewModel.printResponseBillPayment(receiveDataArray);
+                } else {
+                    return receiveData.replace(";", "\n");
+                }
+            default:
+                receiveData = receiveData.replace(";", "\n");
+                return receiveData;
+        }
     }
 }

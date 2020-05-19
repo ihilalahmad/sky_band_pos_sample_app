@@ -58,10 +58,10 @@
 #define ETX_SIZE						1
 #define LCR_SIZE						1
 #define LANG_SIZE						1
-#define VENDORID_SIZE					6
+#define VENDORID_SIZE					2
 #define TRSMID_SIZE						6
-#define TERMTYPE_SIZE					1
-#define KEYINDEX_SIZE					1
+#define TERMTYPE_SIZE					2
+#define KEYINDEX_SIZE					2
 #define CASHREGNUM_SIZE					8
 #define BILLERID_SIZE					6
 #define BILLNUM_SIZE					6

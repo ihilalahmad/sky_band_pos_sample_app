@@ -22,4 +22,6 @@ public interface Constant {
     int SIX = 6;
     int ONE = 1;
     int EIGHT = 8;
+    int TWO = 2;
+    int ZERO = 0;
 }

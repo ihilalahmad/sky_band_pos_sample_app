@@ -79,10 +79,10 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                 portNo = connectSettingFragmentBinding.portNo.getText().toString();
 
                 if (ipAddress.equals("")) {
-                    Toast.makeText(getContext(), "Ip should not be Empty", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Please enter Ip", Toast.LENGTH_LONG).show();
                     return;
                 } else if(portNo.equals("")) {
-                    Toast.makeText(getContext(), "Port should not be Empty", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Please enter Port no.", Toast.LENGTH_LONG).show();
                     return;
                 } else if (!validateIp(ipAddress)) {
                     Toast.makeText(getContext(), R.string.ip_invalid, Toast.LENGTH_LONG).show();

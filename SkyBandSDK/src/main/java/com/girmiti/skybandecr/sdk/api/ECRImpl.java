@@ -30,7 +30,6 @@ public class ECRImpl implements ECRCore {
         } catch(Exception e) {
             throw new Exception("3");
         }
-
         byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
         logger.info("Socket connected");
