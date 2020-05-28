@@ -100,7 +100,7 @@
         <item>Parameter Download</item>
         <item>Set Parameter</item>
         <item>Get Parameter</item>
-        <item>Set Terminal Language</item>
+        <!--<item>Set Terminal Language</item>-->
        <!-- <item>Terminal Status</item>
         <item>Previous Transaction Details</item>-->
         <item>Bill Payment</item>

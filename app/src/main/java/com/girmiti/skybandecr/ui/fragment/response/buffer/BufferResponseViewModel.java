@@ -36,11 +36,14 @@ public class BufferResponseViewModel extends ViewModel {
     }
 
     String printResponseRegister(String[] resp) {
-        return "TransactionType:" + resp[1] + "\n" + "ResponseCode:" + resp[2] + "\n" + "TerminalId:" + resp[3] + "\n";
+        return "TransactionType:" + resp[1] + "\n"
+                + "ResponseCode:" + resp[2] + "\n"
+                + "TerminalId:" + resp[3] + "\n";
     }
 
     String printResponseStartSession(String[] resp) {
-        return "TransactionType:" + resp[1] + "\n" + "ResponseCode:" + resp[2] + "\n";
+        return "TransactionType:" + resp[1] + "\n"
+                + "ResponseCode:" + resp[2] + "\n";
     }
 
     String printResponsePurchaseCashBack(String[] resp) {
@@ -137,6 +140,117 @@ public class BufferResponseViewModel extends ViewModel {
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n";
+    }
+
+    public String printResponseDefault(String[] resp) {
+        return "Response Code               : " + resp[2] + "\n" +
+                "Response Message            : " + resp[3] + "\n";
+    }
+
+    public String printResponsePrintDetailReport(String[] receiveDataArray) {
+
+        String printSettlment = "Transaction Scheme transactionNo\n" +
+                "-------------------- \n" +
+                "Scheme Name                : SchemeName \n" +
+
+                "Transaction Available Flag : TransactionAvailableFlag \n" +
+                "Total Debit Count          : TotalDebitCount \n" +
+                "Total Debit Amount         : TotalDebitAmount \n" +
+                "Total Credit Count         : TotalCreditCount \n" +
+                "Total Credit Amount        : TotalCreditAmount \n" +
+                "NAQD Count                 : NAQDCount \n" +
+                "NAQD Amount                : NAQDAmount \n" +
+                "C/ADV Count                : CADVCount \n" +
+                "C/ADV Amount               : CADVAmount \n" +
+                "Auth Count                 : AuthCount \n" +
+                "Auth Amount                : AuthAmount \n";
+        int k = 5;
+        StringBuilder printFinalReport1 = new StringBuilder("");
+        int totalSchemeLength = Integer.parseInt(receiveDataArray[5]);
+        for (int i = 1; i <= totalSchemeLength; i++)
+        {
+            if (receiveDataArray[k + 2].equals("0"))
+            {
+                String printSettlmentNO = "Transaction Scheme " + i + "\n" +
+                        "-------------------- \n" +
+                        "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
+                        "<No Transaction> \n";
+                k = k + 2;
+                printFinalReport1.append(printSettlmentNO);
+            }
+            else
+            {
+                printSettlment = printSettlment.replace("transactionNo", String.valueOf(i));
+                printSettlment = printSettlment.replace("SchemeName", receiveDataArray[k + 1]);
+                printSettlment = printSettlment.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
+                printSettlment = printSettlment.replace("TotalDebitCount", receiveDataArray[k + 3]);
+                printSettlment = printSettlment.replace("TotalDebitAmount", receiveDataArray[k + 4]);
+                printSettlment = printSettlment.replace("TotalCreditCount", receiveDataArray[k + 5]);
+                printSettlment = printSettlment.replace("TotalCreditAmount", receiveDataArray[k + 6]);
+                printSettlment = printSettlment.replace("NAQDCount", receiveDataArray[k + 7]);
+                printSettlment = printSettlment.replace("NAQDAmount", receiveDataArray[k + 8]);
+                printSettlment = printSettlment.replace("CADVCount", receiveDataArray[k + 9]);
+                printSettlment = printSettlment.replace("CADVAmount", receiveDataArray[k + 10]);
+                printSettlment = printSettlment.replace("AuthCount", receiveDataArray[k + 11]);
+                printSettlment = printSettlment.replace("AuthAmount", receiveDataArray[k + 12]);
+                k = k + 12;
+                printFinalReport1.append(printSettlment);
+            }
+        }
+        return "Transaction type            : " + receiveDataArray[1] + "\n" +
+                "Response Code              : " + receiveDataArray[2] + "\n" +
+                "Response Message           : " + receiveDataArray[3] + "\n" +
+                "Date Time Stamp           : " + receiveDataArray[4] + "\n" +
+                "Total Scheme Length        : " + receiveDataArray[5] + "\n" +
+                printFinalReport1 +
+                "ECR Transaction Reference Number: " + receiveDataArray[k + 1] + "\n" +
+                "Signature                  : " + receiveDataArray[k + 2] + "\n";
+
+    }
+
+    public String printResponseSummaryReport(String[] receiveDataArray) {
+
+        StringBuilder SummaryFinalReport1 = new StringBuilder();
+        String printSummaryReportString1 = "Transaction Number transactionNumberHead\n" +
+                "-------------------- \n" +
+                "Transaction Type            :TransactionType1  \n" +
+                "Date                        :Date1 \n" +
+                "RRN                         :RRN1 \n" +
+                "Transaction Amount          :TransactionAmount1 \n" +
+                "State                       :State1 \n" +
+                "Time                        :Time1 \n" +
+                "PAN Number                  :PANNumber1 \n" +
+                "authCode                    :authCode1 \n" +
+                "transactionNumber           :transactionNumber1 \n";
+        String printSummaryReportString = printSummaryReportString1;
+
+        int k = 7;
+        for (int a = 1; a <= receiveDataArray[6].length(); a++)
+        {
+            printSummaryReportString = printSummaryReportString.replace("transactionNumberHead", String.valueOf(a));
+            printSummaryReportString = printSummaryReportString.replace("TransactionType1", receiveDataArray[k]);
+            printSummaryReportString = printSummaryReportString.replace("Date1", receiveDataArray[k + 1]);
+            printSummaryReportString = printSummaryReportString.replace("RRN1", receiveDataArray[k + 2]);
+            printSummaryReportString = printSummaryReportString.replace("TransactionAmount1", receiveDataArray[k + 3]);
+            printSummaryReportString = printSummaryReportString.replace("State1", receiveDataArray[k + 4]);
+            printSummaryReportString = printSummaryReportString.replace("Time1", receiveDataArray[k + 5]);
+            printSummaryReportString = printSummaryReportString.replace("PANNumber1", receiveDataArray[k + 6]);
+            printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 7]);
+            printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 8]);
+            k = k + 9;
+            SummaryFinalReport1.append(printSummaryReportString);
+            printSummaryReportString = printSummaryReportString1;
+        }
+
+        return "Transaction type            : " + receiveDataArray[1] + "\n" +
+                "Response Code               : " + receiveDataArray[2] + "\n" +
+                "Response Message            : " + receiveDataArray[3] + "\n" +
+                "Date Time Stamp             : " + receiveDataArray[4] + "\n" +
+                "Transaction Requests Count  : " + receiveDataArray[5] + "\n" +
+                "Total Transactions Length   : " + receiveDataArray[6] + "\n" +
+                SummaryFinalReport1 +
+                "ECR Transaction Reference Number  : " + receiveDataArray[k] + "\n" +
+                "Signature    : " + receiveDataArray[k+1] + "\n";
     }
 }
 

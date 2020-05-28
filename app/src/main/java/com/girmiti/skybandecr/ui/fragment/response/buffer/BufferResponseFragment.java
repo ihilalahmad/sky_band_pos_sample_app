@@ -47,6 +47,7 @@ public class BufferResponseFragment extends Fragment {
     }
 
     private void setupListeners() {
+
         HomeFragment.setPosition(0);
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
         receiveData = ActiveTxnData.getInstance().getResData();
@@ -56,12 +57,59 @@ public class BufferResponseFragment extends Fragment {
         bufferResponseFragmentBinding.bufferReceive.setText(BufferData);
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
-        if (receiveDataArray[1].equals("17") || receiveDataArray[1].equals("18") || receiveDataArray[1].equals("19") || receiveDataArray[1].equals("15") || receiveDataArray[1].equals("16") || receiveDataArray[1].equals("12") || receiveDataArray[1].equals("13") || receiveDataArray[1].equals("23")) {
-            bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-        } else if (!(Integer.parseInt(receiveDataArray[2]) == 0)) {
-            bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-        } else {
-            bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+        switch (receiveDataArray[1]) {
+            case "17":
+            case "18":
+            case "19":
+            case "15":
+            case "16":
+            case "12":
+            case "13":
+            case "23":
+            case "30":
+            case "40":
+                bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                break;
+            case "10":
+                logger.debug("inside Reconsiliation print");
+                if (Integer.parseInt(receiveDataArray[2]) == 500 || Integer.parseInt(receiveDataArray[2]) == 501) {
+                    logger.debug("inside Reconsiliation print1");
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                } else {
+                    logger.debug("inside Reconsiliation print2");
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                }
+                break;
+            case "9":
+                if (Integer.parseInt(receiveDataArray[2]) != 400) {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                } else {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "11":
+                if (Integer.parseInt(receiveDataArray[2]) == 300 && !receiveDataArray[3].equals("DECLINED")) {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                } else {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                }
+                break;
+            case "21":
+                if (Integer.parseInt(receiveDataArray[2]) != 0) {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                } else {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "22":
+                bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                break;
+            default:
+                if (receiveDataArray[3].equals("APPROVED") || receiveDataArray[3].equals("DECLINED")) {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                } else {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                }
         }
 
         bufferResponseFragmentBinding.okButton.setOnClickListener(new View.OnClickListener() {
@@ -83,72 +131,77 @@ public class BufferResponseFragment extends Fragment {
 
     private String setResponse(String[] receiveDataArray) {
 
-        switch (ActiveTxnData.getInstance().getTransactionType()) {
-            case PURCHASE:
-            case REFUND:
-            case PRE_AUTHORISATION:
-            case ADVICE:
-            case CASH_ADVANCE:
-            case REVERSAL:
-                if(receiveData.length() > 27) {
+        switch (receiveDataArray[1]) {
+            case "0":
+            case "2":
+            case "3":
+            case "4":
+            case "8":
+            case "9":
+                if (receiveData.length() > 27) {
                     return bufferResponseViewModel.printResponsePurchase(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case PURCHASE_CASHBACK:
-                if(receiveData.length() > 29) {
+            case "1":
+                if (receiveData.length() > 29) {
                     return bufferResponseViewModel.printResponsePurchaseCashBack(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case REGISTER:
-                if(receiveData.length() > 2) {
+            case "17":
+                if (receiveData.length() > 2) {
                     return bufferResponseViewModel.printResponseRegister(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case START_SESSION:
+            case "18":
+            case "19":
                 if (receiveData.length() > 1) {
-                    return  bufferResponseViewModel.printResponseStartSession(receiveDataArray);
+                    return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case RECONCILIATION:
+            case "10":
                 if (receiveData.length() > 18) {
                     return bufferResponseViewModel.printResponseReconcilation(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case PARAMETER_DOWNLOAD:
-            case SET_PARAMETER:
+            case "11":
+            case "12":
                 if (receiveData.length() > 5) {
                     return bufferResponseViewModel.printResponseParameterDownload(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case GET_PARAMETER:
+            case "13":
                 if (receiveData.length() > 10) {
                     return bufferResponseViewModel.printResponseGetParameter(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case CHECK_STATUS:
+            case "23":
                 if (receiveData.length() > 7) {
                     return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case BILL_PAYMENT:
-            case PRE_AUTH_EXTENSION:
-            case PRE_AUTH_VOID:
+            case "20":
+            case "5":
+            case "6":
                 if (receiveData.length() > 2) {
                     return bufferResponseViewModel.printResponseBillPayment(receiveDataArray);
                 } else {
-                    return receiveData.replace(";", "\n");
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
+            case "21":
+                return bufferResponseViewModel.printResponsePrintDetailReport(receiveDataArray);
+            case "22":
+                return bufferResponseViewModel.printResponseSummaryReport(receiveDataArray);
+
             default:
-                receiveData = receiveData.replace(";", "\n");
-                return receiveData;
+                return bufferResponseViewModel.printResponseDefault(receiveDataArray);
         }
     }
 }
