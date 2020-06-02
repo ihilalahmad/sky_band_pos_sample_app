@@ -96,7 +96,7 @@ public class PrintReceiptFragment extends Fragment {
     private String getPrintReceipt(String[] receiveDataArray) throws IOException {
         InputStream is;
         String htmlString = "";
-        String date = date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         switch (ActiveTxnData.getInstance().getTransactionType()) {
             case PURCHASE:
                 is = getResources().getAssets().open("printReceipt/Purchase(customer_copy).html");
@@ -106,7 +106,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -148,7 +148,7 @@ public class PrintReceiptFragment extends Fragment {
                     totalAmount = Math.round(totalAmount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[10];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[9];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -190,7 +190,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -228,8 +228,8 @@ public class PrintReceiptFragment extends Fragment {
                     double amount = Double.parseDouble(receiveDataArray[5]) / 100;
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
-                    if (expiryDate != "") {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                    if (!expiryDate.equals("")) {
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -243,7 +243,7 @@ public class PrintReceiptFragment extends Fragment {
                     htmlString = htmlString.replace("authCode", receiveDataArray[10]);
                     htmlString = htmlString.replace("approved", receiveDataArray[3]);
                     htmlString = htmlString.replace("CurrentAmount", String.valueOf(amount));
-                    htmlString = htmlString.replace("expiryDate", expiryDate);
+                    htmlString = htmlString.replace("ExpiryDate", expiryDate);
                     htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[20]);
                     htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
                     htmlString = htmlString.replace("AIDaid", receiveDataArray[14]);
@@ -269,7 +269,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -308,8 +308,8 @@ public class PrintReceiptFragment extends Fragment {
                     double amount = Double.parseDouble(receiveDataArray[5]) / 100;
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
-                    if (expiryDate != "") {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                    if (!expiryDate.equals("")) {
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -348,7 +348,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -388,7 +388,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -428,7 +428,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -472,49 +472,54 @@ public class PrintReceiptFragment extends Fragment {
                     String SummaryFinalReport = "";
                     String receiveDataArrayDateTime = receiveDataArray[4];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
-                     String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / " + receiveDataArrayDateTime.substring(0, 2) + " / "+ date;
+                    String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / " + receiveDataArrayDateTime.substring(0, 2) + " / "+ date;
                     logger.debug("currentDate>>" + currentDate);
                     String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :" + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-                    int b = 5;
-                    int totalSchemeLengthL =Integer.parseInt(receiveDataArray[5]);
+                    int b = 6;
+                    int totalSchemeLengthL =Integer.parseInt(receiveDataArray[6]);
 
                     for (int j = 1; j <= totalSchemeLengthL; j++)
                     {
 
                         if (receiveDataArray[b + 2].equals("0"))
                         {
-                            is = getResources().getAssets().open("printReceipt/PosTable.html");
+                            is = getResources().getAssets().open("printReceipt/ReconcilationTable.html");
                             String htmlReconcilationNoTable = getHtmlString(is);
-                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("SchemeNo", receiveDataArray[b + 1]);
+                            String arabi = checkingArabic(receiveDataArray[b + 1]);
+                            arabi = arabi.replace("\u08F1", "");
+                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("Scheme", receiveDataArray[b + 1]);
+                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("قَدِيرٞ", arabi);
                             b = b + 2;
-
                             SummaryFinalReport += htmlReconcilationNoTable;
                         }
                         else
                         {
                             htmlSummaryReport = htmlSummaryReport.replace("SchemeName", receiveDataArray[b + 1]);
                             htmlSummaryReport = htmlSummaryReport.replace("totalDBCount", receiveDataArray[b + 3]);
-                            htmlSummaryReport = htmlSummaryReport.replace("totalDBamount", String.valueOf((Integer.parseInt(receiveDataArray[b + 4])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("totalDBAmount", String.valueOf((Double.parseDouble(receiveDataArray[b + 4])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("totalCBCount",  receiveDataArray[b + 5]);
-                            htmlSummaryReport = htmlSummaryReport.replace("totalCBamount",  String.valueOf((Integer.parseInt(receiveDataArray[b + 6])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("totalCBAmount",  String.valueOf((Double.parseDouble(receiveDataArray[b + 6])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("NAQDCount", receiveDataArray[b + 7]);
-                            htmlSummaryReport = htmlSummaryReport.replace("NAQDamount",  String.valueOf((Integer.parseInt(receiveDataArray[b + 8])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("NAQDAmount",  String.valueOf((Double.parseDouble(receiveDataArray[b + 8])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("CADVCount",  receiveDataArray[b + 9]);
-                            htmlSummaryReport = htmlSummaryReport.replace("CADVamount", String.valueOf((Integer.parseInt(receiveDataArray[b + 10])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("CADVAmount", String.valueOf((Double.parseDouble(receiveDataArray[b + 10])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("AUTHCount", receiveDataArray[b + 11]);
-                            htmlSummaryReport = htmlSummaryReport.replace("AUTHamount", String.valueOf((Integer.parseInt(receiveDataArray[b + 12])) / 100));
-                            double TOTALSCount = (Integer.parseInt(receiveDataArray[b + 3]) + Integer.parseInt(receiveDataArray[b + 5]) + Integer.parseInt(receiveDataArray[b + 7]) + Integer.parseInt(receiveDataArray[b + 9]) + Integer.parseInt(receiveDataArray[b + 11]));
-                            double TOTALSamount = (Integer.parseInt(receiveDataArray[b + 4]) + Integer.parseInt(receiveDataArray[b + 6]) + Integer.parseInt(receiveDataArray[b + 8]) + Integer.parseInt(receiveDataArray[b + 10]) + Integer.parseInt(receiveDataArray[b + 12])) / 100.0;
+                            htmlSummaryReport = htmlSummaryReport.replace("AUTHAmount", String.valueOf((Double.parseDouble(receiveDataArray[b + 12])) / 100));
+                            double TOTALSCount = (Double.parseDouble(receiveDataArray[b + 3]) + Double.parseDouble(receiveDataArray[b + 5]) + Double.parseDouble(receiveDataArray[b + 7]) + Double.parseDouble(receiveDataArray[b + 9]) + Double.parseDouble(receiveDataArray[b + 11]));
+                            double TOTALSAmount = (Double.parseDouble(receiveDataArray[b + 4]) + Double.parseDouble(receiveDataArray[b + 6]) + Double.parseDouble(receiveDataArray[b + 8]) + Double.parseDouble(receiveDataArray[b + 10]) + Double.parseDouble(receiveDataArray[b + 12])) / 100.0;
 
                             htmlSummaryReport = htmlSummaryReport.replace("TOTALSCount", String.valueOf(TOTALSCount));
-                            htmlSummaryReport = htmlSummaryReport.replace("TOTALSamount", String.valueOf(TOTALSamount));
+                            htmlSummaryReport = htmlSummaryReport.replace("TOTALSAmount", String.format("{0:0.00##}", TOTALSAmount));
                             b = b + 12;
                             SummaryFinalReport += htmlSummaryReport;
-                            htmlSummaryReport =SummaryHtmlString;
+                            htmlSummaryReport = SummaryHtmlString;
                         }
                         htmlString = htmlString.replace("PosTable", SummaryFinalReport);
                         htmlString = htmlString.replace("currentTime", currentTime);
                         htmlString = htmlString.replace("currentDate", currentDate);
+                        htmlString = htmlString.replace("AppVersion", receiveDataArray[5]);
+                        htmlString = htmlString.replace("TerminalId",  ActiveTxnData.getInstance().getTerminalID());
+
                     }
                 }
                 return htmlString;
@@ -528,7 +533,7 @@ public class PrintReceiptFragment extends Fragment {
                     amount = Math.round(amount * 100.0) / 100.0;
                     String expiryDate = receiveDataArray[8];
                     if (!expiryDate.equals("")) {
-                        expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+                        expiryDate = expiryDate.substring(2,4) + "/" + expiryDate.substring(0,2);
                     }
                     String receiveDataArrayDateTime = receiveDataArray[7];
                     logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -593,8 +598,8 @@ public class PrintReceiptFragment extends Fragment {
                     String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / " + receiveDataArrayDateTime.substring(0, 2) + " / "+ date;
                     logger.debug("currentDate>>" + currentDate);
                     String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :" + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-                    int b = 5;
-                    int totalSchemeLengthL =Integer.parseInt(receiveDataArray[5]);
+                    int b = 6;
+                    int totalSchemeLengthL =Integer.parseInt(receiveDataArray[6]);
 
                     for (int j = 1; j <= totalSchemeLengthL; j++)
                     {
@@ -604,8 +609,9 @@ public class PrintReceiptFragment extends Fragment {
                             is = getResources().getAssets().open("printReceipt/ReconcilationTable.html");
                             String htmlReconcilationNoTable = getHtmlString(is);
                             String arabi = checkingArabic(receiveDataArray[b + 1]);
-                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("SchemeNo", receiveDataArray[b + 1]);
-                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("arabicScheme", arabi);
+                            arabi = arabi.replace("\u08F1", "");
+                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("Scheme", receiveDataArray[b + 1]);
+                            htmlReconcilationNoTable = htmlReconcilationNoTable.replace("قَدِيرٞ", arabi);
                             b = b + 2;
                             SummaryFinalReport += htmlReconcilationNoTable;
                         }
@@ -613,27 +619,30 @@ public class PrintReceiptFragment extends Fragment {
                         {
                             htmlSummaryReport = htmlSummaryReport.replace("SchemeName", receiveDataArray[b + 1]);
                             htmlSummaryReport = htmlSummaryReport.replace("totalDBCount", receiveDataArray[b + 3]);
-                            htmlSummaryReport = htmlSummaryReport.replace("totalDBamount", String.valueOf((Integer.parseInt(receiveDataArray[b + 4])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("totalDBAmount", String.valueOf((Double.parseDouble(receiveDataArray[b + 4])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("totalCBCount",  receiveDataArray[b + 5]);
-                            htmlSummaryReport = htmlSummaryReport.replace("totalCBamount",  String.valueOf((Integer.parseInt(receiveDataArray[b + 6])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("totalCBAmount",  String.valueOf((Double.parseDouble(receiveDataArray[b + 6])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("NAQDCount", receiveDataArray[b + 7]);
-                            htmlSummaryReport = htmlSummaryReport.replace("NAQDamount",  String.valueOf((Integer.parseInt(receiveDataArray[b + 8])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("NAQDAmount",  String.valueOf((Double.parseDouble(receiveDataArray[b + 8])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("CADVCount",  receiveDataArray[b + 9]);
-                            htmlSummaryReport = htmlSummaryReport.replace("CADVamount", String.valueOf((Integer.parseInt(receiveDataArray[b + 10])) / 100));
+                            htmlSummaryReport = htmlSummaryReport.replace("CADVAmount", String.valueOf((Double.parseDouble(receiveDataArray[b + 10])) / 100));
                             htmlSummaryReport = htmlSummaryReport.replace("AUTHCount", receiveDataArray[b + 11]);
-                            htmlSummaryReport = htmlSummaryReport.replace("AUTHamount", String.valueOf((Integer.parseInt(receiveDataArray[b + 12])) / 100));
-                            double TOTALSCount = (Integer.parseInt(receiveDataArray[b + 3]) + Integer.parseInt(receiveDataArray[b + 5]) + Integer.parseInt(receiveDataArray[b + 7]) + Integer.parseInt(receiveDataArray[b + 9]) + Integer.parseInt(receiveDataArray[b + 11]));
-                            double TOTALSamount = (Integer.parseInt(receiveDataArray[b + 4]) + Integer.parseInt(receiveDataArray[b + 6]) + Integer.parseInt(receiveDataArray[b + 8]) + Integer.parseInt(receiveDataArray[b + 10]) + Integer.parseInt(receiveDataArray[b + 12])) / 100.0;
+                            htmlSummaryReport = htmlSummaryReport.replace("AUTHAmount", String.valueOf((Double.parseDouble(receiveDataArray[b + 12])) / 100));
+                            double TOTALSCount = (Double.parseDouble(receiveDataArray[b + 3]) + Double.parseDouble(receiveDataArray[b + 5]) + Double.parseDouble(receiveDataArray[b + 7]) + Double.parseDouble(receiveDataArray[b + 9]) + Double.parseDouble(receiveDataArray[b + 11]));
+                            double TOTALSAmount = (Double.parseDouble(receiveDataArray[b + 4]) + Double.parseDouble(receiveDataArray[b + 6]) + Double.parseDouble(receiveDataArray[b + 8]) + Double.parseDouble(receiveDataArray[b + 10]) + Double.parseDouble(receiveDataArray[b + 12])) / 100.0;
 
                             htmlSummaryReport = htmlSummaryReport.replace("TOTALSCount", String.valueOf(TOTALSCount));
-                            htmlSummaryReport = htmlSummaryReport.replace("TOTALSamount", String.valueOf(TOTALSamount));
+                            htmlSummaryReport = htmlSummaryReport.replace("TOTALSAmount", String.format("0:0.00##",TOTALSAmount));
                             b = b + 12;
                             SummaryFinalReport += htmlSummaryReport;
-                            htmlSummaryReport =SummaryHtmlString;
+                            htmlSummaryReport = SummaryHtmlString;
                         }
                         htmlString = htmlString.replace("PosTable", SummaryFinalReport);
                         htmlString = htmlString.replace("currentTime", currentTime);
                         htmlString = htmlString.replace("currentDate", currentDate);
+                        htmlString = htmlString.replace("AppVersion", receiveDataArray[5]);
+                        htmlString = htmlString.replace("TerminalId",  ActiveTxnData.getInstance().getTerminalID());
+
                     }
                 }
                 return htmlString;
@@ -654,16 +663,20 @@ public class PrintReceiptFragment extends Fragment {
                 logger.debug("Transaction Length in SummaryReport>>"+ transactionsLength);
                 for (int i = 1; i <= 2; i++) {
 
+                    String date1 = receiveDataArray[j+1];
+                    date1 = date1.substring(2, 4) + " - " + receiveDataArrayDateTime.substring(0, 2) + " - "+ date;
+                    String time = receiveDataArray[j+6];
+                    time = time.substring(4, 6) + " :" + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
                     htmlSummaryReport = htmlSummaryReport.replace("transactionType", receiveDataArray[j]);
-                    htmlSummaryReport = htmlSummaryReport.replace("transactionDate", receiveDataArray[j + 1]);
+                    htmlSummaryReport = htmlSummaryReport.replace("transactionDate", date1);
                     htmlSummaryReport = htmlSummaryReport.replace("transactionRRN", receiveDataArray[j + 2]);
-                    htmlSummaryReport = htmlSummaryReport.replace("transactionamount", receiveDataArray[j + 3]);
-                    htmlSummaryReport = htmlSummaryReport.replace("transactionState", receiveDataArray[j + 4]);
-                    htmlSummaryReport = htmlSummaryReport.replace("transactionTime", receiveDataArray[j + 5]);
-                    htmlSummaryReport = htmlSummaryReport.replace("transactionPANNumber", receiveDataArray[j + 6]);
-                    htmlSummaryReport = htmlSummaryReport.replace("authCode", receiveDataArray[j + 7]);
-                    htmlSummaryReport = htmlSummaryReport.replace("transactionNumber", receiveDataArray[j + 8]);
-                    j = j + 9;
+                    htmlSummaryReport = htmlSummaryReport.replace("transactionAmount", receiveDataArray[j + 3]);
+                    htmlSummaryReport = htmlSummaryReport.replace("Claim1", receiveDataArray[j + 4]);
+                    htmlSummaryReport = htmlSummaryReport.replace("transactionTime", time);
+                    htmlSummaryReport = htmlSummaryReport.replace("transactionPANNumber", receiveDataArray[j + 7]);
+                    htmlSummaryReport = htmlSummaryReport.replace("authCode", receiveDataArray[j + 8]);
+                    htmlSummaryReport = htmlSummaryReport.replace("transactionNumber", receiveDataArray[j + 9]);
+                    j = j + 10;
                     SummaryFinalReport.append(htmlSummaryReport);
                     htmlSummaryReport = htmlString;
                 }
@@ -694,17 +707,32 @@ public class PrintReceiptFragment extends Fragment {
         String arabic = "";
         switch (command)
         {
+            case "ELECTRON":
+                arabic = "فيزا";
+                break;
             case "MAESTRO":
-                arabic = "فنافنان";
+                arabic = "مايسترو";
                 break;
-            case "AMERICAN EXPRESS":
-                arabic = "صريحة الأمريكية";
+            case "AMEX":
+                arabic = "امريكان اكسبرس";
                 break;
-            case "MASTER CARD":
-                arabic = "بطاقة رئيسية";
+            case "MASTER":
+                arabic = "ماستر كارد";
                 break;
             case "VISA":
-                arabic = "حلم";
+                arabic = "فيزا";
+                break;
+            case "GCCNET":
+                arabic = "الشبكة الخليجية";
+                break;
+            case "JCB":
+                arabic = "ج س ب";
+                break;
+            case "DISCOVER":
+                arabic = "ديسكفر";
+                break;
+            case "mada":
+                arabic = "مدى";
                 break;
             default:
                 arabic = "";

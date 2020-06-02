@@ -79,26 +79,69 @@ public class BufferResponseViewModel extends ViewModel {
                 "Signature			:" + resp[30] + "\n";
     }
 
-    String printResponseReconcilation(String[] resp) {
-        return "Transaction type: " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "Date&Time          : " + resp[4] + "\n" +
-                "TotalSchemeLength  :" + resp[5] + "\n" +
-                "SchemeName			:" + resp[6] + "\n" +
-                "TransactionAvaliableFlag:" + resp[7] + "\n" +
-                "Total Debit Count	:" + resp[8] + "\n" +
-                "Total Debit Amount :" + resp[9] + "\n" +
-                "Total Credit Count :" + resp[10] + "\n" +
-                "Total Credit Amount:" + resp[11] + "\n" +
-                "NAQD Count			:" + resp[12] + "\n" +
-                "NAQD Amount		:" + resp[13] + "\n" +
-                "C/ADV Count		:" + resp[14] + "\n" +
-                "C/ADV Amount		:" + resp[15] + "\n" +
-                "Auth Count			:" + resp[16] + "\n" +
-                "Auth Amount		:" + resp[17] + "\n" +
-                "ECR Transaction Reference Number:" + resp[18] + "\n" +
-                "Signature			:" + resp[19] + "\n";
+    String printResponseReconcilation(String[] receiveDataArray) {
+
+        String printSettlment = "Transaction Scheme transactionNo\n" +
+                "-------------------- \n" +
+                "Scheme Name                : SchemeName \n" +
+
+                "Transaction Available Flag : TransactionAvailableFlag \n" +
+                "Total Debit Count          : TotalDebitCount \n" +
+                "Total Debit Amount         : TotalDebitAmount \n" +
+                "Total Credit Count         : TotalCreditCount \n" +
+                "Total Credit Amount        : TotalCreditAmount \n" +
+                "NAQD Count                 : NAQDCount \n" +
+                "NAQD Amount                : NAQDAmount \n" +
+                "C/ADV Count                : CADVCount \n" +
+                "C/ADV Amount               : CADVAmount \n" +
+                "Auth Count                 : AuthCount \n" +
+                "Auth Amount                : AuthAmount \n";
+        int k = 6;
+        StringBuilder printFinalReport1 = new StringBuilder("");
+        String printSettlment1 = printSettlment;
+        int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
+        for (int i = 1; i <= totalSchemeLength; i++)
+        {
+            if (receiveDataArray[k + 2].equals("0"))
+            {
+                String printSettlmentNO = "Transaction Scheme " + i + "\n" +
+                        "-------------------- \n" +
+                        "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
+                        "<No Transaction> \n";
+                k = k + 2;
+                printFinalReport1.append(printSettlmentNO);
+                printSettlment1 = printSettlmentNO;
+            }
+            else
+            {
+                printSettlment1 = printSettlment1.replace("transactionNo", String.valueOf(i));
+                printSettlment1 = printSettlment1.replace("SchemeName", receiveDataArray[k + 1]);
+                printSettlment1 = printSettlment1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
+                printSettlment1 = printSettlment1.replace("TotalDebitCount", receiveDataArray[k + 3]);
+                printSettlment1 = printSettlment1.replace("TotalDebitAmount", receiveDataArray[k + 4]);
+                printSettlment1 = printSettlment1.replace("TotalCreditCount", receiveDataArray[k + 5]);
+                printSettlment1 = printSettlment1.replace("TotalCreditAmount", receiveDataArray[k + 6]);
+                printSettlment1 = printSettlment1.replace("NAQDCount", receiveDataArray[k + 7]);
+                printSettlment1 = printSettlment1.replace("NAQDAmount", receiveDataArray[k + 8]);
+                printSettlment1 = printSettlment1.replace("CADVCount", receiveDataArray[k + 9]);
+                printSettlment1 = printSettlment1.replace("CADVAmount", receiveDataArray[k + 10]);
+                printSettlment1 = printSettlment1.replace("AuthCount", receiveDataArray[k + 11]);
+                printSettlment1 = printSettlment1.replace("AuthAmount", receiveDataArray[k + 12]);
+                k = k + 12;
+                printFinalReport1.append(printSettlment1);
+                printSettlment1 = printSettlment;
+            }
+        }
+        return "Transaction type            : " + receiveDataArray[1] + "\n" +
+                "Response Code              : " + receiveDataArray[2] + "\n" +
+                "Response Message           : " + receiveDataArray[3] + "\n" +
+                "Date Time Stamp           : " + receiveDataArray[4] + "\n" +
+                "Application Version        : " + receiveDataArray[5] + "\n" +
+                "Total Scheme Length        : " + receiveDataArray[6] + "\n" +
+                printFinalReport1 +
+                "ECR Transaction Reference Number: " + receiveDataArray[k + 1] + "\n" +
+                "Signature                  : " + receiveDataArray[k + 2] + "\n";
+
     }
 
     String printResponseParameterDownload(String[] resp) {
@@ -164,9 +207,10 @@ public class BufferResponseViewModel extends ViewModel {
                 "C/ADV Amount               : CADVAmount \n" +
                 "Auth Count                 : AuthCount \n" +
                 "Auth Amount                : AuthAmount \n";
-        int k = 5;
+        int k = 6;
         StringBuilder printFinalReport1 = new StringBuilder("");
-        int totalSchemeLength = Integer.parseInt(receiveDataArray[5]);
+        String printSettlment1 = printSettlment;
+        int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
         for (int i = 1; i <= totalSchemeLength; i++)
         {
             if (receiveDataArray[k + 2].equals("0"))
@@ -177,31 +221,34 @@ public class BufferResponseViewModel extends ViewModel {
                         "<No Transaction> \n";
                 k = k + 2;
                 printFinalReport1.append(printSettlmentNO);
+                printSettlment1 = printSettlmentNO;
             }
             else
             {
-                printSettlment = printSettlment.replace("transactionNo", String.valueOf(i));
-                printSettlment = printSettlment.replace("SchemeName", receiveDataArray[k + 1]);
-                printSettlment = printSettlment.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
-                printSettlment = printSettlment.replace("TotalDebitCount", receiveDataArray[k + 3]);
-                printSettlment = printSettlment.replace("TotalDebitAmount", receiveDataArray[k + 4]);
-                printSettlment = printSettlment.replace("TotalCreditCount", receiveDataArray[k + 5]);
-                printSettlment = printSettlment.replace("TotalCreditAmount", receiveDataArray[k + 6]);
-                printSettlment = printSettlment.replace("NAQDCount", receiveDataArray[k + 7]);
-                printSettlment = printSettlment.replace("NAQDAmount", receiveDataArray[k + 8]);
-                printSettlment = printSettlment.replace("CADVCount", receiveDataArray[k + 9]);
-                printSettlment = printSettlment.replace("CADVAmount", receiveDataArray[k + 10]);
-                printSettlment = printSettlment.replace("AuthCount", receiveDataArray[k + 11]);
-                printSettlment = printSettlment.replace("AuthAmount", receiveDataArray[k + 12]);
+                printSettlment1 = printSettlment1.replace("transactionNo", String.valueOf(i));
+                printSettlment1 = printSettlment1.replace("SchemeName", receiveDataArray[k + 1]);
+                printSettlment1 = printSettlment1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
+                printSettlment1 = printSettlment1.replace("TotalDebitCount", receiveDataArray[k + 3]);
+                printSettlment1 = printSettlment1.replace("TotalDebitAmount", receiveDataArray[k + 4]);
+                printSettlment1 = printSettlment1.replace("TotalCreditCount", receiveDataArray[k + 5]);
+                printSettlment1 = printSettlment1.replace("TotalCreditAmount", receiveDataArray[k + 6]);
+                printSettlment1 = printSettlment1.replace("NAQDCount", receiveDataArray[k + 7]);
+                printSettlment1 = printSettlment1.replace("NAQDAmount", receiveDataArray[k + 8]);
+                printSettlment1 = printSettlment1.replace("CADVCount", receiveDataArray[k + 9]);
+                printSettlment1 = printSettlment1.replace("CADVAmount", receiveDataArray[k + 10]);
+                printSettlment1 = printSettlment1.replace("AuthCount", receiveDataArray[k + 11]);
+                printSettlment1 = printSettlment1.replace("AuthAmount", receiveDataArray[k + 12]);
                 k = k + 12;
-                printFinalReport1.append(printSettlment);
+                printFinalReport1.append(printSettlment1);
+                printSettlment1 = printSettlment;
             }
         }
         return "Transaction type            : " + receiveDataArray[1] + "\n" +
                 "Response Code              : " + receiveDataArray[2] + "\n" +
                 "Response Message           : " + receiveDataArray[3] + "\n" +
                 "Date Time Stamp           : " + receiveDataArray[4] + "\n" +
-                "Total Scheme Length        : " + receiveDataArray[5] + "\n" +
+                "Application Version        : " + receiveDataArray[5] + "\n" +
+                "Total Scheme Length        : " + receiveDataArray[6] + "\n" +
                 printFinalReport1 +
                 "ECR Transaction Reference Number: " + receiveDataArray[k + 1] + "\n" +
                 "Signature                  : " + receiveDataArray[k + 2] + "\n";
@@ -217,6 +264,7 @@ public class BufferResponseViewModel extends ViewModel {
                 "Date                        :Date1 \n" +
                 "RRN                         :RRN1 \n" +
                 "Transaction Amount          :TransactionAmount1 \n" +
+                "Claim                       :Claim1 \n" +
                 "State                       :State1 \n" +
                 "Time                        :Time1 \n" +
                 "PAN Number                  :PANNumber1 \n" +
@@ -232,12 +280,13 @@ public class BufferResponseViewModel extends ViewModel {
             printSummaryReportString = printSummaryReportString.replace("Date1", receiveDataArray[k + 1]);
             printSummaryReportString = printSummaryReportString.replace("RRN1", receiveDataArray[k + 2]);
             printSummaryReportString = printSummaryReportString.replace("TransactionAmount1", receiveDataArray[k + 3]);
-            printSummaryReportString = printSummaryReportString.replace("State1", receiveDataArray[k + 4]);
-            printSummaryReportString = printSummaryReportString.replace("Time1", receiveDataArray[k + 5]);
-            printSummaryReportString = printSummaryReportString.replace("PANNumber1", receiveDataArray[k + 6]);
-            printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 7]);
-            printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 8]);
-            k = k + 9;
+            printSummaryReportString = printSummaryReportString.replace("Claim1", receiveDataArray[k + 4]);
+            printSummaryReportString = printSummaryReportString.replace("State1", receiveDataArray[k + 5]);
+            printSummaryReportString = printSummaryReportString.replace("Time1", receiveDataArray[k + 6]);
+            printSummaryReportString = printSummaryReportString.replace("PANNumber1", receiveDataArray[k + 7]);
+            printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 8]);
+            printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 9]);
+            k = k + 10;
             SummaryFinalReport1.append(printSummaryReportString);
             printSummaryReportString = printSummaryReportString1;
         }
