@@ -2,7 +2,11 @@ package com.girmiti.skybandecr.ui.fragment.response.buffer;
 
 import androidx.lifecycle.ViewModel;
 
+import com.girmiti.skybandecr.sdk.logger.Logger;
+
 public class BufferResponseViewModel extends ViewModel {
+
+    private Logger logger = Logger.getNewLogger(BufferResponseViewModel.class.getName());
 
     String printResponsePurchase(String[] resp) {
         return "Transaction type: " + resp[1] + "\n" +
@@ -100,10 +104,8 @@ public class BufferResponseViewModel extends ViewModel {
         StringBuilder printFinalReport1 = new StringBuilder("");
         String printSettlment1 = printSettlment;
         int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
-        for (int i = 1; i <= totalSchemeLength; i++)
-        {
-            if (receiveDataArray[k + 2].equals("0"))
-            {
+        for (int i = 1; i <= totalSchemeLength; i++) {
+            if (receiveDataArray[k + 2].equals("0")) {
                 String printSettlmentNO = "Transaction Scheme " + i + "\n" +
                         "-------------------- \n" +
                         "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
@@ -111,9 +113,7 @@ public class BufferResponseViewModel extends ViewModel {
                 k = k + 2;
                 printFinalReport1.append(printSettlmentNO);
                 printSettlment1 = printSettlmentNO;
-            }
-            else
-            {
+            } else {
                 printSettlment1 = printSettlment1.replace("transactionNo", String.valueOf(i));
                 printSettlment1 = printSettlment1.replace("SchemeName", receiveDataArray[k + 1]);
                 printSettlment1 = printSettlment1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
@@ -168,7 +168,7 @@ public class BufferResponseViewModel extends ViewModel {
     }
 
 
-    String printResponseCheckStatus(String[] resp) {
+    String  printResponseCheckStatus(String[] resp) {
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
@@ -211,10 +211,8 @@ public class BufferResponseViewModel extends ViewModel {
         StringBuilder printFinalReport1 = new StringBuilder("");
         String printSettlment1 = printSettlment;
         int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
-        for (int i = 1; i <= totalSchemeLength; i++)
-        {
-            if (receiveDataArray[k + 2].equals("0"))
-            {
+        for (int i = 1; i <= totalSchemeLength; i++) {
+            if (receiveDataArray[k + 2].equals("0")) {
                 String printSettlmentNO = "Transaction Scheme " + i + "\n" +
                         "-------------------- \n" +
                         "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
@@ -222,9 +220,7 @@ public class BufferResponseViewModel extends ViewModel {
                 k = k + 2;
                 printFinalReport1.append(printSettlmentNO);
                 printSettlment1 = printSettlmentNO;
-            }
-            else
-            {
+            } else {
                 printSettlment1 = printSettlment1.replace("transactionNo", String.valueOf(i));
                 printSettlment1 = printSettlment1.replace("SchemeName", receiveDataArray[k + 1]);
                 printSettlment1 = printSettlment1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
@@ -257,24 +253,26 @@ public class BufferResponseViewModel extends ViewModel {
 
     public String printResponseSummaryReport(String[] receiveDataArray) {
 
-        StringBuilder SummaryFinalReport1 = new StringBuilder();
-        String printSummaryReportString1 = "Transaction Number transactionNumberHead\n" +
-                "-------------------- \n" +
-                "Transaction Type            :TransactionType1  \n" +
-                "Date                        :Date1 \n" +
-                "RRN                         :RRN1 \n" +
-                "Transaction Amount          :TransactionAmount1 \n" +
-                "Claim                       :Claim1 \n" +
-                "State                       :State1 \n" +
-                "Time                        :Time1 \n" +
-                "PAN Number                  :PANNumber1 \n" +
-                "authCode                    :authCode1 \n" +
-                "transactionNumber           :transactionNumber1 \n";
-        String printSummaryReportString = printSummaryReportString1;
+        logger.debug("arrayLength>>"+receiveDataArray.length);
 
+        String printSummaryReportString1 = "Transaction Number transactionNumberHead\n" + "-------------------- \n"
+                + "Transaction Type            :TransactionType1  \n" + "Date                        :Date1 \n"
+                + "RRN                         :RRN1 \n" + "Transaction Amount          :TransactionAmount1 \n"
+                + "Claim                       :Claim1 \n" + "State                       :State1 \n"
+                + "Time                        :Time1 \n" + "PAN Number                  :PANNumber1 \n"
+                + "authCode                    :authCode1 \n" + "transactionNumber           :transactionNumber1 \n";
+        StringBuilder htmlSummaryReport1 ;
+        String printSummaryReportString = printSummaryReportString1;
+        StringBuilder summaryFinalReport1 = new StringBuilder();
         int k = 7;
-        for (int a = 1; a <= receiveDataArray[6].length(); a++)
-        {
+        int transactionsLength = Integer.parseInt(receiveDataArray[6]);
+        logger.debug("transaction Length>>" + transactionsLength);
+
+        if(transactionsLength > 17) {
+            transactionsLength = 17;
+        }
+
+        for (int a = 1; a <= transactionsLength; a++) {
             printSummaryReportString = printSummaryReportString.replace("transactionNumberHead", String.valueOf(a));
             printSummaryReportString = printSummaryReportString.replace("TransactionType1", receiveDataArray[k]);
             printSummaryReportString = printSummaryReportString.replace("Date1", receiveDataArray[k + 1]);
@@ -287,19 +285,20 @@ public class BufferResponseViewModel extends ViewModel {
             printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 8]);
             printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 9]);
             k = k + 10;
-            SummaryFinalReport1.append(printSummaryReportString);
+            htmlSummaryReport1 = new StringBuilder(printSummaryReportString);
+            summaryFinalReport1.append(htmlSummaryReport1.toString());
+            logger.debug("Length" + a + ")  " + htmlSummaryReport1);
+            logger.debug("index"+k);
             printSummaryReportString = printSummaryReportString1;
         }
+        logger.debug("Final Report>>" + summaryFinalReport1);
+        return "Transaction type            : " + receiveDataArray[1] + "\n" + "Response Code               : "
+                + receiveDataArray[2] + "\n" + "Response Message            : " + receiveDataArray[3] + "\n"
+                + "Date Time Stamp             : " + receiveDataArray[4] + "\n" + "Transaction Requests Count  : "
+                + receiveDataArray[5] + "\n" + "Total Transactions Length   : " + receiveDataArray[6] + "\n"
+                + summaryFinalReport1 + "ECR Transaction Reference Number  : " + receiveDataArray[k] + "\n"
+                + "Signature    : " + receiveDataArray[k + 1] + "\n";
 
-        return "Transaction type            : " + receiveDataArray[1] + "\n" +
-                "Response Code               : " + receiveDataArray[2] + "\n" +
-                "Response Message            : " + receiveDataArray[3] + "\n" +
-                "Date Time Stamp             : " + receiveDataArray[4] + "\n" +
-                "Transaction Requests Count  : " + receiveDataArray[5] + "\n" +
-                "Total Transactions Length   : " + receiveDataArray[6] + "\n" +
-                SummaryFinalReport1 +
-                "ECR Transaction Reference Number  : " + receiveDataArray[k] + "\n" +
-                "Signature    : " + receiveDataArray[k+1] + "\n";
     }
 }
 

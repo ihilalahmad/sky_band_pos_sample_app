@@ -16,7 +16,6 @@ import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -114,6 +113,8 @@ public class HomeViewModel extends ViewModel implements Constant {
     @SuppressLint("DefaultLocale")
     public void getVisibilityOfViews(String selectedItem) {
 
+        String a= "\u0002�C1�00�APPROVED�080620183836�0�73�AUTH�060620183836�015813000045�0000000001.11�Yes�APP�1356�-VC-MSR�010028�000057�ADV�060620�015814000046�0000000001.11�Yes�APP�1400�-VC-MSR�010028�000057�AUTH�060620�015814000048�0000000001.00�Yes�APP�1404�-VC-MSR�010028�000057�ADV�060620�015814000049�0000000001.00�Yes�APP�1406�-VC-MSR�010028�000057�AUTH�060620�015814000050�0000000001.99�Yes�APP�1423�-P1-ICC�010859�000057�ADV�060620�015814000052�0000000001.99�Yes�APP�1424�-P1-ICC�010859�000057�ADV�060620�015814000053�0000000001.99�Yes�APP�1426�-P1-ICC�010859�000057�AUTH�060620�015814000054�0000000004.44�Yes�APP�1432�-VC-MSR�010028�000057�ADV�060620�015814000055�0000000004.44�Yes�APP�1434�-VC-MSR�010028�000057�AUTH�060620�015815000056�0000000002.99�Yes�APP�1517�-P1-KEY�010859�000057�AUTH�060620�015815000058�0000000002.44�Yes�APP�1518�-P1-KEY�010859�000070�ADV�060620�015815000059�0000000002.44�Yes�APP�1522�-P1-KEY�010859�000070�AUTH�060620�015815000060�0000000001.23�Yes�APP�1524�-P1-ICC�010859�000070�ADV�060620�015815000062�0000000001.23�Yes�APP�1526�-P1-KEY�010859�000070�AUTH�060620�015815000063�0000000001.00�Yes�APP�1529�-VC-MSR�010028�000070�ADV�060620�015815000064�0000000001.00�Yes�APP�1531�-P1-KEY�010028�000070�ADV�060620�015815000065�0000000001.00�Yes�APP�1534�-VC-MSR�010028�000070�AUTH�060620�015815000066�0000000002.00�Yes�APP�1535�-VC-MSR�010028�000070�ADV�060620�015815000067�0000000002.00�Yes�APP�1537�-VC-MSR�010028�000070�AUTH�060620";
+logger.debug("length>>"+ a.length());
         transactionTypeString = TransactionType.valueOf(selectedItem.toUpperCase().replace(" ", "_"));
         prevEcrNo = GeneralParamCache.getInstance().getString(PREV_ECR_NO);
 
@@ -382,8 +383,9 @@ public class HomeViewModel extends ViewModel implements Constant {
         StringBuilder terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
         String terminalResponseString = terminalResponse.toString();
         String[] responseArray = terminalResponseString.split(";");
-
         String[] responseTemp;
+
+        logger.debug("FirstApicall length>> "+responseArray.length);
 
         if (Integer.parseInt(responseArray[1]) == 22 && Integer.parseInt(responseArray[5]) != 0) {
 
@@ -401,7 +403,7 @@ public class HomeViewModel extends ViewModel implements Constant {
 
                     reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
                     String terminalResponseString1 = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
-                  logger.debug("terminal Response Sumarry Report>> "+i+terminalResponseString1);
+                    logger.debug("terminal Response Sumarry Report>> "+i+terminalResponseString1);
                     String[] responseArray1 = terminalResponseString1.split(";");
                     responseTemp = new String[responseArray1.length - 6];
                     int j = 0;
@@ -427,6 +429,7 @@ public class HomeViewModel extends ViewModel implements Constant {
         }
 
         logger.debug(getClass() + "::Terminal ID>>" + terminalID);
+
         return terminalResponse.toString();
     }
 

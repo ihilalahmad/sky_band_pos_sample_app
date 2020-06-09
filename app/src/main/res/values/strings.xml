@@ -82,6 +82,9 @@
     <string name="home_fragment">HomeFragment</string>
     <string name="id_not_received">Terminal id not received</string>
     <string name="prev_ecr_no">Prev Ecr No</string>
+    <string name="ip_or_port_empty">IP or Port should not be empty</string>
+    <string name="ip_and_port_empty">IP and Port should not be empty</string>
+    <string name="port_invalid">Port is not valid</string>
     <string-array name="transaction_type">
 
         <item>Register</item>
