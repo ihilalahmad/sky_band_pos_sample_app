@@ -12,7 +12,7 @@ public class BufferResponseViewModel extends ViewModel {
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " + resp[4] + "\n" +
+                "PAN Number         : " + maskPAn(resp[4]) + "\n" +
                 "Transaction Amount : " + resp[5] + "\n" +
                 "Stan No            : " + resp[6] + "\n" +
                 "Date & Time        : " + resp[7] + "\n" +
@@ -39,6 +39,10 @@ public class BufferResponseViewModel extends ViewModel {
                 "Signature          : " + resp[28] + "\n";
     }
 
+    private String maskPAn(String s) {
+       return s.substring(0, 5) + "******" + s.substring(s.length()-4);
+    }
+
     String printResponseRegister(String[] resp) {
         return "TransactionType:" + resp[1] + "\n"
                 + "ResponseCode:" + resp[2] + "\n"
@@ -54,7 +58,7 @@ public class BufferResponseViewModel extends ViewModel {
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " + resp[4] + "\n" +
+                "PAN Number         : " +  maskPAn(resp[4]) + "\n" +
                 "Transaction Amount : " + resp[5] + "\n" +
                 "Cash Back Amount   : " + resp[6] + "\n" +
                 "Total Amount       : " + resp[7] + "\n" +
@@ -281,7 +285,7 @@ public class BufferResponseViewModel extends ViewModel {
             printSummaryReportString = printSummaryReportString.replace("Claim1", receiveDataArray[k + 4]);
             printSummaryReportString = printSummaryReportString.replace("State1", receiveDataArray[k + 5]);
             printSummaryReportString = printSummaryReportString.replace("Time1", receiveDataArray[k + 6]);
-            printSummaryReportString = printSummaryReportString.replace("PANNumber1", receiveDataArray[k + 7]);
+            printSummaryReportString = printSummaryReportString.replace("PANNumber1",  maskPAn(receiveDataArray[k + 7]));
             printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 8]);
             printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 9]);
             k = k + 10;

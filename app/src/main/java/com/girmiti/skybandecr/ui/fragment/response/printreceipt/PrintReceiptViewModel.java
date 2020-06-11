@@ -40,7 +40,7 @@ public class PrintReceiptViewModel extends ViewModel {
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :" + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+            htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
@@ -89,7 +89,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[12]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("TransactionAmount", String.format("%.2f", transactionAmount));
@@ -136,7 +136,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -181,7 +181,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -226,7 +226,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));;
@@ -272,7 +272,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -317,7 +317,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -363,7 +363,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -409,7 +409,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -521,7 +521,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", receiveDataArray[4]);
+                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -733,5 +733,9 @@ public class PrintReceiptViewModel extends ViewModel {
         String str = new String(buffer);
         logger.debug(getClass() + "LoadedHtml>>" + str);
         return str;
+    }
+
+    private String maskPAn(String s) {
+        return s.substring(0, 5) + "******" + s.substring(s.length()-4);
     }
 }
