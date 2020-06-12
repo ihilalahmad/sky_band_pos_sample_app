@@ -70,6 +70,9 @@ public class PrintReceiptFragment extends Fragment {
         logger.debug(getClass() + "::" + "GetRespData>>> " + receiveData);
         String[] receiveDataArray = receiveData.split(";");
         logger.debug(getClass() + "Received Data Array>>" + receiveDataArray);
+        if(receiveDataArray[1].equals("23") && (receiveDataArray.length > 15)){
+            receiveDataArray = ActiveTxnData.getInstance().getReplacedArray();
+        }
         String replacedHtmlString = getPrintReceipt(receiveDataArray);
         logger.debug(getClass() + "Replaced Html>>" + replacedHtmlString);
         if (replacedHtmlString != null) {
@@ -138,9 +141,9 @@ public class PrintReceiptFragment extends Fragment {
             case "12":
             case "14":
             case "17":
+            case "23":
             case "18":
             case "19":
-            case "23":
             case "13":
             case "15":
             case "16":

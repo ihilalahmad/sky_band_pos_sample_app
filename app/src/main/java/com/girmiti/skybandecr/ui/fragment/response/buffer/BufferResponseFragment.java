@@ -65,18 +65,14 @@ public class BufferResponseFragment extends Fragment {
             case "16":
             case "12":
             case "13":
-            case "23":
             case "30":
             case "40":
                 bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                 break;
             case "10":
-                logger.debug("inside Reconsiliation print");
                 if (Integer.parseInt(receiveDataArray[2]) == 500 || Integer.parseInt(receiveDataArray[2]) == 501) {
-                    logger.debug("inside Reconsiliation print1");
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                 } else {
-                    logger.debug("inside Reconsiliation print2");
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                 }
                 break;
@@ -104,6 +100,13 @@ public class BufferResponseFragment extends Fragment {
             case "22":
                 bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                 break;
+            case "23":
+                if(receiveDataArray.length > 11) {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                } else {
+                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                }
+
             default:
                 if (receiveDataArray[3].equals("APPROVED") || receiveDataArray[3].equals("DECLINED")) {
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
@@ -137,71 +140,164 @@ public class BufferResponseFragment extends Fragment {
             case "3":
             case "4":
             case "8":
-            case "9":
-                if (receiveData.length() > 27) {
+                if (receiveDataArray.length > 27) {
                     return bufferResponseViewModel.printResponsePurchase(receiveDataArray);
                 } else {
                     return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
             case "1":
-                if (receiveData.length() > 29) {
+                if (receiveDataArray.length > 29) {
                     return bufferResponseViewModel.printResponsePurchaseCashBack(receiveDataArray);
                 } else {
                     return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
-            case "17":
-                if (receiveData.length() > 2) {
-                    return bufferResponseViewModel.printResponseRegister(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-            case "18":
-            case "19":
-                if (receiveData.length() > 1) {
-                    return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-            case "10":
-                if (receiveData.length() > 18) {
-                    return bufferResponseViewModel.printResponseReconcilation(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-            case "11":
-            case "12":
-                if (receiveData.length() > 5) {
-                    return bufferResponseViewModel.printResponseParameterDownload(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-            case "13":
-                if (receiveData.length() > 10) {
-                    return bufferResponseViewModel.printResponseGetParameter(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-            case "23":
-                if (receiveData.length() > 7) {
-                    return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-            case "20":
+
             case "5":
             case "6":
-                if (receiveData.length() > 2) {
+            case "20":
+                if (receiveDataArray.length > 27) {
                     return bufferResponseViewModel.printResponseBillPayment(receiveDataArray);
                 } else {
                     return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
+            case "9":
+                if (receiveDataArray.length > 26) {
+                    return bufferResponseViewModel.printResponseReversal(receiveDataArray);
+                } else {
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
+                }
+            case "10":
+                if (receiveDataArray.length > 18) {
+                    return bufferResponseViewModel.printResponseReconcilation(receiveDataArray);
+                } else {
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
+                }
+
+            case "11":
+            case "12":
+                if (receiveDataArray.length > 4) {
+                    return bufferResponseViewModel.printResponseParameterDownload(receiveDataArray);
+                } else {
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
+                }
+
+            case "13":
+                if (receiveDataArray.length > 9) {
+                    return bufferResponseViewModel.printResponseGetParameter(receiveDataArray);
+                } else {
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
+                }
+
+            case "17":
+                if (receiveDataArray.length > 2) {
+                    return bufferResponseViewModel.printResponseRegister(receiveDataArray);
+                } else {
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
+                }
+
+            case "18":
+            case "19":
+                    return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
             case "21":
                 return bufferResponseViewModel.printResponsePrintDetailReport(receiveDataArray);
+
             case "22":
                 return bufferResponseViewModel.printResponseSummaryReport(receiveDataArray);
+
+            case "23":
+                if (receiveDataArray.length > 11) {
+                    String[] separateResponse = new String[receiveData.length()];
+                    int j = 1;
+                    for (int i = 5; i < receiveDataArray.length - 3; i++)
+                    {
+                        separateResponse[j] = receiveDataArray[i];
+                        j = j + 1;
+                    }
+                    String[] a = changeToTransactionType(separateResponse);
+                    ActiveTxnData.getInstance().setReplacedArray(a);
+                    return setResponse(a);
+                } else {
+                    return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
+                }
 
             default:
                 return bufferResponseViewModel.printResponseDefault(receiveDataArray);
         }
+    }
+
+    private String[] changeToTransactionType(String[] terminalResponse) {
+
+        switch (terminalResponse[1]) {
+            case "A0":
+                terminalResponse[1] =  "17";
+                break;
+            case "B6":
+                terminalResponse[1] =  "18";
+                break;
+            case "B7":
+                terminalResponse[1] =  "19";
+                break;
+            case "A1":
+                terminalResponse[1] =  "0";
+                break;
+            case "A2":
+                terminalResponse[1] =  "1";
+                break;
+            case "A3":
+                terminalResponse[1] =  "8";
+                break;
+            case "A4":
+                terminalResponse[1] =  "3";
+                break;
+            case "A5":
+                terminalResponse[1] =  "9";
+                break;
+            case "A6":
+                terminalResponse[1] =  "2";
+                break;
+            case "A7":
+                terminalResponse[1] =  "4";
+                break;
+            case "A8":
+                terminalResponse[1] =  "5";
+                break;
+            case "A9":
+                terminalResponse[1] =  "6";
+                break;
+            case "B1":
+                terminalResponse[1] =  "10";
+                break;
+            case "B2":
+                terminalResponse[1] =  "11";
+                break;
+            case "B3":
+                terminalResponse[1] =  "12";
+                break;
+            case "B4":
+                terminalResponse[1] =  "13";
+                break;
+            case "B5":
+                terminalResponse[1] =  "14";
+                break;
+            case "B8":
+                terminalResponse[1] =  "20";
+                break;
+            case "B9":
+                terminalResponse[1] =  "21";
+                break;
+            case "C1":
+                terminalResponse[1] =  "22";
+                break;
+            case "C2":
+                terminalResponse[1] =  "23";
+                break;
+            case "D1":
+                terminalResponse[1] =  "30";
+                break;
+            default:
+                terminalResponse[1] =  "40";
+                break;
+        }
+        return terminalResponse;
     }
 }

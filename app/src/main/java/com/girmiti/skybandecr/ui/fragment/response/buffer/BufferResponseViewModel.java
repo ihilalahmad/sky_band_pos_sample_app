@@ -9,10 +9,17 @@ public class BufferResponseViewModel extends ViewModel {
     private Logger logger = Logger.getNewLogger(BufferResponseViewModel.class.getName());
 
     String printResponsePurchase(String[] resp) {
+        String pan;
+        if(resp[4].length() > 14) {
+            pan = maskPAn(resp[4]);
+        } else {
+            pan = resp[4];
+        }
+
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " + maskPAn(resp[4]) + "\n" +
+                "PAN Number         : " + pan + "\n" +
                 "Transaction Amount : " + resp[5] + "\n" +
                 "Stan No            : " + resp[6] + "\n" +
                 "Date & Time        : " + resp[7] + "\n" +
@@ -39,10 +46,6 @@ public class BufferResponseViewModel extends ViewModel {
                 "Signature          : " + resp[28] + "\n";
     }
 
-    private String maskPAn(String s) {
-       return s.substring(0, 5) + "******" + s.substring(s.length()-4);
-    }
-
     String printResponseRegister(String[] resp) {
         return "TransactionType:" + resp[1] + "\n"
                 + "ResponseCode:" + resp[2] + "\n"
@@ -55,10 +58,16 @@ public class BufferResponseViewModel extends ViewModel {
     }
 
     String printResponsePurchaseCashBack(String[] resp) {
+        String pan;
+        if(resp[4].length() > 14) {
+            pan = maskPAn(resp[4]);
+        } else {
+            pan = resp[4];
+        }
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " +  maskPAn(resp[4]) + "\n" +
+                "PAN Number         : " +  pan + "\n" +
                 "Transaction Amount : " + resp[5] + "\n" +
                 "Cash Back Amount   : " + resp[6] + "\n" +
                 "Total Amount       : " + resp[7] + "\n" +
@@ -106,34 +115,35 @@ public class BufferResponseViewModel extends ViewModel {
                 "Auth Amount                : AuthAmount \n";
         int k = 6;
         StringBuilder printFinalReport1 = new StringBuilder("");
-        String printSettlment1 = printSettlment;
+        String printSettlement1 = printSettlment;
         int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
         for (int i = 1; i <= totalSchemeLength; i++) {
             if (receiveDataArray[k + 2].equals("0")) {
-                String printSettlmentNO = "Transaction Scheme " + i + "\n" +
+
+                String printSettlementNO = "Transaction Scheme " + i + "\n" +
                         "-------------------- \n" +
                         "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
                         "<No Transaction> \n";
                 k = k + 2;
-                printFinalReport1.append(printSettlmentNO);
-                printSettlment1 = printSettlmentNO;
+                printFinalReport1.append(printSettlementNO);
+                printSettlement1 = printSettlementNO;
             } else {
-                printSettlment1 = printSettlment1.replace("transactionNo", String.valueOf(i));
-                printSettlment1 = printSettlment1.replace("SchemeName", receiveDataArray[k + 1]);
-                printSettlment1 = printSettlment1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
-                printSettlment1 = printSettlment1.replace("TotalDebitCount", receiveDataArray[k + 3]);
-                printSettlment1 = printSettlment1.replace("TotalDebitAmount", receiveDataArray[k + 4]);
-                printSettlment1 = printSettlment1.replace("TotalCreditCount", receiveDataArray[k + 5]);
-                printSettlment1 = printSettlment1.replace("TotalCreditAmount", receiveDataArray[k + 6]);
-                printSettlment1 = printSettlment1.replace("NAQDCount", receiveDataArray[k + 7]);
-                printSettlment1 = printSettlment1.replace("NAQDAmount", receiveDataArray[k + 8]);
-                printSettlment1 = printSettlment1.replace("CADVCount", receiveDataArray[k + 9]);
-                printSettlment1 = printSettlment1.replace("CADVAmount", receiveDataArray[k + 10]);
-                printSettlment1 = printSettlment1.replace("AuthCount", receiveDataArray[k + 11]);
-                printSettlment1 = printSettlment1.replace("AuthAmount", receiveDataArray[k + 12]);
+                printSettlement1 = printSettlement1.replace("transactionNo", String.valueOf(i));
+                printSettlement1 = printSettlement1.replace("SchemeName", receiveDataArray[k + 1]);
+                printSettlement1 = printSettlement1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
+                printSettlement1 = printSettlement1.replace("TotalDebitCount", receiveDataArray[k + 3]);
+                printSettlement1 = printSettlement1.replace("TotalDebitAmount", receiveDataArray[k + 4]);
+                printSettlement1 = printSettlement1.replace("TotalCreditCount", receiveDataArray[k + 5]);
+                printSettlement1 = printSettlement1.replace("TotalCreditAmount", receiveDataArray[k + 6]);
+                printSettlement1 = printSettlement1.replace("NAQDCount", receiveDataArray[k + 7]);
+                printSettlement1 = printSettlement1.replace("NAQDAmount", receiveDataArray[k + 8]);
+                printSettlement1 = printSettlement1.replace("CADVCount", receiveDataArray[k + 9]);
+                printSettlement1 = printSettlement1.replace("CADVAmount", receiveDataArray[k + 10]);
+                printSettlement1 = printSettlement1.replace("AuthCount", receiveDataArray[k + 11]);
+                printSettlement1 = printSettlement1.replace("AuthAmount", receiveDataArray[k + 12]);
                 k = k + 12;
-                printFinalReport1.append(printSettlment1);
-                printSettlment1 = printSettlment;
+                printFinalReport1.append(printSettlement1);
+                printSettlement1 = printSettlment;
             }
         }
         return "Transaction type            : " + receiveDataArray[1] + "\n" +
@@ -304,6 +314,47 @@ public class BufferResponseViewModel extends ViewModel {
                 + "Signature    : " + receiveDataArray[k + 1] + "\n";
 
     }
+
+    public String printResponseReversal(String[] resp) {
+        String pan;
+        if(resp[4].length() > 14) {
+            pan = maskPAn(resp[4]);
+        } else {
+            pan = resp[4];
+        }
+        return "Transaction type: " + resp[1] + "\n" +
+                "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n" +
+                "PAN Number         : " + pan + "\n" +
+                "Transaction Amount : " + resp[5] + "\n" +
+                "Stan No            : " + resp[6] + "\n" +
+                "Date & Time        : " + resp[7] + "\n" +
+                "Card Exp Date      : " + resp[8] + "\n" +
+                "RRN                : " + resp[9] + "\n" +
+                "Auth Code          : " + resp[10] + "\n" +
+                "TID                : " + resp[11] + "\n" +
+                "MID                : " + resp[12] + "\n" +
+                "Batch No           : " + resp[13] + "\n" +
+                "AID                : " + resp[14] + "\n" +
+                "Application Cryptogram : " + resp[15] + "\n" +
+                "CID                : " + resp[16] + "\n" +
+                "CVR                : " + resp[17] + "\n" +
+                "TVR                : " + resp[18] + "\n" +
+                "TSI                : " + resp[19] + "\n" +
+                "Merchant Category Code : " + resp[20] + "\n" +
+                "Transaction Type   : " + resp[21] + "\n" +
+                "Scheme Label       : " + resp[22] + "\n" +
+                "Store and Cashier Info : " + resp[23] + "\n" +
+                "Product Info       : " + resp[24] + "\n" +
+                "Application Version: " + resp[25] + "\n" +
+                "ECR Transaction Reference Number: " + resp[26] + "\n" +
+                "Signature          : " + resp[27] + "\n";
+    }
+
+    private String maskPAn(String s) {
+        return s.substring(0, 5) + "******" + s.substring(s.length()-4);
+    }
+
 }
 
 

@@ -63,8 +63,11 @@ public class ECRImpl implements ECRCore {
         return terminalResponse;
     }
 
-    private String changeToTransactionType(String terminalResponse) {
+    private String changeToTransactionType(String terminalResponse) throws Exception {
         String[] response = terminalResponse.split(";");
+        if(response.length < 2 ) {
+            throw new Exception("3");
+        }
         String index1 = response[1];
         switch (response[1]) {
             case "A0":
@@ -131,10 +134,10 @@ public class ECRImpl implements ECRCore {
                 terminalResponse= terminalResponse.replaceFirst("C2", String.valueOf(23));
                 break;
             case "D1":
-                terminalResponse=terminalResponse.replaceFirst("D1",String.valueOf(30));
+                terminalResponse = terminalResponse.replaceFirst("D1",String.valueOf(30));
                 break;
             default:
-                terminalResponse=terminalResponse.replaceFirst(index1,String.valueOf(40));
+                terminalResponse = terminalResponse.replaceFirst(index1,String.valueOf(40));
                 break;
         }
         return terminalResponse;

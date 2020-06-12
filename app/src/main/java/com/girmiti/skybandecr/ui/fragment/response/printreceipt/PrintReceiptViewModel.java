@@ -23,6 +23,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Purchase(customer_copy).html");
         htmlString = getHtmlString(is);
@@ -31,7 +32,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -40,7 +47,7 @@ public class PrintReceiptViewModel extends ViewModel {
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :" + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
@@ -67,6 +74,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptPurchaseCashback(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Purchase_Cashback(customer_copy)).html");
         htmlString = getHtmlString(is);
@@ -79,8 +87,15 @@ public class PrintReceiptViewModel extends ViewModel {
             totalAmount = Math.round(totalAmount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[10];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
+            }
+
             String receiveDataArrayDateTime = receiveDataArray[9];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / " + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -89,7 +104,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[12]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("TransactionAmount", String.format("%.2f", transactionAmount));
@@ -117,6 +132,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptRefund(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Refund(customer_copy).html");
         htmlString = getHtmlString(is);
@@ -126,7 +142,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -136,7 +158,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -163,6 +185,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptPreAuthorisation(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Pre-Auth(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -171,7 +194,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -181,7 +210,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -207,6 +236,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptPreAuthCompletion(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Purchase_Advice(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -216,7 +246,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -226,7 +262,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));;
@@ -253,6 +289,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptPreAuthExtension(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Pre-Extension(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -262,7 +299,12 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -272,7 +314,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -299,6 +341,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptPreAuthVoid(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Pre-void(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -307,7 +350,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -317,7 +366,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -345,6 +394,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptCashAdvance(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Cash_Advance(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -353,7 +403,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -363,7 +419,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -390,6 +446,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptReversal(String[] receiveDataArray, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Reversal(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -399,7 +456,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -409,7 +472,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
@@ -502,6 +565,7 @@ public class PrintReceiptViewModel extends ViewModel {
     public String printReceiptBillPayment(String[] receiveDataArray, String receiveData, Context context) throws IOException {
         InputStream is;
         String htmlString = "";
+        String pan;
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Bill_Payment(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -511,7 +575,13 @@ public class PrintReceiptViewModel extends ViewModel {
             amount = Math.round(amount * 100.0) / 100.0;
             String expiryDate = receiveDataArray[8];
             if (!expiryDate.equals("")) {
-                expiryDate = expiryDate.substring(2, 4) + "/" + expiryDate.substring(0, 2);
+                expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+
+            if(receiveDataArray[4].length() > 14) {
+                pan = maskPAn(receiveDataArray[4]);
+            } else {
+                pan = receiveDataArray[4];
             }
             String receiveDataArrayDateTime = receiveDataArray[7];
             logger.debug("DateTime>>" + receiveDataArrayDateTime);
@@ -521,7 +591,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
+                htmlString = htmlString.replace("panNumber", pan);
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
