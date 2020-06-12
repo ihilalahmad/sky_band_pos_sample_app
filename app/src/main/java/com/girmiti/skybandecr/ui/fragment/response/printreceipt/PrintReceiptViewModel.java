@@ -63,9 +63,11 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
             htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[21]);
+
         }
         return htmlString;
     }
@@ -122,6 +124,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("TID", receiveDataArray[13]);
             htmlString = htmlString.replace("RRN", receiveDataArray[11]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[8]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[21]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[28]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[25]);
             htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[23]);
@@ -174,6 +177,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
             htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[21]);
@@ -224,6 +228,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("CID", receiveDataArray[16]);
             htmlString = htmlString.replace("MID", receiveDataArray[12]);
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
@@ -278,6 +283,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
             htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[21]);
@@ -329,6 +335,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("MID", receiveDataArray[12]);
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
@@ -381,6 +388,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("MID", receiveDataArray[12]);
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
@@ -434,6 +442,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("MID", receiveDataArray[12]);
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
@@ -487,11 +496,11 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("MID", receiveDataArray[12]);
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
             htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[21]);
-
         }
         return htmlString;
     }
@@ -607,6 +616,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("TID", receiveDataArray[11]);
             htmlString = htmlString.replace("RRN", receiveDataArray[9]);
             htmlString = htmlString.replace("StanNo", receiveDataArray[6]);
+            htmlString = htmlString.replace("TSI", receiveDataArray[19]);
             htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[26]);
             htmlString = htmlString.replace("SchemeLabel", receiveDataArray[23]);
             htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[21]);

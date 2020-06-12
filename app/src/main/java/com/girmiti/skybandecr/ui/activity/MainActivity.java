@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity implements Constant {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         generalParamCache.clear();
         findViewById(R.id.left).setOnClickListener(new View.OnClickListener() {
             @Override
