@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View v) {
 
-                homeViewModel.setReqData(selectedItem);
+                homeViewModel.setReqData(selectedItem,getContext());
                 logger.info(getClass() + getString(R.string.request_data_set));
 
                 boolean validated = false;

@@ -40,29 +40,15 @@
             android:textStyle="bold"
             android:text="@string/cash_register_number" />
 
-        <EditText
-            android:id="@+id/cash_register_no"
+
+        <TextView
+            android:id="@+id/cash_register_no2"
             android:layout_below="@+id/cash_register_no_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp25"
             android:layout_marginTop="@dimen/dp10"
             android:background="@drawable/border"
-            android:hint="@string/cash_register_number"
-            android:inputType="number"
-            android:maxLength="8"
-            android:padding="@dimen/dp10"
-            />
-
-        <TextView
-            android:id="@+id/cash_register_no2"
-            android:layout_below="@+id/cash_register_no"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp25"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="@drawable/border"
-            android:visibility="gone"
             android:hint="@string/cash_register_number"
             android:padding="@dimen/dp10"
             />

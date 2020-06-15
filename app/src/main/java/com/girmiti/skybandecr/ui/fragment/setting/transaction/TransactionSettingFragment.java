@@ -15,7 +15,6 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.cache.GeneralParamCache;
@@ -33,7 +32,6 @@ public class TransactionSettingFragment extends Fragment implements Constant {
     private NavController navController;
 
     private Logger logger = Logger.getNewLogger(TransactionSettingFragment.class.getName());
-    private String cashRegisterNO;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -51,8 +49,6 @@ public class TransactionSettingFragment extends Fragment implements Constant {
 
         if(ActiveTxnData.getInstance().isRegistered()) {
             transactionSettingFragmentBinding.cashRegisterNo2.setText(GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
-            transactionSettingFragmentBinding.cashRegisterNo2.setVisibility(View.VISIBLE);
-            transactionSettingFragmentBinding.cashRegisterNo.setVisibility(View.GONE);
         }
 
         if (TransactionSettingViewModel.getEcr() == 1) {
@@ -67,9 +63,6 @@ public class TransactionSettingFragment extends Fragment implements Constant {
             transactionSettingFragmentBinding.terminalPrinter.setChecked(false);
         }
 
-        cashRegisterNO = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO);
-        transactionSettingFragmentBinding.cashRegisterNo.setText(cashRegisterNO);
-
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
 
@@ -78,20 +71,7 @@ public class TransactionSettingFragment extends Fragment implements Constant {
             public void onClick(View v) {
 
                 transactionSettingViewModel.setData(transactionSettingFragmentBinding);
-                boolean isValid = transactionSettingViewModel.validCashRegisterNo(transactionSettingFragmentBinding);
-
-                if (isValid) {
-                    cashRegisterNO = transactionSettingFragmentBinding.cashRegisterNo.getText().toString();
                     navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment, null, options);
-                    GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, cashRegisterNO);
-                } else {
-                    if(transactionSettingFragmentBinding.cashRegisterNo.getText().length() == ZERO) {
-                        Toast.makeText(getActivity(), "Cash register number should not be empty", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Cash register number length should be 8", Toast.LENGTH_LONG).show();
-                    }
-                    cashRegisterNO = "";
-                }
             }
         });
     }

@@ -295,7 +295,7 @@ public class BufferResponseViewModel extends ViewModel {
             printSummaryReportString = printSummaryReportString.replace("Claim1", receiveDataArray[k + 4]);
             printSummaryReportString = printSummaryReportString.replace("State1", receiveDataArray[k + 5]);
             printSummaryReportString = printSummaryReportString.replace("Time1", receiveDataArray[k + 6]);
-            printSummaryReportString = printSummaryReportString.replace("PANNumber1",  maskPAn(receiveDataArray[k + 7]));
+            printSummaryReportString = printSummaryReportString.replace("PANNumber1",  receiveDataArray[k + 7]);
             printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 8]);
             printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 9]);
             k = k + 10;
@@ -310,9 +310,8 @@ public class BufferResponseViewModel extends ViewModel {
                 + receiveDataArray[2] + "\n" + "Response Message            : " + receiveDataArray[3] + "\n"
                 + "Date Time Stamp             : " + receiveDataArray[4] + "\n" + "Transaction Requests Count  : "
                 + receiveDataArray[5] + "\n" + "Total Transactions Length   : " + receiveDataArray[6] + "\n"
-                + summaryFinalReport1 + "ECR Transaction Reference Number  : " + receiveDataArray[k] + "\n"
-                + "Signature    : " + receiveDataArray[k + 1] + "\n";
-
+                + summaryFinalReport1;/* + "ECR Transaction Reference Number  : " + receiveDataArray[k] + "\n"
+                + "Signature    : " + receiveDataArray[k + 1] + "\n";*/
     }
 
     public String printResponseReversal(String[] resp) {

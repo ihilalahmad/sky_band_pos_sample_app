@@ -1,10 +1,12 @@
 package com.girmiti.skybandecr.ui.fragment.home;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.View;
 
 import androidx.lifecycle.ViewModel;
 
+import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.cache.GeneralParamCache;
 import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.databinding.HomeFragmentBinding;
@@ -22,6 +24,9 @@ import java.util.Date;
 import java.util.Locale;
 
 public class HomeViewModel extends ViewModel implements Constant {
+
+
+
 
     private HomeFragmentBinding homeFragmentBinding;
     private Logger logger = Logger.getNewLogger(HomeViewModel.class.getName());
@@ -113,8 +118,8 @@ public class HomeViewModel extends ViewModel implements Constant {
     @SuppressLint("DefaultLocale")
     public void getVisibilityOfViews(String selectedItem) {
 
-        String a= "\u0002�C1�00�APPROVED�080620183836�0�73�AUTH�060620183836�015813000045�0000000001.11�Yes�APP�1356�-VC-MSR�010028�000057�ADV�060620�015814000046�0000000001.11�Yes�APP�1400�-VC-MSR�010028�000057�AUTH�060620�015814000048�0000000001.00�Yes�APP�1404�-VC-MSR�010028�000057�ADV�060620�015814000049�0000000001.00�Yes�APP�1406�-VC-MSR�010028�000057�AUTH�060620�015814000050�0000000001.99�Yes�APP�1423�-P1-ICC�010859�000057�ADV�060620�015814000052�0000000001.99�Yes�APP�1424�-P1-ICC�010859�000057�ADV�060620�015814000053�0000000001.99�Yes�APP�1426�-P1-ICC�010859�000057�AUTH�060620�015814000054�0000000004.44�Yes�APP�1432�-VC-MSR�010028�000057�ADV�060620�015814000055�0000000004.44�Yes�APP�1434�-VC-MSR�010028�000057�AUTH�060620�015815000056�0000000002.99�Yes�APP�1517�-P1-KEY�010859�000057�AUTH�060620�015815000058�0000000002.44�Yes�APP�1518�-P1-KEY�010859�000070�ADV�060620�015815000059�0000000002.44�Yes�APP�1522�-P1-KEY�010859�000070�AUTH�060620�015815000060�0000000001.23�Yes�APP�1524�-P1-ICC�010859�000070�ADV�060620�015815000062�0000000001.23�Yes�APP�1526�-P1-KEY�010859�000070�AUTH�060620�015815000063�0000000001.00�Yes�APP�1529�-VC-MSR�010028�000070�ADV�060620�015815000064�0000000001.00�Yes�APP�1531�-P1-KEY�010028�000070�ADV�060620�015815000065�0000000001.00�Yes�APP�1534�-VC-MSR�010028�000070�AUTH�060620�015815000066�0000000002.00�Yes�APP�1535�-VC-MSR�010028�000070�ADV�060620�015815000067�0000000002.00�Yes�APP�1537�-VC-MSR�010028�000070�AUTH�060620";
-logger.debug("length>>"+ a.length());
+        String a = "\u0002�C1�00�APPROVED�080620183836�0�73�AUTH�060620183836�015813000045�0000000001.11�Yes�APP�1356�-VC-MSR�010028�000057�ADV�060620�015814000046�0000000001.11�Yes�APP�1400�-VC-MSR�010028�000057�AUTH�060620�015814000048�0000000001.00�Yes�APP�1404�-VC-MSR�010028�000057�ADV�060620�015814000049�0000000001.00�Yes�APP�1406�-VC-MSR�010028�000057�AUTH�060620�015814000050�0000000001.99�Yes�APP�1423�-P1-ICC�010859�000057�ADV�060620�015814000052�0000000001.99�Yes�APP�1424�-P1-ICC�010859�000057�ADV�060620�015814000053�0000000001.99�Yes�APP�1426�-P1-ICC�010859�000057�AUTH�060620�015814000054�0000000004.44�Yes�APP�1432�-VC-MSR�010028�000057�ADV�060620�015814000055�0000000004.44�Yes�APP�1434�-VC-MSR�010028�000057�AUTH�060620�015815000056�0000000002.99�Yes�APP�1517�-P1-KEY�010859�000057�AUTH�060620�015815000058�0000000002.44�Yes�APP�1518�-P1-KEY�010859�000070�ADV�060620�015815000059�0000000002.44�Yes�APP�1522�-P1-KEY�010859�000070�AUTH�060620�015815000060�0000000001.23�Yes�APP�1524�-P1-ICC�010859�000070�ADV�060620�015815000062�0000000001.23�Yes�APP�1526�-P1-KEY�010859�000070�AUTH�060620�015815000063�0000000001.00�Yes�APP�1529�-VC-MSR�010028�000070�ADV�060620�015815000064�0000000001.00�Yes�APP�1531�-P1-KEY�010028�000070�ADV�060620�015815000065�0000000001.00�Yes�APP�1534�-VC-MSR�010028�000070�AUTH�060620�015815000066�0000000002.00�Yes�APP�1535�-VC-MSR�010028�000070�ADV�060620�015815000067�0000000002.00�Yes�APP�1537�-VC-MSR�010028�000070�AUTH�060620";
+        logger.debug("length>>" + a.length());
         transactionTypeString = TransactionType.valueOf(selectedItem.toUpperCase().replace(" ", "_"));
         prevEcrNo = GeneralParamCache.getInstance().getString(PREV_ECR_NO);
 
@@ -263,11 +268,15 @@ logger.debug("length>>"+ a.length());
         }
     }
 
-    public void setReqData(String selectedItem) {
+    public void setReqData(String selectedItem, Context context) {
 
         date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
         int print = TransactionSettingViewModel.getPrint();
         String completion;
+
+        if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
+            GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
+        }
 
         if (ecrSelected == ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
             ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
@@ -385,14 +394,14 @@ logger.debug("length>>"+ a.length());
         String[] responseArray = terminalResponseString.split(";");
         String[] responseTemp;
 
-        logger.debug("FirstApicall length>> "+responseArray.length);
+        logger.debug("FirstApicall length>> " + responseArray.length);
 
         if (Integer.parseInt(responseArray[1]) == 22 && Integer.parseInt(responseArray[5]) != 0) {
 
-            responseTemp = new String[terminalResponseString.length()-2];
+            responseTemp = new String[terminalResponseString.length() - 2];
             int count = Integer.parseInt(responseArray[5]);
             int m = 1;
-            for (int n = 1; n < terminalResponseString.length()- 2; n++) {
+            for (int n = 1; n < terminalResponseString.length() - 2; n++) {
                 responseTemp[m] = responseArray[n];
                 m = m + 1;
             }
@@ -403,7 +412,7 @@ logger.debug("length>>"+ a.length());
 
                     reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
                     String terminalResponseString1 = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
-                    logger.debug("terminal Response Sumarry Report>> "+i+terminalResponseString1);
+                    logger.debug("terminal Response Sumarry Report>> " + i + terminalResponseString1);
                     String[] responseArray1 = terminalResponseString1.split(";");
                     responseTemp = new String[responseArray1.length - 6];
                     int j = 0;
@@ -455,9 +464,6 @@ logger.debug("length>>"+ a.length());
             throw new Exception("Please Register First");
         } else if (transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && !ActiveTxnData.getInstance().isSessionStarted()) {
             throw new Exception("Please Start Session");
-        } else if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
-            logger.info("Cash Register No. not entered");
-            throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
         }
 
         switch (transactionTypeString) {
@@ -790,5 +796,3 @@ logger.debug("length>>"+ a.length());
         ActiveTxnData.getInstance().setResData(terminalResponse);
     }
 }
-
-

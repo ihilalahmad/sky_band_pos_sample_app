@@ -485,7 +485,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("authCode", receiveDataArray[10]);
             htmlString = htmlString.replace("approved", receiveDataArray[3]);
             htmlString = htmlString.replace("CurrentAmount", String.format("%.2f",amount));
-            htmlString = htmlString.replace("expiryDate", expiryDate);
+            htmlString = htmlString.replace("ExpiryDate", expiryDate);
             htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[20]);
             htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
             htmlString = htmlString.replace("AIDaid", receiveDataArray[14]);
