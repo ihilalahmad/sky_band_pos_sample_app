@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ConnectionManager {
 
     private Logger logger = Logger.getNewLogger(ConnectionManager.class.getName());
@@ -15,9 +18,11 @@ public class ConnectionManager {
     private Socket socket;
     private OutputStream output;
     private InputStream input;
-    private String serverIp;
-    private int serverPort;
-    private final int SOCKET_TIMEOUT = 10000;
+    @Getter
+    private static String serverIp;
+    @Setter
+    private static int serverPort;
+    private final int SOCKET_TIMEOUT = 120000;
     private static ConnectionManager socketHostConnector;
 
     public static ConnectionManager Instance(String ip, int port) throws IOException {
@@ -37,10 +42,11 @@ public class ConnectionManager {
 
     /**
      * This use only for exiting connection access
+     *
      * @return
      * @throws IOException
      */
-    public static ConnectionManager Instance()  {
+    public static ConnectionManager Instance() {
 
         if (socketHostConnector != null) {
             return socketHostConnector;
@@ -65,10 +71,7 @@ public class ConnectionManager {
         socket = new Socket();
         socket.connect(new InetSocketAddress(serverIp, serverPort), SOCKET_TIMEOUT);
         socket.setSoTimeout(SOCKET_TIMEOUT);
-
-        output = socket.getOutputStream();
-        input = socket.getInputStream();
-        logger.debug(getClass() + "::" + "Created connection : Ip"+serverIp+ "port:" + serverPort);
+        logger.debug(getClass() + "::" + "Created connection : Ip" + serverIp + "port:" + serverPort);
     }
 
     public void disconnect() throws IOException {
@@ -112,6 +115,9 @@ public class ConnectionManager {
 
     public String sendAndRecv(byte[] in) throws IOException {
 
+        output = socket.getOutputStream();
+        input = socket.getInputStream();
+
         output.write(in);
         output.flush();
 
@@ -127,6 +133,7 @@ public class ConnectionManager {
             throw new IOException();
         }
 
+
         byte[] finalResponse = new byte[noOfBytesRead];
         System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
         String terminalResponse = new String(finalResponse);
@@ -138,7 +145,7 @@ public class ConnectionManager {
 
     public boolean isConnected() {
 
-        if(socket != null) {
+        if (socket != null) {
             return socket.isConnected();
         }
 

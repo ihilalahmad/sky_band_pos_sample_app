@@ -5,6 +5,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context=".ui.fragment.home.HomeFragment"
         tools:ignore="ExtraText">
         >
@@ -39,7 +41,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp25"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal" >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -58,7 +60,24 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/ecr_ref_no_tv"
+                        android:id="@+id/prev_ecr_no_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp25"
+                        android:text="@string/prev_ecr_no" />
+
+                    <TextView
+                        android:id="@+id/prev_ecr_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp25"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:background="@drawable/border"
+                        android:padding="@dimen/dp10" />
+
+                    <TextView
+                        android:id="@+id/ecr_no_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
@@ -66,7 +85,7 @@
                         android:text="@string/ecr_ref_no" />
 
                     <EditText
-                        android:id="@+id/ecr_ref_no"
+                        android:id="@+id/ecr_no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dp25"
@@ -81,7 +100,7 @@
                         android:layout_width="127dp"
                         android:layout_height="35dp"
                         android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp35"
+                        android:layout_marginTop="@dimen/dp25"
                         android:text="@string/type"
                         android:textStyle="bold" />
 
@@ -212,7 +231,7 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/ddmmyy"
-                        android:inputType="date"
+                        android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
@@ -273,7 +292,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/vendor_id"
                         android:inputType="number"
-                        android:maxLength="6"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -293,7 +312,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/vendor_terminal_type"
                         android:inputType="number"
-                        android:maxLength="1"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -333,7 +352,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/vendor_key_index"
                         android:inputType="number"
-                        android:maxLength="1"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -353,7 +372,7 @@
                         android:background="@drawable/border"
                         android:hint="@string/sama_key_index"
                         android:inputType="number"
-                        android:maxLength="1"
+                        android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
                     <TextView
@@ -372,7 +391,7 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/ddmmyy"
-                        android:inputType="date"
+                        android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
 

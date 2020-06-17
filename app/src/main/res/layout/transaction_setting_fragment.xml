@@ -20,7 +20,7 @@
             />
 
         <CheckBox
-            android:id="@+id/ecr_ref_no"
+            android:id="@+id/ecr_no"
             android:layout_below="@id/terminal_printer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/cash_register_no_tv"
-            android:layout_below="@id/ecr_ref_no"
+            android:layout_below="@id/ecr_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp25"
@@ -40,8 +40,9 @@
             android:textStyle="bold"
             android:text="@string/cash_register_number" />
 
-        <EditText
-            android:id="@+id/cash_register_no"
+
+        <TextView
+            android:id="@+id/cash_register_no2"
             android:layout_below="@+id/cash_register_no_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,10 +50,9 @@
             android:layout_marginTop="@dimen/dp10"
             android:background="@drawable/border"
             android:hint="@string/cash_register_number"
-            android:inputType="number"
-            android:maxLength="8"
             android:padding="@dimen/dp10"
             />
+
         <Button
             android:id="@+id/ok_button"
             android:layout_width="match_parent"

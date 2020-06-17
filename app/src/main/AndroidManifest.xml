@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.girmiti.skybandecr">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,9 +23,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.MainActivity"
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:windowSoftInputMode="adjustPan"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

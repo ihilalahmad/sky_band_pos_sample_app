@@ -38,12 +38,15 @@
 
     <fragment
         android:id="@+id/bufferResponseFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.buffer.BufferResponseFragment"
+        android:name="com.girmiti.skybandecr.ui.fragment.response.buffer.BufferResponseFragment"
         android:label="buffer_response_fragment"
         tools:layout="@layout/buffer_response_fragment" >
         <action
             android:id="@+id/action_bufferResponseFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_bufferResponseFragment_to_printReceiptFragment"
+            app:destination="@id/printReceiptFragment" />
     </fragment>
 
     <fragment
@@ -64,6 +67,14 @@
         android:label="ConnectedFragment" >
         <action
             android:id="@+id/action_connectedFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/printReceiptFragment"
+        android:name="com.girmiti.skybandecr.ui.fragment.response.printreceipt.PrintReceiptFragment"
+        android:label="PrintReceiptFragment" >
+        <action
+            android:id="@+id/action_printReceiptFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 

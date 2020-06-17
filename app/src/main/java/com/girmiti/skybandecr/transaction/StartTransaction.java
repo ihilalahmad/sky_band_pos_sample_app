@@ -4,9 +4,6 @@ import com.girmiti.skybandecr.ui.fragment.home.HomeViewModel;
 import com.girmiti.skybandecr.transaction.listener.TransactionListener;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 public class StartTransaction implements Runnable {
 
     private Logger logger = Logger.getNewLogger(StartTransaction.class.getName());
@@ -24,13 +21,12 @@ public class StartTransaction implements Runnable {
     @Override
     public void run() {
         try {
-            byte[] packData = homeViewModel.packData();
-            String terminalResponse = homeViewModel.getTerminalResponse(packData);
+            String terminalResponse = homeViewModel.getTerminalResponse();
             logger.debug("Terminal response>>> " + terminalResponse);
-            homeViewModel.parse(terminalResponse);
+            homeViewModel.setParseResponse(terminalResponse);
             logger.info("Response parsed");
             transactionListener.onSuccess();
-        } catch (final IOException | NoSuchAlgorithmException e) {
+        } catch (final Exception e) {
             logger.severe("Exception on transaction", e);
             transactionListener.onError(e);
         }

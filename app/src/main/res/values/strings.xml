@@ -55,7 +55,7 @@
     <string name="Exception_during_connection">Exception during connection</string>
     <string name="connecting">connecting</string>
     <string name="please_wait">Please wait...</string>
-    <string name="ip_port_invalid">IP or Port is not valid</string>
+    <string name="ip_invalid">IP is not valid</string>
     <string name="cash_back_amount">Cash Back Amount</string>
     <string name="do_transaction">Do Transaction</string>
     <string name="connection_status">Connection status:</string>
@@ -79,6 +79,12 @@
     <string name="biller_id">Biller Id</string>
     <string name="biller_number">Biller Number</string>
     <string name="full_completion">Full Completion</string>
+    <string name="home_fragment">HomeFragment</string>
+    <string name="id_not_received">Terminal id not received</string>
+    <string name="prev_ecr_no">Prev Ecr No</string>
+    <string name="ip_or_port_empty">IP or Port should not be empty</string>
+    <string name="ip_and_port_empty">IP and Port should not be empty</string>
+    <string name="port_invalid">Port is not valid</string>
     <string-array name="transaction_type">
 
         <item>Register</item>
@@ -97,12 +103,13 @@
         <item>Parameter Download</item>
         <item>Set Parameter</item>
         <item>Get Parameter</item>
-        <item>Set Terminal Language</item>
+        <!--<item>Set Terminal Language</item>-->
        <!-- <item>Terminal Status</item>
         <item>Previous Transaction Details</item>-->
         <item>Bill Payment</item>
         <item>Print Detail Report</item>
         <item>Print Summary Report</item>
+        <item>Check Status</item>
 
     </string-array>
 

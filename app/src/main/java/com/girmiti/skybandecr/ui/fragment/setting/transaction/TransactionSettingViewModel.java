@@ -21,7 +21,7 @@ public class TransactionSettingViewModel extends ViewModel implements Constant {
 
     public void setData(TransactionSettingFragmentBinding transactionSettingFragmentBinding) {
 
-        if (transactionSettingFragmentBinding.ecrRefNo.isChecked()) {
+        if (transactionSettingFragmentBinding.ecrNo.isChecked()) {
             GeneralParamCache.getInstance().putInt(ENABLE_ECR, 1);
         } else {
             GeneralParamCache.getInstance().putInt(ENABLE_ECR, 0);
@@ -33,9 +33,5 @@ public class TransactionSettingViewModel extends ViewModel implements Constant {
             GeneralParamCache.getInstance().putInt(ENABLE_PRINT, 0);
         }
 
-    }
-
-    public boolean validCashRegisterNo(TransactionSettingFragmentBinding transactionSettingFragmentBinding) {
-        return transactionSettingFragmentBinding.cashRegisterNo.getText().length() == 8;
     }
 }
