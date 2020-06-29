@@ -21,7 +21,6 @@ import com.girmiti.skybandecr.cache.GeneralParamCache;
 import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.databinding.TransactionSettingFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
-import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.util.Objects;
 
@@ -30,8 +29,6 @@ public class TransactionSettingFragment extends Fragment implements Constant {
     private TransactionSettingViewModel transactionSettingViewModel;
     private TransactionSettingFragmentBinding transactionSettingFragmentBinding;
     private NavController navController;
-
-    private Logger logger = Logger.getNewLogger(TransactionSettingFragment.class.getName());
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

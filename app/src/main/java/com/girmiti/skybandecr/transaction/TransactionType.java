@@ -17,8 +17,8 @@ public enum TransactionType {
     REVERSAL("Reversal"),
     RECONCILIATION("Reconciliation"),
     PARAMETER_DOWNLOAD("Parameter Download"),
-    SET_PARAMETER("Set Parameter"),
-    GET_PARAMETER("Get Parameter"),
+    SET_SETTINGS("SET Settings"),
+    GET_SETTINGS("GET Settings"),
     SET_TERMINAL_LANGUAGE("Set Terminal Language"),
     TERMINAL_STATUS("Terminal Status"),
     PREVIOUS_TRANSACTION_DETAILS("Previous Transaction Details"),
@@ -26,10 +26,10 @@ public enum TransactionType {
     START_SESSION("Start Session"),
     END_SESSION("End Session"),
     BILL_PAYMENT("Bill Payment"),
-    PRINT_DETAIL_REPORT("Print Detail Report"),
+    RUNNING_TOTAL("Running Total"),
     PRINT_SUMMARY_REPORT("Print Summary Report"),
+    REPEAT("Repeat"),
     CHECK_STATUS("Check Status");
-
 
     @Getter
     @Setter

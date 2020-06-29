@@ -5,11 +5,8 @@ import androidx.lifecycle.ViewModel;
 import com.girmiti.skybandecr.cache.GeneralParamCache;
 import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.databinding.TransactionSettingFragmentBinding;
-import com.girmiti.skybandecr.sdk.logger.Logger;
 
 public class TransactionSettingViewModel extends ViewModel implements Constant {
-
-    private Logger logger = Logger.getNewLogger(TransactionSettingViewModel.class.getName());
 
     public static int getPrint() {
         return GeneralParamCache.getInstance().getInt(ENABLE_PRINT);

@@ -496,14 +496,6 @@
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
 
-                    <CheckBox
-                        android:id="@+id/type_of_completion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp25"
-                        android:layout_marginTop="@dimen/dp25"
-                        android:text="@string/full_completion" />
-
                 </LinearLayout>
             </RelativeLayout>
         </ScrollView>

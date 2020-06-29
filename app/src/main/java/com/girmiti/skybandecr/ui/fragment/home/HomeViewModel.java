@@ -25,15 +25,11 @@ import java.util.Locale;
 
 public class HomeViewModel extends ViewModel implements Constant {
 
-
-
-
+    public TransactionType transactionTypeString = TransactionType.PURCHASE;
     private HomeFragmentBinding homeFragmentBinding;
     private Logger logger = Logger.getNewLogger(HomeViewModel.class.getName());
     private int ecrSelected = TransactionSettingViewModel.getEcr();
-
     private String reqData = "";
-    public TransactionType transactionTypeString = TransactionType.PURCHASE;
     private String terminalID = "";
     private String szSignature = "";
     private String ecrReferenceNo = "";
@@ -109,8 +105,6 @@ public class HomeViewModel extends ViewModel implements Constant {
         homeFragmentBinding.terminalLanguage.setVisibility(View.GONE);
         homeFragmentBinding.terminalLanguageTv.setVisibility(View.GONE);
 
-        this.homeFragmentBinding.typeOfCompletion.setVisibility(View.GONE);
-
         this.homeFragmentBinding.prevEcrNo.setVisibility(View.GONE);
         this.homeFragmentBinding.prevEcrNoTv.setVisibility(View.GONE);
     }
@@ -118,8 +112,6 @@ public class HomeViewModel extends ViewModel implements Constant {
     @SuppressLint("DefaultLocale")
     public void getVisibilityOfViews(String selectedItem) {
 
-        String a = "\u0002�C1�00�APPROVED�080620183836�0�73�AUTH�060620183836�015813000045�0000000001.11�Yes�APP�1356�-VC-MSR�010028�000057�ADV�060620�015814000046�0000000001.11�Yes�APP�1400�-VC-MSR�010028�000057�AUTH�060620�015814000048�0000000001.00�Yes�APP�1404�-VC-MSR�010028�000057�ADV�060620�015814000049�0000000001.00�Yes�APP�1406�-VC-MSR�010028�000057�AUTH�060620�015814000050�0000000001.99�Yes�APP�1423�-P1-ICC�010859�000057�ADV�060620�015814000052�0000000001.99�Yes�APP�1424�-P1-ICC�010859�000057�ADV�060620�015814000053�0000000001.99�Yes�APP�1426�-P1-ICC�010859�000057�AUTH�060620�015814000054�0000000004.44�Yes�APP�1432�-VC-MSR�010028�000057�ADV�060620�015814000055�0000000004.44�Yes�APP�1434�-VC-MSR�010028�000057�AUTH�060620�015815000056�0000000002.99�Yes�APP�1517�-P1-KEY�010859�000057�AUTH�060620�015815000058�0000000002.44�Yes�APP�1518�-P1-KEY�010859�000070�ADV�060620�015815000059�0000000002.44�Yes�APP�1522�-P1-KEY�010859�000070�AUTH�060620�015815000060�0000000001.23�Yes�APP�1524�-P1-ICC�010859�000070�ADV�060620�015815000062�0000000001.23�Yes�APP�1526�-P1-KEY�010859�000070�AUTH�060620�015815000063�0000000001.00�Yes�APP�1529�-VC-MSR�010028�000070�ADV�060620�015815000064�0000000001.00�Yes�APP�1531�-P1-KEY�010028�000070�ADV�060620�015815000065�0000000001.00�Yes�APP�1534�-VC-MSR�010028�000070�AUTH�060620�015815000066�0000000002.00�Yes�APP�1535�-VC-MSR�010028�000070�ADV�060620�015815000067�0000000002.00�Yes�APP�1537�-VC-MSR�010028�000070�AUTH�060620";
-        logger.debug("length>>" + a.length());
         transactionTypeString = TransactionType.valueOf(selectedItem.toUpperCase().replace(" ", "_"));
         prevEcrNo = GeneralParamCache.getInstance().getString(PREV_ECR_NO);
 
@@ -172,8 +164,6 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.origApproveCode.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origApproveCode.setText("");
-
-                homeFragmentBinding.typeOfCompletion.setVisibility(View.VISIBLE);
                 break;
             case PRE_AUTH_EXTENSION:
                 homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
@@ -215,7 +205,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
                 homeFragmentBinding.rrnNoEditText.setText("");
                 break;
-            case SET_PARAMETER:
+            case SET_SETTINGS:
                 homeFragmentBinding.vendorId.setVisibility(View.VISIBLE);
                 homeFragmentBinding.vendorIdTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.vendorId.setText("");
@@ -260,7 +250,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 homeFragmentBinding.billerNumberTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.billerNumber.setText("");
                 break;
-            case CHECK_STATUS:
+            case REPEAT:
                 homeFragmentBinding.prevEcrNo.setVisibility(View.VISIBLE);
                 homeFragmentBinding.prevEcrNoTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.prevEcrNo.setText(prevEcrNo);
@@ -272,7 +262,7 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
         int print = TransactionSettingViewModel.getPrint();
-        String completion;
+        String completion = "1";
 
         if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
             GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
@@ -286,12 +276,6 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         logger.debug(getClass() + ":: Ecr refrence no>>" + ecrReferenceNo);
         logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
-
-        if (homeFragmentBinding.typeOfCompletion.isChecked()) {
-            completion = "1";
-        } else {
-            completion = "0";
-        }
 
         switch (transactionTypeString) {
             case PURCHASE:
@@ -324,7 +308,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             case RECONCILIATION:
                 reqData = date + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case SET_PARAMETER:
+            case SET_SETTINGS:
                 reqData = date + ";" + homeFragmentBinding.vendorId.getText() + ";" + homeFragmentBinding.vendorTerminalType.getText() + ";" + homeFragmentBinding.trsmId.getText() + ";" + homeFragmentBinding.vendorKeyIndex.getText() + ";" + homeFragmentBinding.samaKeyIndex.getText() + ";" + ecrReferenceNo + "!";
                 break;
             case SET_TERMINAL_LANGUAGE:
@@ -339,17 +323,18 @@ public class HomeViewModel extends ViewModel implements Constant {
                 szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
                 reqData = date + ";" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + "!";
                 break;
-            case CHECK_STATUS:
+            case REPEAT:
                 reqData = date + ";" + prevEcrNo + ";" + ecrReferenceNo + "!";
                 break;
             case PRINT_SUMMARY_REPORT:
                 reqData = date + ";" + "0" + ";" + ecrReferenceNo + "!";
                 break;
             case PARAMETER_DOWNLOAD:
-            case GET_PARAMETER:
+            case GET_SETTINGS:
             case TERMINAL_STATUS:
             case PREVIOUS_TRANSACTION_DETAILS:
-            case PRINT_DETAIL_REPORT:
+            case RUNNING_TOTAL:
+            case CHECK_STATUS:
 
             default:
                 reqData = date + ";" + ecrReferenceNo + "!";
@@ -397,10 +382,10 @@ public class HomeViewModel extends ViewModel implements Constant {
         logger.debug("FirstApicall length>> " + responseArray.length);
 
         if (Integer.parseInt(responseArray[1]) == 22 && Integer.parseInt(responseArray[5]) != 0) {
-
             responseTemp = new String[terminalResponseString.length() - 2];
             int count = Integer.parseInt(responseArray[5]);
             int m = 1;
+
             for (int n = 1; n < terminalResponseString.length() - 2; n++) {
                 responseTemp[m] = responseArray[n];
                 m = m + 1;
@@ -485,7 +470,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 return validateCashAdvance();
             case REVERSAL:
                 return validateReversal();
-            case SET_PARAMETER:
+            case SET_SETTINGS:
                 return validateSetParameter();
             case REGISTER:
                 return validateRegister();
@@ -497,11 +482,12 @@ public class HomeViewModel extends ViewModel implements Constant {
                 return validateTerminalLanguage();
             case RECONCILIATION:
             case PARAMETER_DOWNLOAD:
-            case GET_PARAMETER:
+            case GET_SETTINGS:
             case TERMINAL_STATUS:
             case PREVIOUS_TRANSACTION_DETAILS:
-            case PRINT_DETAIL_REPORT:
+            case RUNNING_TOTAL:
             case PRINT_SUMMARY_REPORT:
+            case REPEAT:
             case CHECK_STATUS:
             case START_SESSION:
                 return validateEcrNo();

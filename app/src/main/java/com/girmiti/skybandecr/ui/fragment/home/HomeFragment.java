@@ -224,7 +224,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     @SuppressLint("DefaultLocale")
-    public String getEcrNumberString() {
+    private String getEcrNumberString() {
         // Random rnd = new Random();
         // int number = rnd.nextInt(999999);
         int number = 1;

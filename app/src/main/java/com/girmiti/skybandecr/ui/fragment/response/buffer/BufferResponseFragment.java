@@ -291,6 +291,9 @@ public class BufferResponseFragment extends Fragment {
             case "C2":
                 terminalResponse[1] =  "23";
                 break;
+            case "C3":
+                terminalResponse[1] =  "24";
+                break;
             case "D1":
                 terminalResponse[1] =  "30";
                 break;

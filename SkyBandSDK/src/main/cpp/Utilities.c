@@ -85,11 +85,11 @@ void ascToHexConv (unsigned char *outp, unsigned char *inp, int iLength)
 
 void xorOpBtwnChars (unsigned char *pbt_Data1, int i_DataLen, int *output)
 {
-	int i = 0, result = 0;
+        int i = 0, result = 0;
 
-	for (i = 0; i < i_DataLen; i++)
-	{
-		*output = result ^ pbt_Data1[i];
-		result = *output;
-	}
+        for (i = 0; i < i_DataLen; i++)
+        {
+        	*output = result ^ pbt_Data1[i];
+			result = *output;
+        }
 }

@@ -14,7 +14,7 @@ extern void hexDataPrint(char * headerString, unsigned char * inputBuffer, int n
 extern void ascToHexConv (unsigned char *outp, unsigned char *inp, int iLength);
 extern void xorOpBtwnChars (unsigned char *pbt_Data1, int i_DataLen, int *output);
 
-void vdParseRequestData(char *inputReqData, long long reqFields[], int *count)
+void vdParseRequestData(char *inputReqData, char *szReqFields[], int *count)
 {
 	char szItem[100];
 	int inReqDataIndex = 0, inItemsCount = 0, inFieldIndex = 0;
@@ -24,7 +24,7 @@ void vdParseRequestData(char *inputReqData, long long reqFields[], int *count)
 	{
 		if(inputReqData[inReqDataIndex] == DELIMITOR_CHAR)
 		{
-			reqFields[inItemsCount] = atoll(szItem);
+			memcpy(szReqFields[inItemsCount], szItem, strlen(szItem));
 			inItemsCount++;
 			memset(szItem, 0x00, sizeof(szItem));
 			inFieldIndex = 0;
@@ -35,7 +35,7 @@ void vdParseRequestData(char *inputReqData, long long reqFields[], int *count)
 			inFieldIndex++;
 			if(inputReqData[inReqDataIndex] == ENDMSG_CHAR)
 			{
-				reqFields[inItemsCount] = atoll(szItem);
+				memcpy(szReqFields[inItemsCount], szItem, strlen(szItem)-1);
 				inItemsCount++;
 			}
 		}
@@ -107,6 +107,9 @@ char *getCommand(int tranType)
 
 		case TYPE_PRNT_SUMMARY_RPORT:
 			return CMD_PRNT_SUMMARY_RPORT;	//Print summary report
+
+		case TYPE_REPEAT:
+			return CMD_REPEAT;	//Repeat
 
 		case TYPE_CHECK_STATUS:
 			return CMD_CHECK_STATUS;	//Check Status

@@ -16,7 +16,7 @@ public class BufferResponseViewModel extends ViewModel {
             pan = resp[4];
         }
 
-        return "Transaction type: " + resp[1] + "\n" +
+        return "Transaction type    : " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
                 "PAN Number         : " + pan + "\n" +
@@ -64,7 +64,7 @@ public class BufferResponseViewModel extends ViewModel {
         } else {
             pan = resp[4];
         }
-        return "Transaction type: " + resp[1] + "\n" +
+        return  "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n" +
                 "PAN Number         : " +  pan + "\n" +
@@ -353,7 +353,6 @@ public class BufferResponseViewModel extends ViewModel {
     private String maskPAn(String s) {
         return s.substring(0, 5) + "******" + s.substring(s.length()-4);
     }
-
 }
 
 

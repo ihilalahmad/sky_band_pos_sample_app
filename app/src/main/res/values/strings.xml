@@ -101,14 +101,15 @@
         <item>Reversal</item>
         <item>Reconciliation</item>
         <item>Parameter Download</item>
-        <item>Set Parameter</item>
-        <item>Get Parameter</item>
+        <item>SET Settings</item>
+        <item>GET Settings</item>
         <!--<item>Set Terminal Language</item>-->
        <!-- <item>Terminal Status</item>
         <item>Previous Transaction Details</item>-->
         <item>Bill Payment</item>
-        <item>Print Detail Report</item>
+        <item>Running Total</item>
         <item>Print Summary Report</item>
+        <item>Repeat</item>
         <item>Check Status</item>
 
     </string-array>
