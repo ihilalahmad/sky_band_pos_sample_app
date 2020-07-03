@@ -14,7 +14,7 @@ extern void hexDataPrint(char * headerString, unsigned char * inputBuffer, int n
 extern void ascToHexConv (unsigned char *outp, unsigned char *inp, int iLength);
 extern void xorOpBtwnChars (unsigned char *pbt_Data1, int i_DataLen, int *output);
 
-void vdParseRequestData(char *inputReqData, char *szReqFields[], int *count)
+void vdParseRequestData(char *inputReqData, long long reqFields[], int *count)
 {
 	char szItem[100];
 	int inReqDataIndex = 0, inItemsCount = 0, inFieldIndex = 0;
@@ -24,7 +24,7 @@ void vdParseRequestData(char *inputReqData, char *szReqFields[], int *count)
 	{
 		if(inputReqData[inReqDataIndex] == DELIMITOR_CHAR)
 		{
-			memcpy(szReqFields[inItemsCount], szItem, strlen(szItem));
+			reqFields[inItemsCount] = atoll(szItem);
 			inItemsCount++;
 			memset(szItem, 0x00, sizeof(szItem));
 			inFieldIndex = 0;
@@ -35,7 +35,7 @@ void vdParseRequestData(char *inputReqData, char *szReqFields[], int *count)
 			inFieldIndex++;
 			if(inputReqData[inReqDataIndex] == ENDMSG_CHAR)
 			{
-				memcpy(szReqFields[inItemsCount], szItem, strlen(szItem)-1);
+				reqFields[inItemsCount] = atoll(szItem);
 				inItemsCount++;
 			}
 		}

@@ -106,7 +106,9 @@ public class BufferResponseFragment extends Fragment {
                 } else {
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                 }
-
+            case "24":
+                bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                break;
             default:
                 if (receiveDataArray[3].equals("APPROVED") || receiveDataArray[3].equals("DECLINED")) {
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
@@ -140,6 +142,10 @@ public class BufferResponseFragment extends Fragment {
             case "3":
             case "4":
             case "8":
+
+            case "5":
+            case "6":
+            case "20":
                 if (receiveDataArray.length > 27) {
                     return bufferResponseViewModel.printResponsePurchase(receiveDataArray);
                 } else {
@@ -148,15 +154,6 @@ public class BufferResponseFragment extends Fragment {
             case "1":
                 if (receiveDataArray.length > 29) {
                     return bufferResponseViewModel.printResponsePurchaseCashBack(receiveDataArray);
-                } else {
-                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
-                }
-
-            case "5":
-            case "6":
-            case "20":
-                if (receiveDataArray.length > 27) {
-                    return bufferResponseViewModel.printResponseBillPayment(receiveDataArray);
                 } else {
                     return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
@@ -217,9 +214,12 @@ public class BufferResponseFragment extends Fragment {
                     ActiveTxnData.getInstance().setReplacedArray(a);
                     return setResponse(a);
                 } else {
-                    return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
+                    return bufferResponseViewModel.printResponseRepeat(receiveDataArray);
                 }
 
+            case "24":
+                if(receiveDataArray.length > 5)
+                return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
             default:
                 return bufferResponseViewModel.printResponseDefault(receiveDataArray);
         }

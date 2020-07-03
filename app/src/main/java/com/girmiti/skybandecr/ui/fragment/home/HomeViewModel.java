@@ -503,7 +503,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.payAmt.getText().toString().equals("")) {
             throw new Exception("Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.payAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.payAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Amount should not be 0");
         } else {
             return true;
@@ -518,11 +518,11 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.payAmt.getText().toString().equals("")) {
             throw new Exception("Purchase Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.payAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.payAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Purchase Amount should not be 0");
         } else if (homeFragmentBinding.cashBackAmt.getText().toString().equals("")) {
             throw new Exception("CashBack Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.cashBackAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.cashBackAmt.getText().toString())).equals("0.0")) {
             throw new Exception("CashBack Amount should not be 0");
         } else if (!(Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) > Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText())))) {
             throw new Exception("CashBackAmt should not be More than or equal to Purchase Amt");
@@ -537,7 +537,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.refundAmt.getText().toString().equals("")) {
             throw new Exception("Refund Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.refundAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.refundAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Refund Amount should not be 0");
         } else if (homeFragmentBinding.rrnNoEditText.getText().length() == ZERO) {
             throw new Exception("RRN no. should not be empty");
@@ -560,7 +560,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.authAmt.getText().toString().equals("")) {
             throw new Exception("Auth Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.authAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.authAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Auth Amount should not be 0");
         } else {
             return true;
@@ -579,7 +579,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("RRN no. length should be 12 digits");
         } else if (homeFragmentBinding.authAmt.getText().toString().equals("")) {
             throw new Exception("Auth Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.authAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.authAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Auth Amount should not be 0");
         } else if (homeFragmentBinding.origTransactionDate.getText().length() == ZERO) {
             throw new Exception("Date should not be 0");
@@ -629,7 +629,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("RRN no. length should be 12 digits");
         } else if (homeFragmentBinding.origTransactionAmt.getText().toString().equals("")) {
             throw new Exception("Original Transaction Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.origTransactionAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.origTransactionAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Original Transaction Amount should not be 0");
         } else if (homeFragmentBinding.origTransactionDate.getText().length() == ZERO) {
             throw new Exception("Date should not be 0");
@@ -652,7 +652,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("")) {
             throw new Exception("Cash Advance Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.cashAdvanceAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.cashAdvanceAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Cash Advance Amount should not be 0");
         } else {
             return true;
@@ -752,7 +752,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.billPayAmt.getText().toString().equals("")) {
             throw new Exception("Bill Amount should not be empty");
-        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.billPayAmt.getText().toString())).equals("0.00")) {
+        } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.billPayAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Bill Amount should not be 0");
         } else if (homeFragmentBinding.billerId.getText().length() == ZERO) {
             throw new Exception("Bill Id should not be empty");

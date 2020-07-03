@@ -16,45 +16,46 @@ public class BufferResponseViewModel extends ViewModel {
             pan = resp[4];
         }
 
-        return "Transaction type    : " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " + pan + "\n" +
-                "Transaction Amount : " + resp[5] + "\n" +
-                "Stan No            : " + resp[6] + "\n" +
-                "Date & Time        : " + resp[7] + "\n" +
-                "Card Exp Date      : " + resp[8] + "\n" +
-                "RRN                : " + resp[9] + "\n" +
-                "Auth Code          : " + resp[10] + "\n" +
-                "TID                : " + resp[11] + "\n" +
-                "MID                : " + resp[12] + "\n" +
-                "Batch No           : " + resp[13] + "\n" +
-                "AID                : " + resp[14] + "\n" +
-                "Application Cryptogram : " + resp[15] + "\n" +
-                "CID                : " + resp[16] + "\n" +
-                "CVR                : " + resp[17] + "\n" +
-                "TVR                : " + resp[18] + "\n" +
-                "TSI                : " + resp[19] + "\n" +
-                "Card Entry Mode    : " + resp[20] + "\n" +
-                "Merchant Category Code : " + resp[21] + "\n" +
-                "Transaction Type   : " + resp[22] + "\n" +
-                "Scheme Label       : " + resp[23] + "\n" +
-                "Store and Cashier Info : " + resp[24] + "\n" +
-                "Product Info       : " + resp[25] + "\n" +
-                "Application Version: " + resp[26] + "\n" +
-                "ECR Transaction Reference Number: " + resp[27] + "\n" +
-                "Signature          : " + resp[28] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + "\t"+ ": " + resp[3] + "\n" +
+                "PanNumber" + "\t" + "\t" + "\t" +"\t" +": " + pan + "\n" +
+                "Transaction Amount" + "\t" + "\t" + "\t"+": " + resp[5] + "\n" +
+                "Buss Code" + "\t" + "\t" + "\t" +"\t"+ ": " + resp[6] + "\n" +
+                "StanNo" + "\t" + "\t" + "\t" + "\t" + "\t"+": " + resp[7] + "\n" +
+                "Date&Time " + "\t" + "\t" + "\t" + ": " + resp[8] + "\n" +
+                "Card Exp Date" + "\t" + "\t" + "\t" +"\t"+": " + resp[9] + "\n" +
+                "RRN" + "\t" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[10] + "\n" +
+                "Auth Code" + "\t" + "\t" + "\t" + "\t"+": " + resp[11] + "\n" +
+                "TID" + "\t" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[12] + "\n" +
+                "MID" + "\t" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[13] + "\n" +
+                "Batch No" + "\t" + "\t" + "\t" +"\t"+"\t"+": " + resp[14] + "\n" +
+                "AID" + "\t" + "\t" + "\t" + "\t" +"\t"+"\t"+ ": " + resp[15] + "\n" +
+                "Application Cryptogram" + "\t" + "\t" + ": " + resp[16] + "\n" +
+                "CID" + "\t" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[17] + "\n" +
+                "CVR" + "\t" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[18] + "\n" +
+                "TVR" + "\t" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[19] + "\n" +
+                "TSI" + "\t" + "\t" + "\t" + "\t" +"\t"+"\t"+ ": " + resp[20] + "\n" +
+                "Card Entry Mode" + "\t" + "\t" + "\t" + ": " + resp[21] + "\n" +
+                "Merchant Category Code" + "\t" + "\t" + ": " + resp[22] + "\n" +
+                "Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
+                "Scheme Label" + "\t" + "\t" + "\t" + "\t"+": " + resp[24] + "\n" +
+                "Store and Cashier Info" + "\t" + "\t" + ": " + resp[25] + "\n" +
+                "Product Info" + "\t" + "\t" + "\t" + "\t"+": " + resp[26] + "\n" +
+                "Application Version" + "\t" + "\t" + "\t"+": " + resp[27] + "\n" +
+                "ECR Transaction Reference No"+ ": " + resp[28] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[29] + "\n";
     }
 
     String printResponseRegister(String[] resp) {
-        return "TransactionType:" + resp[1] + "\n"
-                + "ResponseCode:" + resp[2] + "\n"
-                + "TerminalId:" + resp[3] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Terminal id" + "\t" + "\t" + "\t" + ": " + resp[3] + "\n";
     }
 
     String printResponseStartSession(String[] resp) {
-        return "TransactionType:" + resp[1] + "\n"
-                + "ResponseCode:" + resp[2] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n";
     }
 
     String printResponsePurchaseCashBack(String[] resp) {
@@ -64,254 +65,353 @@ public class BufferResponseViewModel extends ViewModel {
         } else {
             pan = resp[4];
         }
-        return  "Transaction type: " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " +  pan + "\n" +
-                "Transaction Amount : " + resp[5] + "\n" +
-                "Cash Back Amount   : " + resp[6] + "\n" +
-                "Total Amount       : " + resp[7] + "\n" +
-                "StanNo      		: " + resp[8] + "\n" +
-                "Date&Time          : " + resp[9] + "\n" +
-                "CardExpDate        : " + resp[10] + "\n" +
-                "RRN                : " + resp[11] + "\n" +
-                "AuthCode           : " + resp[12] + "\n" +
-                "TID           		: " + resp[13] + "\n" +
-                "MID                : " + resp[14] + "\n" +
-                "BatchNo			: " + resp[15] + "\n" +
-                "AID                : " + resp[16] + "\n" +
-                "Application Cryptogram : " + resp[17] + "\n" +
-                "CID                : " + resp[18] + "\n" +
-                "CVR               	: " + resp[19] + "\n" +
-                "TVR			    : " + resp[20] + "\n" +
-                "TSI				: " + resp[21] + "\n" +
-                "CardEntryMode	   	: " + resp[22] + "\n" +
-                "Merchant Category Code: " + resp[23] + "\n" +
-                "Transaction Type 	: " + resp[24] + "\n" +
-                "SchemeLabel       	: " + resp[25] + "\n" +
-                "Store and Cashier Info: " + resp[26] + "\n" +
-                "ProductInfo		: " + resp[27] + "\n" +
-                "ApplicationVersion : " + resp[28] + "\n" +
-                "EcrTransactionReference:" + resp[29] + "\n" +
-                "Signature			:" + resp[30] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" +
+                "PAN Number" + "\t" + "\t" + "\t" + ": " + pan + "\n" +
+                "Transaction Amount" + "\t" + "\t" + ": " + resp[5] + "\n" +
+                "Cash Back Amount" + "\t" + "\t" + ": " + resp[6] + "\n" +
+                "Total Amount" + "\t" + "\t" + "\t" + ": " + resp[7] + "\n" +
+                "Buss Code" + "\t" + "\t" + "\t" + ": " + resp[8] + "\n" +
+                "Stan No" + "\t" + "\t" + "\t" + "\t" + ": " + resp[9] + "\n" +
+                "Date & Time" + "\t" + "\t" + "\t" + ": " + resp[10] + "\n" +
+                "Card Exp Date" + "\t" + "\t" + "\t" + ": " + resp[11] + "\n" +
+                "RRN" + "\t" + "\t" + "\t" + "\t" + ": " + resp[12] + "\n" +
+                "Auth Code" + "\t" + "\t" + "\t" + ": " + resp[13] + "\n" +
+                "TID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[14] + "\n" +
+                "MID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[15] + "\n" +
+                "Batch No" + "\t" + "\t" + "\t" + ": " + resp[16] + "\n" +
+                "AID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[17] + "\n" +
+                "Application Cryptogram" + "\t" + "\t" + ": " + resp[18] + "\n" +
+                "CID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[19] + "\n" +
+                "CVR" + "\t" + "\t" + "\t" + "\t" + ": " + resp[20] + "\n" +
+                "TVR" + "\t" + "\t" + "\t" + "\t" + ": " + resp[21] + "\n" +
+                "TSI" + "\t" + "\t" + "\t" + "\t" + ": " + resp[22] + "\n" +
+                "Card Entry Mode" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
+                "Merchant Category Code" + "\t" + "\t" + ": " + resp[24] + "\n" +
+                "Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[25] + "\n" +
+                "Scheme Label" + "\t" + "\t" + "\t" + ": " + resp[26] + "\n" +
+                "Store and Cashier Info" + "\t" + "\t" + ": " + resp[27] + "\n" +
+                "Product Info" + "\t" + "\t" + "\t" + ": " + resp[28] + "\n" +
+                "Application Version" + "\t" + "\t" + ": " + resp[29] + "\n" +
+                "ECR Transaction Reference Number" + "\t" + ": " + resp[30] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + ": " + resp[31] + "\n";
     }
 
-    String printResponseReconcilation(String[] receiveDataArray) {
+    String printResponseReconcilation(String[] resp) {
 
-        String printSettlment = "Transaction Scheme transactionNo\n" +
-                "-------------------- \n" +
-                "Scheme Name                : SchemeName \n" +
+        String printSettlement =
+                "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" +
+                        "Scheme HOST" + "\t" + "\t" + "\t" + ": SchemeHOST \n" +
+                        "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n" +
+                        "Total Debit Count" + "\t" + "\t" + "\t" + ": TotalDebitCount \n" +
+                        "Total Debit Amount" + "\t" + "\t" + ": TotalDebitAmount \n" +
+                        "Total Credit Count" + "\t" + "\t" + "\t" + ": TotalCreditCount \n" +
+                        "Total Credit Amount" + "\t" + "\t" + ": TotalCreditAmount \n" +
+                        "NAQD Count" + "\t" + "\t" + "\t" + ": NAQDCount \n" +
+                        "NAQD Amount" + "\t" + "\t" + "\t" + ": NAQDAmount \n" +
+                        "C/ADV Count" + "\t" + "\t" + "\t" + ": CADVCount \n" +
+                        "C/ADV Amount" + "\t" + "\t" + "\t" + ": CADVAmount \n" +
+                        "Auth Count" + "\t" + "\t" + "\t" + ": AuthCount \n" +
+                        "Auth Amount" + "\t" + "\t" + "\t" + ": AuthAmount \n"+
+                        "Total Count" + "\t" + "\t" + "\t" + ": TotalCount \n" +
+                        "Total Amount" + "\t" + "\t" + "\t" + ": TotalAmount \n";
+        String printSettlementPos =
+                "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n" +
+                        "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" +
+                        "Total Debit Count" + "\t" + "\t" + "\t" + ": TotalDebitCount \n" +
+                        "Total Debit Amount" + "\t" + "\t" + ": TotalDebitAmount \n" +
+                        "Total Credit Count" + "\t" + "\t" + "\t" + ": TotalCreditCount \n" +
+                        "Total Credit Amount" + "\t" + "\t" + ": TotalCreditAmount \n" +
+                        "NAQD Count" + "\t" + "\t" + "\t" + ": NAQDCount \n" +
+                        "NAQD Amount" + "\t" + "\t" + "\t" + ": NAQDAmount \n" +
+                        "C/ADV Count" + "\t" + "\t" + "\t" + ": CADVCount \n" +
+                        "C/ADV Amount" + "\t" + "\t" + "\t" + ": CADVAmount \n" +
+                        "Auth Count" + "\t" + "\t" + "\t" + ": TotalCount \n" +
+                        "Auth Amount" + "\t" + "\t" + "\t" + ": AuthAmount \n"+
+                        "Total Count" + "\t" + "\t" + "\t" + ": TotalCount \n" +
+                        "Total Amount" + "\t" + "\t" + "\t" + ": TotalAmount \n";
+        String printSettlementPosDetails =
+                "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n" +
+                        "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" +
+                        "P/OFF Count" + "\t" + "\t" + "\t" + ": POFFCount \n" +
+                        "P/OFF Amount" + "\t" + "\t" + "\t" + ": POFFAmount \n" +
+                        "P/ON Count" + "\t" + "\t" + "\t" + ": PONCount \n" +
+                        "P/ON Amount" + "\t" + "\t" + "\t" + ": PONAmount \n" +
+                        "NAQD Count" + "\t" + "\t" + "\t" + ": NAQDCount \n" +
+                        "NAQD Amount" + "\t" + "\t" + "\t" + ": NAQDAmount \n" +
+                        "REVERSAL Count" + "\t" + "\t" + "\t" + ": REVERSALCount \n" +
+                        "REVERSAL Amount" + "\t" + "\t" + ": REVERSALAmount \n" +
+                        "REFUND Count" + "\t" + "\t" + "\t" + ": REFUNDCount \n" +
+                        "REFUND Amount" + "\t" + "\t" + "\t" + ": REFUNDAmount \n" +
+                        "COMP Count" + "\t" + "\t" + "\t" + ": COMPCount \n" +
+                        "COMP Amount" + "\t" + "\t" + "\t" + ": COMPAmount \n";
 
-                "Transaction Available Flag : TransactionAvailableFlag \n" +
-                "Total Debit Count          : TotalDebitCount \n" +
-                "Total Debit Amount         : TotalDebitAmount \n" +
-                "Total Credit Count         : TotalCreditCount \n" +
-                "Total Credit Amount        : TotalCreditAmount \n" +
-                "NAQD Count                 : NAQDCount \n" +
-                "NAQD Amount                : NAQDAmount \n" +
-                "C/ADV Count                : CADVCount \n" +
-                "C/ADV Amount               : CADVAmount \n" +
-                "Auth Count                 : AuthCount \n" +
-                "Auth Amount                : AuthAmount \n";
-        int k = 6;
         StringBuilder printFinalReport1 = new StringBuilder("");
-        String printSettlement1 = printSettlment;
-        int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
-        for (int i = 1; i <= totalSchemeLength; i++) {
-            if (receiveDataArray[k + 2].equals("0")) {
+        int k = 9;
+        int totalSchemeLength = Integer.parseInt(resp[9]);
+        for (int i = 1; i <= totalSchemeLength; i++)
+        {
 
-                String printSettlementNO = "Transaction Scheme " + i + "\n" +
-                        "-------------------- \n" +
-                        "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
+            if (resp[k + 2].equals("0"))
+            {
+                String printSettlementNO =  "Scheme Name" + "\t" + "\t" + "\t" + ": " + resp[k + 1] + "\n" +
                         "<No Transaction> \n";
-                k = k + 2;
+                k = k + 3;
                 printFinalReport1.append(printSettlementNO);
-                printSettlement1 = printSettlementNO;
-            } else {
-                printSettlement1 = printSettlement1.replace("transactionNo", String.valueOf(i));
-                printSettlement1 = printSettlement1.replace("SchemeName", receiveDataArray[k + 1]);
-                printSettlement1 = printSettlement1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
-                printSettlement1 = printSettlement1.replace("TotalDebitCount", receiveDataArray[k + 3]);
-                printSettlement1 = printSettlement1.replace("TotalDebitAmount", receiveDataArray[k + 4]);
-                printSettlement1 = printSettlement1.replace("TotalCreditCount", receiveDataArray[k + 5]);
-                printSettlement1 = printSettlement1.replace("TotalCreditAmount", receiveDataArray[k + 6]);
-                printSettlement1 = printSettlement1.replace("NAQDCount", receiveDataArray[k + 7]);
-                printSettlement1 = printSettlement1.replace("NAQDAmount", receiveDataArray[k + 8]);
-                printSettlement1 = printSettlement1.replace("CADVCount", receiveDataArray[k + 9]);
-                printSettlement1 = printSettlement1.replace("CADVAmount", receiveDataArray[k + 10]);
-                printSettlement1 = printSettlement1.replace("AuthCount", receiveDataArray[k + 11]);
-                printSettlement1 = printSettlement1.replace("AuthAmount", receiveDataArray[k + 12]);
-                k = k + 12;
-                printFinalReport1.append(printSettlement1);
-                printSettlement1 = printSettlment;
+            }
+            else
+            {
+                if (resp[k + 3].equalsIgnoreCase("mada HOST"))
+                {
+                    i = i - 1;
+                    printSettlement = printSettlement.replace("SchemeName", resp[k + 1]);
+                    printSettlement = printSettlement.replace("TransactionAvailableFlag", resp[k + 2]);
+                    printSettlement = printSettlement.replace("SchemeHOST", resp[k + 3]);
+                    printSettlement = printSettlement.replace("TotalDebitCount", resp[k + 4]);
+                    printSettlement = printSettlement.replace("TotalDebitAmount", resp[k + 5]);
+                    printSettlement = printSettlement.replace("TotalCreditCount", resp[k + 6]);
+                    printSettlement = printSettlement.replace("TotalCreditAmount", resp[k + 7]);
+                    printSettlement = printSettlement.replace("NAQDCount", resp[k + 8]);
+                    printSettlement = printSettlement.replace("NAQDAmount", resp[k + 9]);
+                    printSettlement = printSettlement.replace("CADVCount", resp[k + 10]);
+                    printSettlement = printSettlement.replace("CADVAmount", resp[k + 11]);
+                    printSettlement = printSettlement.replace("AuthCount", resp[k + 12]);
+                    printSettlement = printSettlement.replace("AuthAmount", resp[k + 13]);
+                    printSettlement = printSettlement.replace("TotalCount", resp[k + 14]);
+                    printSettlement = printSettlement.replace("TotalAmount", resp[k + 15]);
+                    k = k + 15;
+                    printFinalReport1.append(printSettlement);
+
+                }
+                else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL"))
+                {
+                    i = i - 1;
+                    printSettlementPos=printSettlementPos.replace("TransactionAvailableFlag", resp[k + 1]);
+                    printSettlementPos=printSettlementPos.replace("SchemeName", resp[k + 2]);
+                    printSettlementPos=printSettlementPos.replace("TotalDebitCount", resp[k + 3]);
+                    printSettlementPos=printSettlementPos.replace("TotalDebitAmount", resp[k + 4]);
+                    printSettlementPos=printSettlementPos.replace("TotalCreditCount", resp[k + 5]);
+                    printSettlementPos=printSettlementPos.replace("TotalCreditAmount", resp[k + 6]);
+                    printSettlementPos=printSettlementPos.replace("NAQDCount", resp[k + 7]);
+                    printSettlementPos=printSettlementPos.replace("NAQDAmount", resp[k + 8]);
+                    printSettlementPos=printSettlementPos.replace("CADVCount", resp[k + 9]);
+                    printSettlementPos=printSettlementPos.replace("CADVAmount", resp[k + 10]);
+                    printSettlementPos=printSettlementPos.replace("AuthCount", resp[k + 11]);
+                    printSettlementPos=printSettlementPos.replace("AuthAmount", resp[k + 12]);
+                    printSettlementPos=printSettlementPos.replace("TotalCount", resp[k + 13]);
+                    printSettlementPos=printSettlementPos.replace("TotalAmount", resp[k + 14]);
+                    k = k + 14;
+                    printFinalReport1.append(printSettlementPos);
+                }
+                else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL DETAILS"))
+                {
+                    i = i - 1;
+                    printSettlementPosDetails=printSettlementPosDetails.replace("TransactionAvailableFlag", resp[k + 1]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("SchemeName", resp[k + 2]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("POFFCount", resp[k + 3]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("POFFAmount", resp[k + 4]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("PONCount", resp[k + 5]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("PONAmount", resp[k + 6]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("NAQDCount", resp[k + 7]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("NAQDAmount", resp[k + 8]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("REVERSALCount", resp[k + 9]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("REVERSALAmount", resp[k + 10]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("REFUNDCount", resp[k + 11]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("REFUNDAmount", resp[k + 12]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("COMPCount", resp[k + 13]);
+                    printSettlementPosDetails=printSettlementPosDetails.replace("COMPAmount", resp[k + 14]);
+                    k = k + 14;
+                    printFinalReport1.append(printSettlementPosDetails);
+                }
+                else if(resp[k + 1].equalsIgnoreCase("0"))
+                {
+                    String printSettlementNO1 = "Scheme Name" + "\t" + "\t" + "\t" + ": POS TERMINAL \n" +
+                            "<No Transaction> \n"+
+                            "Scheme Name" + "\t" + "\t" + "\t" + ": POS TERMINAL Details\n" +
+                            "<No Transaction> \n";
+                    k = k + 1;
+                    printFinalReport1.append(printSettlementNO1);
+                }
             }
         }
-        return "Transaction type            : " + receiveDataArray[1] + "\n" +
-                "Response Code              : " + receiveDataArray[2] + "\n" +
-                "Response Message           : " + receiveDataArray[3] + "\n" +
-                "Date Time Stamp           : " + receiveDataArray[4] + "\n" +
-                "Application Version        : " + receiveDataArray[5] + "\n" +
-                "Total Scheme Length        : " + receiveDataArray[6] + "\n" +
-                printFinalReport1 +
-                "ECR Transaction Reference Number: " + receiveDataArray[k + 1] + "\n" +
-                "Signature                  : " + receiveDataArray[k + 2] + "\n";
 
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" +
+                "Date Time Stamp" + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" +
+                "Merchent ID" + "\t" + "\t" + "\t" + ": " + resp[5] + "\n" +
+                "Buss Code" + "\t" + "\t" + "\t" + ": " + resp[6] + "\n" +
+                "Trace Number" + "\t" + "\t" + "\t" + ": " + resp[7] + "\n" +
+                "Application Version" + "\t" + "\t" + ": " + resp[8] + "\n" +
+                "Total Scheme Length" + "\t" + "\t" + ": " + resp[9] + "\n" +
+                printFinalReport1 +
+                "ECR Transaction Reference Number : " + resp[k + 1] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + ": " + resp[k + 2] + "\n";
     }
 
     String printResponseParameterDownload(String[] resp) {
-        return "Transaction type: " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "Date&Time          : " + resp[4] + "\n" +
-                "ECR Transaction Reference Number:" + resp[5] + "\n" +
-                "Signature			:" + resp[6] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" +
+                "Date Time Stamp" + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" +
+                "ECR Transaction Reference Number : " + resp[5] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + ": " + resp[6] + "\n";
     }
 
     String printResponseGetParameter(String[] resp) {
-        return "Transaction type: " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "Date&Time          : " + resp[4] + "\n" +
-                "Vendor ID 			:" + resp[5] + "\n" +
-                "Vendor Terminal type:" + resp[6] + "\n" +
-                "TRSM ID			:" + resp[7] + "\n" +
-                "Vendor Key Index	:" + resp[8] + "\n" +
-                "SAMA Key Index		:" + resp[9] + "\n" +
-                "ECR Transaction Reference Number:" + resp[10] + "\n" +
-                "Signature			:" + resp[11] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" +
+                "Date Time Stamp" + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" +
+                "Vendor ID" + "\t" + "\t" + "\t" + ": " + resp[5] + "\n" +
+                "Vendor Terminal type" + "\t" + "\t" + ": " + resp[6] + "\n" +
+                "TRSM ID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[7] + "\n" +
+                "Vendor Key Index" + "\t" + "\t" + "\t" + ": " + resp[8] + "\n" +
+                "SAMA Key Index" + "\t" + "\t" + "\t" + ": " + resp[9] + "\n" +
+                "ECR Transaction Reference Number : " + resp[10] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + ": " + resp[11] + "\n";
     }
 
 
-    String  printResponseCheckStatus(String[] resp) {
-        return "Transaction type: " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "Date&Time          : " + resp[4] + "\n" +
-                "PreviousTransactionResponse:" + resp[5] + "\n" +
-                "PreviousEcrNo		:" + resp[6] + "\n" +
-                "ECR Transaction Reference Number:" + resp[7] + "\n" +
-                "Signature			:" + resp[8] + "\n";
+    String printResponseRepeat(String[] resp) {
+        return "Transaction type" + resp[1] + "\n" + "Response Code" + resp[2] + "\n"
+                + "Response Message" + resp[3] + "\n" + "Date Time Stamp" + resp[4] + "\n"
+                + "PreviousTransactionResponse:" + resp[5] + "\n" + "PreviousEcrNo		:" + resp[6] + "\n"
+                + "ECR Transaction Reference Number : " + resp[7] + "\n" + "Signature" + resp[8] + "\n";
     }
 
-    String printResponseBillPayment(String[] resp) {
+    public String printResponseDefault(String[] resp) {
         return "Transaction type: " + resp[1] + "\n" +
                 "Response Code      : " + resp[2] + "\n" +
                 "Response Message   : " + resp[3] + "\n";
     }
 
-    public String printResponseDefault(String[] resp) {
-        return "Response Code               : " + resp[2] + "\n" +
-                "Response Message            : " + resp[3] + "\n";
-    }
+    public String printResponsePrintDetailReport(String[] resp) {
 
-    public String printResponsePrintDetailReport(String[] receiveDataArray) {
+        String printSettlementPos = "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" + "Scheme HOST" + "\t" + "\t"
+                + "\t" + ": SchemeHOST \n" + "Transaction Available Flag" + "\t" + "\t"
+                + ": TransactionAvailableFlag \n" + "Total Debit Count" + "\t" + "\t" + "\t" + ": TotalDebitCount \n"
+                + "Total Debit Amount" + "\t" + "\t" + ": TotalDebitAmount \n" + "Total Credit Count" + "\t" + "\t"
+                + "\t" + ": TotalCreditCount \n" + "Total Credit Amount" + "\t" + "\t" + ": TotalCreditAmount \n"
+                + "NAQD Count" + "\t" + "\t" + "\t" + ": NAQDCount \n" + "NAQD Amount" + "\t" + "\t" + "\t"
+                + ": NAQDAmount \n" + "C/ADV Count" + "\t" + "\t" + "\t" + ": CADVCount \n" + "C/ADV Amount" + "\t"
+                + "\t" + "\t" + ": CADVAmount \n" + "Auth Count" + "\t" + "\t" + "\t" + ": AuthCount \n" + "Auth Amount"
+                + "\t" + "\t" + "\t" + ": AuthAmount \n" + "Total Count" + "\t" + "\t" + "\t" + ": TotalCount \n"
+                + "Total Amount" + "\t" + "\t" + "\t" + ": TotalAmount \n";
 
-        String printSettlment = "Transaction Scheme transactionNo\n" +
-                "-------------------- \n" +
-                "Scheme Name                : SchemeName \n" +
+        String printSettlementPosDetails = "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n"
+                + "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" + "P/OFF Count" + "\t" + "\t" + "\t"
+                + ": POFFCount \n" + "P/OFF Amount" + "\t" + "\t" + "\t" + ": POFFAmount \n" + "P/ON Count" + "\t"
+                + "\t" + "\t" + ": PONCount \n" + "P/ON Amount" + "\t" + "\t" + "\t" + ": PONAmount \n" + "NAQD Count"
+                + "\t" + "\t" + "\t" + ": NAQDCount \n" + "NAQD Amount" + "\t" + "\t" + "\t" + ": NAQDAmount \n"
+                + "REVERSAL Count" + "\t" + "\t" + "\t" + ": REVERSALCount \n" + "REVERSAL Amount" + "\t" + "\t"
+                + ": REVERSALAmount \n" + "REFUND Count" + "\t" + "\t" + "\t" + ": REFUNDCount \n" + "REFUND Amount"
+                + "\t" + "\t" + "\t" + ": REFUNDAmount \n" + "COMP Count" + "\t" + "\t" + "\t" + ": COMPCount \n"
+                + "COMP Amount" + "\t" + "\t" + "\t" + ": COMPAmount \n";
 
-                "Transaction Available Flag : TransactionAvailableFlag \n" +
-                "Total Debit Count          : TotalDebitCount \n" +
-                "Total Debit Amount         : TotalDebitAmount \n" +
-                "Total Credit Count         : TotalCreditCount \n" +
-                "Total Credit Amount        : TotalCreditAmount \n" +
-                "NAQD Count                 : NAQDCount \n" +
-                "NAQD Amount                : NAQDAmount \n" +
-                "C/ADV Count                : CADVCount \n" +
-                "C/ADV Amount               : CADVAmount \n" +
-                "Auth Count                 : AuthCount \n" +
-                "Auth Amount                : AuthAmount \n";
-        int k = 6;
         StringBuilder printFinalReport1 = new StringBuilder("");
-        String printSettlment1 = printSettlment;
-        int totalSchemeLength = Integer.parseInt(receiveDataArray[6]);
+        int k = 8;
+        int totalSchemeLength = Integer.parseInt(resp[8]);
         for (int i = 1; i <= totalSchemeLength; i++) {
-            if (receiveDataArray[k + 2].equals("0")) {
-                String printSettlmentNO = "Transaction Scheme " + i + "\n" +
-                        "-------------------- \n" +
-                        "Scheme Name                : " + receiveDataArray[k + 1] + "\n" +
-                        "<No Transaction> \n";
+
+            if (resp[k + 2].equalsIgnoreCase("0")) {
+                String printSettlementNO = "Scheme Name" + "\t" + "\t" + "\t" + ": " + resp[k + 1] + "\n"
+                        + "<No Transaction> \n";
                 k = k + 2;
-                printFinalReport1.append(printSettlmentNO);
-                printSettlment1 = printSettlmentNO;
+                printFinalReport1.append(printSettlementNO);
             } else {
-                printSettlment1 = printSettlment1.replace("transactionNo", String.valueOf(i));
-                printSettlment1 = printSettlment1.replace("SchemeName", receiveDataArray[k + 1]);
-                printSettlment1 = printSettlment1.replace("TransactionAvailableFlag", receiveDataArray[k + 2]);
-                printSettlment1 = printSettlment1.replace("TotalDebitCount", receiveDataArray[k + 3]);
-                printSettlment1 = printSettlment1.replace("TotalDebitAmount", receiveDataArray[k + 4]);
-                printSettlment1 = printSettlment1.replace("TotalCreditCount", receiveDataArray[k + 5]);
-                printSettlment1 = printSettlment1.replace("TotalCreditAmount", receiveDataArray[k + 6]);
-                printSettlment1 = printSettlment1.replace("NAQDCount", receiveDataArray[k + 7]);
-                printSettlment1 = printSettlment1.replace("NAQDAmount", receiveDataArray[k + 8]);
-                printSettlment1 = printSettlment1.replace("CADVCount", receiveDataArray[k + 9]);
-                printSettlment1 = printSettlment1.replace("CADVAmount", receiveDataArray[k + 10]);
-                printSettlment1 = printSettlment1.replace("AuthCount", receiveDataArray[k + 11]);
-                printSettlment1 = printSettlment1.replace("AuthAmount", receiveDataArray[k + 12]);
-                k = k + 12;
-                printFinalReport1.append(printSettlment1);
-                printSettlment1 = printSettlment;
+                if (resp[k + 3].equalsIgnoreCase("POS TERMINAL")) {
+                    printSettlementPos = printSettlementPos.replace("SchemeName", resp[k + 1]);
+                    printSettlementPos = printSettlementPos.replace("TransactionAvailableFlag", resp[k + 2]);
+                    printSettlementPos = printSettlementPos.replace("SchemeHOST", resp[k + 3]);
+                    printSettlementPos = printSettlementPos.replace("TotalDebitCount", resp[k + 4]);
+                    printSettlementPos = printSettlementPos.replace("TotalDebitAmount", resp[k + 5]);
+                    printSettlementPos = printSettlementPos.replace("TotalCreditCount", resp[k + 6]);
+                    printSettlementPos = printSettlementPos.replace("TotalCreditAmount", resp[k + 7]);
+                    printSettlementPos = printSettlementPos.replace("NAQDCount", resp[k + 8]);
+                    printSettlementPos = printSettlementPos.replace("NAQDAmount", resp[k + 9]);
+                    printSettlementPos = printSettlementPos.replace("CADVCount", resp[k + 10]);
+                    printSettlementPos = printSettlementPos.replace("CADVAmount", resp[k + 11]);
+                    printSettlementPos = printSettlementPos.replace("AuthCount", resp[k + 12]);
+                    printSettlementPos = printSettlementPos.replace("AuthAmount", resp[k + 13]);
+                    printSettlementPos = printSettlementPos.replace("TotalCount", resp[k + 14]);
+                    printSettlementPos = printSettlementPos.replace("TotalAmount", resp[k + 15]);
+                    k = k + 15;
+                    printFinalReport1.append(printSettlementPos);
+                } else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL DETAILS")) {
+                    i = i - 1;
+                    printSettlementPosDetails = printSettlementPosDetails.replace("TransactionAvailableFlag",
+                            resp[k + 1]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("SchemeName", resp[k + 2]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("POFFCount", resp[k + 3]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("POFFAmount", resp[k + 4]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("PONCount", resp[k + 5]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("PONAmount", resp[k + 6]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("NAQDCount", resp[k + 7]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("NAQDAmount", resp[k + 8]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("REVERSALCount", resp[k + 9]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("REVERSALAmount", resp[k + 10]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("REFUNDCount", resp[k + 11]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("REFUNDAmount", resp[k + 12]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("COMPCount", resp[k + 13]);
+                    printSettlementPosDetails = printSettlementPosDetails.replace("COMPAmount", resp[k + 14]);
+                    k = k + 14;
+                    printFinalReport1.append(printSettlementPosDetails);
+                }
             }
         }
-        return "Transaction type            : " + receiveDataArray[1] + "\n" +
-                "Response Code              : " + receiveDataArray[2] + "\n" +
-                "Response Message           : " + receiveDataArray[3] + "\n" +
-                "Date Time Stamp           : " + receiveDataArray[4] + "\n" +
-                "Application Version        : " + receiveDataArray[5] + "\n" +
-                "Total Scheme Length        : " + receiveDataArray[6] + "\n" +
-                printFinalReport1 +
-                "ECR Transaction Reference Number: " + receiveDataArray[k + 1] + "\n" +
-                "Signature                  : " + receiveDataArray[k + 2] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" + "Response Code" + "\t" + "\t" + "\t"
+                + ": " + resp[2] + "\n" + "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" + "Date Time Stamp"
+                + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" + "Trace Number" + "\t" + "\t" + "\t" + ": " + resp[5]
+                + "\n" + "Buss Code" + "\t" + "\t" + "\t" + ": " + resp[6] + "\n" + "Application Version" + "\t" + "\t"
+                + ": " + resp[7] + "\n" + "Total Scheme Length" + "\t" + "\t" + ": " + resp[8] + "\n"
+                + printFinalReport1 + "ECR Transaction Reference Number : " + resp[k + 1] + "\n" + "Signature" + "\t"
+                + "\t" + "\t" + ": " + resp[k + 2] + "\n";
+
 
     }
 
-    public String printResponseSummaryReport(String[] receiveDataArray) {
+    public String printResponseSummaryReport(String[] resp) {
 
-        logger.debug("arrayLength>>"+receiveDataArray.length);
+        logger.debug("arrayLength>>"+resp.length);
 
-        String printSummaryReportString1 = "Transaction Number transactionNumberHead\n" + "-------------------- \n"
-                + "Transaction Type            :TransactionType1  \n" + "Date                        :Date1 \n"
-                + "RRN                         :RRN1 \n" + "Transaction Amount          :TransactionAmount1 \n"
-                + "Claim                       :Claim1 \n" + "State                       :State1 \n"
-                + "Time                        :Time1 \n" + "PAN Number                  :PANNumber1 \n"
-                + "authCode                    :authCode1 \n" + "transactionNumber           :transactionNumber1 \n";
-        StringBuilder htmlSummaryReport1 ;
-        String printSummaryReportString = printSummaryReportString1;
-        StringBuilder summaryFinalReport1 = new StringBuilder();
+        String printSummaryReportString = "Transaction transactionNumberHead\n"
+                + "----------------------------------------------------------\n" + "Transaction Type" + "\t" + "\t"
+                + "\t" + ": TransactionType1  \n" + "Date" + "\t" + "\t" + "\t" + "\t" + ": Date1 \n" + "RRN" + "\t"
+                + "\t" + "\t" + "\t" + ": RRN1 \n" + "Transaction Amount" + "\t" + "\t" + ": TransactionAmount1 \n"
+                + "Claim " + "\t" + "\t" + "\t" + "\t" + ": Claim1 \n" + "State" + "\t" + "\t" + "\t" + "\t"
+                + ": State1 \n" + "Time" + "\t" + "\t" + "\t" + "\t" + ": Time1 \n" + "PAN Number" + "\t" + "\t" + "\t"
+                + ": PANNumber1 \n" + "authCode" + "\t" + "\t" + "\t" + ": authCode1 \n" + "transactionNumber" + "\t"
+                + "\t" + ": transactionNumber1 \n" + "----------------------------------------------------------\n";
+        StringBuilder summaryFinalReport1 = new StringBuilder("");
         int k = 7;
-        int transactionsLength = Integer.parseInt(receiveDataArray[6]);
-        logger.debug("transaction Length>>" + transactionsLength);
-
+        int transactionsLength = Integer.parseInt(resp[6]);
         if(transactionsLength > 17) {
             transactionsLength = 17;
         }
-
         for (int a = 1; a <= transactionsLength; a++) {
             printSummaryReportString = printSummaryReportString.replace("transactionNumberHead", String.valueOf(a));
-            printSummaryReportString = printSummaryReportString.replace("TransactionType1", receiveDataArray[k]);
-            printSummaryReportString = printSummaryReportString.replace("Date1", receiveDataArray[k + 1]);
-            printSummaryReportString = printSummaryReportString.replace("RRN1", receiveDataArray[k + 2]);
-            printSummaryReportString = printSummaryReportString.replace("TransactionAmount1", receiveDataArray[k + 3]);
-            printSummaryReportString = printSummaryReportString.replace("Claim1", receiveDataArray[k + 4]);
-            printSummaryReportString = printSummaryReportString.replace("State1", receiveDataArray[k + 5]);
-            printSummaryReportString = printSummaryReportString.replace("Time1", receiveDataArray[k + 6]);
-            printSummaryReportString = printSummaryReportString.replace("PANNumber1",  receiveDataArray[k + 7]);
-            printSummaryReportString = printSummaryReportString.replace("authCode1", receiveDataArray[k + 8]);
-            printSummaryReportString = printSummaryReportString.replace("transactionNumber1", receiveDataArray[k + 9]);
+            printSummaryReportString = printSummaryReportString.replace("TransactionType1", resp[k]);
+            printSummaryReportString = printSummaryReportString.replace("Date1", resp[k + 1]);
+            printSummaryReportString = printSummaryReportString.replace("RRN1", resp[k + 2]);
+            printSummaryReportString = printSummaryReportString.replace("TransactionAmount1", resp[k + 3]);
+            printSummaryReportString = printSummaryReportString.replace("Claim1", resp[k + 4]);
+            printSummaryReportString = printSummaryReportString.replace("State1", resp[k + 5]);
+            printSummaryReportString = printSummaryReportString.replace("Time1", resp[k + 6]);
+            printSummaryReportString = printSummaryReportString.replace("PANNumber1", resp[k + 7]);
+            printSummaryReportString = printSummaryReportString.replace("authCode1", resp[k + 8]);
+            printSummaryReportString = printSummaryReportString.replace("transactionNumber1", resp[k + 9]);
             k = k + 10;
-            htmlSummaryReport1 = new StringBuilder(printSummaryReportString);
-            summaryFinalReport1.append(htmlSummaryReport1.toString());
-            logger.debug("Length" + a + ")  " + htmlSummaryReport1);
-            logger.debug("index"+k);
-            printSummaryReportString = printSummaryReportString1;
+            summaryFinalReport1.append(printSummaryReportString);
         }
-        logger.debug("Final Report>>" + summaryFinalReport1);
-        return "Transaction type            : " + receiveDataArray[1] + "\n" + "Response Code               : "
-                + receiveDataArray[2] + "\n" + "Response Message            : " + receiveDataArray[3] + "\n"
-                + "Date Time Stamp             : " + receiveDataArray[4] + "\n" + "Transaction Requests Count  : "
-                + receiveDataArray[5] + "\n" + "Total Transactions Length   : " + receiveDataArray[6] + "\n"
-                + summaryFinalReport1;/* + "ECR Transaction Reference Number  : " + receiveDataArray[k] + "\n"
-                + "Signature    : " + receiveDataArray[k + 1] + "\n";*/
+
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" + "Response Code" + "\t" + "\t" + "\t"
+                + ": " + resp[2] + "\n" + "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" + "Date Time Stamp"
+                + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" + "Transaction Requests Count" + "\t" + ": " + resp[5]
+                + "\n" + "Total Transactions Length" + "\t" + ": " + resp[6] + "\n" + summaryFinalReport1
+                + "ECR Transaction Reference Number  : " + resp[k] + "\n" + "Signature" + "\t" + "\t" + "\t" + ": "
+                + resp[k + 1] + "\n";
     }
 
     public String printResponseReversal(String[] resp) {
@@ -321,33 +421,44 @@ public class BufferResponseViewModel extends ViewModel {
         } else {
             pan = resp[4];
         }
-        return "Transaction type: " + resp[1] + "\n" +
-                "Response Code      : " + resp[2] + "\n" +
-                "Response Message   : " + resp[3] + "\n" +
-                "PAN Number         : " + pan + "\n" +
-                "Transaction Amount : " + resp[5] + "\n" +
-                "Stan No            : " + resp[6] + "\n" +
-                "Date & Time        : " + resp[7] + "\n" +
-                "Card Exp Date      : " + resp[8] + "\n" +
-                "RRN                : " + resp[9] + "\n" +
-                "Auth Code          : " + resp[10] + "\n" +
-                "TID                : " + resp[11] + "\n" +
-                "MID                : " + resp[12] + "\n" +
-                "Batch No           : " + resp[13] + "\n" +
-                "AID                : " + resp[14] + "\n" +
-                "Application Cryptogram : " + resp[15] + "\n" +
-                "CID                : " + resp[16] + "\n" +
-                "CVR                : " + resp[17] + "\n" +
-                "TVR                : " + resp[18] + "\n" +
-                "TSI                : " + resp[19] + "\n" +
-                "Merchant Category Code : " + resp[20] + "\n" +
-                "Transaction Type   : " + resp[21] + "\n" +
-                "Scheme Label       : " + resp[22] + "\n" +
-                "Store and Cashier Info : " + resp[23] + "\n" +
-                "Product Info       : " + resp[24] + "\n" +
-                "Application Version: " + resp[25] + "\n" +
-                "ECR Transaction Reference Number: " + resp[26] + "\n" +
-                "Signature          : " + resp[27] + "\n";
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" +
+                "PAN Number" + "\t" + "\t" + "\t" + ": " + pan + "\n" +
+                "Transaction Amount" + "\t" + "\t" + ": " + resp[5] + "\n" +
+                "Buss Code" + "\t" + "\t" + "\t" + ": " + resp[6] + "\n" +
+                "Stan No" + "\t" + "\t" + "\t" + "\t" + ": " + resp[7] + "\n" +
+                "Date & Time" + "\t" + "\t" + "\t" + ": " + resp[8] + "\n" +
+                "Card Exp Date" + "\t" + "\t" + "\t" + ": " + resp[9] + "\n" +
+                "RRN" + "\t" + "\t" + "\t" + "\t" + ": " + resp[10] + "\n" +
+                "Auth Code" + "\t" + "\t" + "\t" + ": " + resp[11] + "\n" +
+                "TID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[12] + "\n" +
+                "MID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[13] + "\n" +
+                "Batch No" + "\t" + "\t" + "\t" + ": " + resp[14] + "\n" +
+                "AID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[15] + "\n" +
+                "Application Cryptogram" + "\t" + "\t" + ": " + resp[16] + "\n" +
+                "CID" + "\t" + "\t" + "\t" + "\t" + ": " + resp[17] + "\n" +
+                "CVR" + "\t" + "\t" + "\t" + "\t" + ": " + resp[18] + "\n" +
+                "TVR" + "\t" + "\t" + "\t" + "\t" + ": " + resp[19] + "\n" +
+                "TSI" + "\t" + "\t" + "\t" + "\t" + ": " + resp[20] + "\n" +
+                "Card Entry Mode" + "\t" + "\t" + "\t" + ": " + resp[21] + "\n" +
+                "Merchant Category Code" + "\t" + "\t" + ": " + resp[22] + "\n" +
+                "Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
+                "Scheme Label" + "\t" + "\t" + "\t" + ": " + resp[24] + "\n" +
+                "Store and Cashier Info" + "\t" + "\t" + ": " + resp[25] + "\n" +
+                "Product Info" + "\t" + "\t" + "\t" + ": " + resp[26] + "\n" +
+                "Application Version" + "\t" + "\t" + ": " + resp[27] + "\n" +
+                "ECR Transaction Reference Number" + "\t" + ": " + resp[28] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + ": " + resp[29] + "\n";
+    }
+
+    public  String printResponseCheckStatus(String[] resp) {
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + "\t"+": " + resp[3] + "\n" +
+                "Date Time Stamp" + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" +
+                "ECRTransactionReferenceNo: " + resp[5] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + "\t"+"\t"+": " + resp[6] + "\n";
     }
 
     private String maskPAn(String s) {

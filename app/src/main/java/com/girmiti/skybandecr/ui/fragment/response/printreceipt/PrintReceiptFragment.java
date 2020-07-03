@@ -124,13 +124,13 @@ public class PrintReceiptFragment extends Fragment {
                 return printReceiptViewModel.printReceiptReversal(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "10":
-                return printReceiptViewModel.printReceiptReconcilation(receiveDataArray, Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptReconciliation(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "20":
-                return printReceiptViewModel.printReceiptBillPayment(receiveDataArray,receiveData,Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptBillPayment(receiveDataArray,Objects.requireNonNull(getContext()));
 
             case "11":
-                return printReceiptViewModel.printReceiptParameterDownload(receiveDataArray,receiveData,Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptParameterDownload(receiveDataArray,Objects.requireNonNull(getContext()));
 
             case "21":
                 return printReceiptViewModel.printReceiptPrintDetail(receiveDataArray,Objects.requireNonNull(getContext()));
