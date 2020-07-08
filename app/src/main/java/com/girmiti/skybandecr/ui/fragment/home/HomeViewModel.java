@@ -262,6 +262,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
         int print = TransactionSettingViewModel.getPrint();
+        if(print != 1) {
+            print = 0;
+        }
         String completion = "1";
 
         if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
@@ -279,28 +282,28 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         switch (transactionTypeString) {
             case PURCHASE:
-                reqData = date + ";" + homeFragmentBinding.payAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PURCHASE_CASHBACK:
-                reqData = date + ";" + homeFragmentBinding.payAmt.getText() + ";" + homeFragmentBinding.cashBackAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText()))*100 + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REFUND:
-                reqData = date + ";" + homeFragmentBinding.refundAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.refundAmt.getText()))*100 + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTHORISATION:
-                reqData = date + ";" + homeFragmentBinding.authAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_COMPLETION:
-                reqData = date + ";" + homeFragmentBinding.authAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText()))*100 + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_EXTENSION:
                 reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_VOID:
-                reqData = date + ";" + homeFragmentBinding.origTransactionAmt.getText() + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.origTransactionAmt.getText()))*100 + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case CASH_ADVANCE:
-                reqData = date + ";" + homeFragmentBinding.cashAdvanceAmt.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.cashAdvanceAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REVERSAL:
                 reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + ecrReferenceNo + "!";
@@ -315,7 +318,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 reqData = date + ";" + homeFragmentBinding.terminalLanguage.getText() + ";" + ecrReferenceNo + "!";
                 break;
             case BILL_PAYMENT:
-                reqData = date + ";" + homeFragmentBinding.billPayAmt.getText() + ";" + homeFragmentBinding.billerId.getText() + ";" + homeFragmentBinding.billerNumber.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.billPayAmt.getText()))*100 + ";" + homeFragmentBinding.billerId.getText() + ";" + homeFragmentBinding.billerNumber.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REGISTER:
             case START_SESSION:
@@ -381,7 +384,7 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         logger.debug("FirstApicall length>> " + responseArray.length);
 
-        if (Integer.parseInt(responseArray[1]) == 22 && Integer.parseInt(responseArray[5]) != 0) {
+        if (Double.parseDouble(responseArray[1]) == 22 && Double.parseDouble(responseArray[5]) != 0) {
             responseTemp = new String[terminalResponseString.length() - 2];
             int count = Integer.parseInt(responseArray[5]);
             int m = 1;
@@ -392,9 +395,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             }
 
             if (count > 0) {
-
                 for (int i = 1; i <= count; i++) {
-
                     reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
                     String terminalResponseString1 = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
                     logger.debug("terminal Response Sumarry Report>> " + i + terminalResponseString1);

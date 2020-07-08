@@ -180,7 +180,7 @@ public class BufferResponseFragment extends Fragment {
 
             case "13":
                 if (receiveDataArray.length > 9) {
-                    return bufferResponseViewModel.printResponseGetParameter(receiveDataArray);
+                    return bufferResponseViewModel.printResponseGetSetting(receiveDataArray);
                 } else {
                     return bufferResponseViewModel.printResponseDefault(receiveDataArray);
                 }
@@ -196,7 +196,7 @@ public class BufferResponseFragment extends Fragment {
             case "19":
                     return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
             case "21":
-                return bufferResponseViewModel.printResponsePrintDetailReport(receiveDataArray);
+                return bufferResponseViewModel.printResponseRunningTotal(receiveDataArray);
 
             case "22":
                 return bufferResponseViewModel.printResponseSummaryReport(receiveDataArray);

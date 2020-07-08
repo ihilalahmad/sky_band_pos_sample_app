@@ -27,14 +27,14 @@ public class ECRImpl implements ECRCore {
 
         try {
             ECRImpl.getConnectInstance().doTCPIPConnection(ipAddress, portNumber);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new Exception("3");
         }
         byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
         logger.info("Socket connected");
 
-        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected())                                                       {
+        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
             try {
                 terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
             } catch (IOException e) {
@@ -65,81 +65,81 @@ public class ECRImpl implements ECRCore {
 
     private String changeToTransactionType(String terminalResponse) throws Exception {
         String[] response = terminalResponse.split(";");
-        if(response.length < 2 ) {
+        if (response.length < 2) {
             throw new Exception("3");
         }
         String index1 = response[1];
         switch (response[1]) {
             case "A0":
-                terminalResponse= terminalResponse.replaceFirst("A0", String.valueOf(17));
+                terminalResponse = terminalResponse.replaceFirst("A0", String.valueOf(17));
                 break;
             case "B6":
-                terminalResponse= terminalResponse.replaceFirst("B6", String.valueOf(18));
+                terminalResponse = terminalResponse.replaceFirst("B6", String.valueOf(18));
                 break;
             case "B7":
-                terminalResponse= terminalResponse.replaceFirst("B7", String.valueOf(19));
+                terminalResponse = terminalResponse.replaceFirst("B7", String.valueOf(19));
                 break;
             case "A1":
-                terminalResponse= terminalResponse.replaceFirst("A1", String.valueOf(0));
+                terminalResponse = terminalResponse.replaceFirst("A1", String.valueOf(0));
                 break;
             case "A2":
-                terminalResponse= terminalResponse.replaceFirst("A2", String.valueOf(1));
+                terminalResponse = terminalResponse.replaceFirst("A2", String.valueOf(1));
                 break;
             case "A3":
-                terminalResponse= terminalResponse.replaceFirst("A3", String.valueOf(8));
+                terminalResponse = terminalResponse.replaceFirst("A3", String.valueOf(8));
                 break;
             case "A4":
-                terminalResponse= terminalResponse.replaceFirst("A4", String.valueOf(3));
+                terminalResponse = terminalResponse.replaceFirst("A4", String.valueOf(3));
                 break;
             case "A5":
-                terminalResponse= terminalResponse.replaceFirst("A5", String.valueOf(9));
+                terminalResponse = terminalResponse.replaceFirst("A5", String.valueOf(9));
                 break;
             case "A6":
-                terminalResponse= terminalResponse.replaceFirst("A6", String.valueOf(2));
+                terminalResponse = terminalResponse.replaceFirst("A6", String.valueOf(2));
                 break;
             case "A7":
-                terminalResponse= terminalResponse.replaceFirst("A7", String.valueOf(4));
+                terminalResponse = terminalResponse.replaceFirst("A7", String.valueOf(4));
                 break;
             case "A8":
-                terminalResponse= terminalResponse.replaceFirst("A8", String.valueOf(5));
+                terminalResponse = terminalResponse.replaceFirst("A8", String.valueOf(5));
                 break;
             case "A9":
-                terminalResponse= terminalResponse.replaceFirst("A9", String.valueOf(6));
+                terminalResponse = terminalResponse.replaceFirst("A9", String.valueOf(6));
                 break;
             case "B1":
-                terminalResponse= terminalResponse.replaceFirst("B1", String.valueOf(10));
+                terminalResponse = terminalResponse.replaceFirst("B1", String.valueOf(10));
                 break;
             case "B2":
-                terminalResponse= terminalResponse.replaceFirst("B2", String.valueOf(11));
+                terminalResponse = terminalResponse.replaceFirst("B2", String.valueOf(11));
                 break;
             case "B3":
-                terminalResponse= terminalResponse.replaceFirst("B3", String.valueOf(12));
+                terminalResponse = terminalResponse.replaceFirst("B3", String.valueOf(12));
                 break;
             case "B4":
-                terminalResponse= terminalResponse.replaceFirst("B4", String.valueOf(13));
+                terminalResponse = terminalResponse.replaceFirst("B4", String.valueOf(13));
                 break;
             case "B5":
-                terminalResponse= terminalResponse.replaceFirst("B5", String.valueOf(14));
+                terminalResponse = terminalResponse.replaceFirst("B5", String.valueOf(14));
                 break;
             case "B8":
-                terminalResponse= terminalResponse.replaceFirst("B8", String.valueOf(20));
+                terminalResponse = terminalResponse.replaceFirst("B8", String.valueOf(20));
                 break;
             case "B9":
-                terminalResponse= terminalResponse.replaceFirst("B9", String.valueOf(21));
+                terminalResponse = terminalResponse.replaceFirst("B9", String.valueOf(21));
                 break;
             case "C1":
-                terminalResponse= terminalResponse.replaceFirst("C1", String.valueOf(22));
+                terminalResponse = terminalResponse.replaceFirst("C1", String.valueOf(22));
                 break;
             case "C2":
-                terminalResponse= terminalResponse.replaceFirst("C2", String.valueOf(23));
+                terminalResponse = terminalResponse.replaceFirst("C2", String.valueOf(23));
                 break;
             case "C3":
-                terminalResponse= terminalResponse.replaceFirst("C3", String.valueOf(24));
+                terminalResponse = terminalResponse.replaceFirst("C3", String.valueOf(24));
             case "D1":
-                terminalResponse = terminalResponse.replaceFirst("D1",String.valueOf(30));
+                terminalResponse = terminalResponse.replaceFirst("D1", String.valueOf(30));
                 break;
             default:
-                terminalResponse = terminalResponse.replaceFirst(index1,String.valueOf(40));
+                terminalResponse = terminalResponse.replaceFirst(index1, String.valueOf(40));
                 break;
         }
         return terminalResponse;
