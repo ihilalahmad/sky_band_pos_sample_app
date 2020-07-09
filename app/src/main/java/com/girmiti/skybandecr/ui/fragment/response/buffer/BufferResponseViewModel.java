@@ -38,6 +38,7 @@ public class BufferResponseViewModel extends ViewModel {
                 "TSI" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + ": " + resp[20] + "\n" +
                 "Card Entry Mode" + "\t" + "\t" + "\t" + ": " + resp[21] + "\n" +
                 "Merchant Category Code" + "\t" + "\t" + ": " + resp[22] + "\n" +
+                "Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
                 "Scheme Label" + "\t" + "\t" + "\t" + "\t" + ": " + resp[24] + "\n" +
                 "Store and Cashier Info" + "\t" + "\t" + ": " + resp[25] + "\n" +
                 "Product Info" + "\t" + "\t" + "\t" + "\t" + ": " + resp[26] + "\n" +
@@ -98,7 +99,7 @@ public class BufferResponseViewModel extends ViewModel {
 
     String printResponseReconcilation(String[] resp) {
 
-        String printSettlment =
+        String printSettlment1 =
                 "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" +
                         "Scheme HOST" + "\t" + "\t" + "\t" + ": SchemeHOST \n" +
                         "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n" +
@@ -111,10 +112,10 @@ public class BufferResponseViewModel extends ViewModel {
                         "C/ADV Count" + "\t" + "\t" + "\t" + ": CADVCount \n" +
                         "C/ADV Amount" + "\t" + "\t" + "\t" + ": CADVAmount \n" +
                         "Auth Count" + "\t" + "\t" + "\t" + ": AuthCount \n" +
-                        "Auth Amount" + "\t" + "\t" + "\t" + ": AuthAmount \n"+
+                        "Auth Amount" + "\t" + "\t" + "\t" + ": AuthAmount \n" +
                         "Total Count" + "\t" + "\t" + "\t" + ": TotalCount \n" +
                         "Total Amount" + "\t" + "\t" + "\t" + ": TotalAmount \n";
-        String printSettlmentPos =
+        String printSettlmentPos1 =
                 "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n" +
                         "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" +
                         "Total Debit Count" + "\t" + "\t" + "\t" + ": TotalDebitCount \n" +
@@ -126,10 +127,10 @@ public class BufferResponseViewModel extends ViewModel {
                         "C/ADV Count" + "\t" + "\t" + "\t" + ": CADVCount \n" +
                         "C/ADV Amount" + "\t" + "\t" + "\t" + ": CADVAmount \n" +
                         "Auth Count" + "\t" + "\t" + "\t" + ": TotalCount \n" +
-                        "Auth Amount" + "\t" + "\t" + "\t" + ": AuthAmount \n"+
+                        "Auth Amount" + "\t" + "\t" + "\t" + ": AuthAmount \n" +
                         "Total Count" + "\t" + "\t" + "\t" + ": TotalCount \n" +
                         "Total Amount" + "\t" + "\t" + "\t" + ": TotalAmount \n";
-        String printSettlmentPosDetails =
+        String printSettlmentPosDetails1 =
                 "Transaction Available Flag" + "\t" + "\t" + ": TransactionAvailableFlag \n" +
                         "Scheme Name" + "\t" + "\t" + "\t" + ": SchemeName \n" +
                         "P/OFF Count" + "\t" + "\t" + "\t" + ": POFFCount \n" +
@@ -148,21 +149,17 @@ public class BufferResponseViewModel extends ViewModel {
         StringBuilder printFinalReport1 = new StringBuilder("");
         int k = 9;
         int totalSchemeLength = Integer.parseInt(resp[9]);
-        for (int i = 1; i <= totalSchemeLength; i++)
-        {
+        logger.debug("Sceme length   :" + totalSchemeLength);
+        for (int i = 1; i <= totalSchemeLength; i++) {
 
-            if (resp[k + 2] == "0")
-            {
-                String printSettlmentNO =  "Scheme Name" + "\t" + "\t" + "\t" + ": " + resp[k + 1] + "\n" +
+            if (resp[k + 2].equals("0")) {
+                String printSettlmentNO = "Scheme Name" + "\t" + "\t" + "\t" + ": " + resp[k + 1] + "\n" +
                         "<No Transaction> \n";
                 k = k + 3;
-                StringBuilder printSettlment2 = new StringBuilder(printSettlmentNO);
-                printFinalReport1.append(printSettlment2);
-            }
-            else
-            {
-                if (resp[k + 3].equalsIgnoreCase("mada HOST"))
-                {
+                printFinalReport1.append(printSettlmentNO);
+            } else {
+                String printSettlment = printSettlment1;
+                if (resp[k + 3].equalsIgnoreCase("mada HOST")) {
                     i = i - 1;
                     printSettlment = printSettlment.replace("SchemeName", resp[k + 1]);
                     printSettlment = printSettlment.replace("TransactionAvailableFlag", resp[k + 2]);
@@ -182,56 +179,51 @@ public class BufferResponseViewModel extends ViewModel {
                     k = k + 15;
                     printFinalReport1.append(printSettlment);
 
-                }
-                else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL"))
-                {
+                } else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL")) {
+                   String printSettlmentPos = printSettlmentPos1;
                     i = i - 1;
-                    printSettlmentPos=printSettlmentPos.replace("TransactionAvailableFlag", resp[k + 1]);
-                    printSettlmentPos=printSettlmentPos.replace("SchemeName", resp[k + 2]);
-                    printSettlmentPos=printSettlmentPos.replace("TotalDebitCount", resp[k + 3]);
-                    printSettlmentPos=printSettlmentPos.replace("TotalDebitAmount", resp[k + 4]);
-                    printSettlmentPos=printSettlmentPos.replace("TotalCreditCount", resp[k + 5]);
-                    printSettlmentPos=printSettlmentPos.replace("TotalCreditAmount", resp[k + 6]);
-                    printSettlmentPos=printSettlmentPos.replace("NAQDCount", resp[k + 7]);
-                    printSettlmentPos=printSettlmentPos.replace("NAQDAmount", resp[k + 8]);
-                    printSettlmentPos=printSettlmentPos.replace("CADVCount", resp[k + 9]);
-                    printSettlmentPos=printSettlmentPos.replace("CADVAmount", resp[k + 10]);
-                    printSettlmentPos=printSettlmentPos.replace("AuthCount", resp[k + 11]);
-                    printSettlmentPos=printSettlmentPos.replace("AuthAmount", resp[k + 12]);
-                    printSettlmentPos=printSettlmentPos.replace("TotalCount", resp[k + 13]);
-                    printSettlmentPos=printSettlmentPos.replace("TotalAmount", resp[k + 14]);
+                    printSettlmentPos = printSettlmentPos.replace("TransactionAvailableFlag", resp[k + 1]);
+                    printSettlmentPos = printSettlmentPos.replace("SchemeName", resp[k + 2]);
+                    printSettlmentPos = printSettlmentPos.replace("TotalDebitCount", resp[k + 3]);
+                    printSettlmentPos = printSettlmentPos.replace("TotalDebitAmount", resp[k + 4]);
+                    printSettlmentPos = printSettlmentPos.replace("TotalCreditCount", resp[k + 5]);
+                    printSettlmentPos = printSettlmentPos.replace("TotalCreditAmount", resp[k + 6]);
+                    printSettlmentPos = printSettlmentPos.replace("NAQDCount", resp[k + 7]);
+                    printSettlmentPos = printSettlmentPos.replace("NAQDAmount", resp[k + 8]);
+                    printSettlmentPos = printSettlmentPos.replace("CADVCount", resp[k + 9]);
+                    printSettlmentPos = printSettlmentPos.replace("CADVAmount", resp[k + 10]);
+                    printSettlmentPos = printSettlmentPos.replace("AuthCount", resp[k + 11]);
+                    printSettlmentPos = printSettlmentPos.replace("AuthAmount", resp[k + 12]);
+                    printSettlmentPos = printSettlmentPos.replace("TotalCount", resp[k + 13]);
+                    printSettlmentPos = printSettlmentPos.replace("TotalAmount", resp[k + 14]);
                     k = k + 14;
                     printFinalReport1.append(printSettlmentPos);
-                }
-                else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL DETAILS"))
-                {
+                } else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL DETAILS")) {
+                    String printSettlmentPosDetails = printSettlmentPosDetails1;
                     i = i - 1;
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("TransactionAvailableFlag", resp[k + 1]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("SchemeName", resp[k + 2]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("POFFCount", resp[k + 3]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("POFFAmount", resp[k + 4]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("PONCount", resp[k + 5]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("PONAmount", resp[k + 6]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("NAQDCount", resp[k + 7]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("NAQDAmount", resp[k + 8]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("REVERSALCount", resp[k + 9]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("REVERSALAmount", resp[k + 10]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("REFUNDCount", resp[k + 11]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("REFUNDAmount", resp[k + 12]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("COMPCount", resp[k + 13]);
-                    printSettlmentPosDetails=printSettlmentPosDetails.replace("COMPAmount", resp[k + 14]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("TransactionAvailableFlag", resp[k + 1]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("SchemeName", resp[k + 2]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("POFFCount", resp[k + 3]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("POFFAmount", resp[k + 4]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("PONCount", resp[k + 5]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("PONAmount", resp[k + 6]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("NAQDCount", resp[k + 7]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("NAQDAmount", resp[k + 8]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("REVERSALCount", resp[k + 9]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("REVERSALAmount", resp[k + 10]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("REFUNDCount", resp[k + 11]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("REFUNDAmount", resp[k + 12]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("COMPCount", resp[k + 13]);
+                    printSettlmentPosDetails = printSettlmentPosDetails.replace("COMPAmount", resp[k + 14]);
                     k = k + 14;
                     printFinalReport1.append(printSettlmentPosDetails);
-                }
-                else if(resp[k + 1] == "0")
-                {
+                } else if (resp[k + 1].equals("0")) {
                     String printSettlmentNO1 = "Scheme Name" + "\t" + "\t" + "\t" + ": POS TERMINAL \n" +
-                            "<No Transaction> \n"+
+                            "<No Transaction> \n" +
                             "Scheme Name" + "\t" + "\t" + "\t" + ": POS TERMINAL Details\n" +
                             "<No Transaction> \n";
                     k = k + 1;
-                    StringBuilder printSettlment2 = new StringBuilder(printSettlmentNO1);
-                    printFinalReport1.append(printSettlment2);
+                    printFinalReport1.append(printSettlmentNO1);
                 }
             }
         }
@@ -290,39 +282,41 @@ public class BufferResponseViewModel extends ViewModel {
 
     public String printResponseRunningTotal(String[] resp) {
 
-        String printSettlmentPos = "Scheme Name" + "\t" + "\t" + "\t" +"\t"+ ": SchemeName \n" + "Scheme HOST" + "\t"+ "\t" + "\t"
-                + "\t" + ": SchemeHOST \n" + "Transaction Available Flag"  + "\t"
+        String printSettlmentPos1 = "Scheme Name" + "\t" + "\t" + "\t" + "\t" + ": SchemeName \n" + "Scheme HOST" + "\t" + "\t" + "\t"
+                + "\t" + ": SchemeHOST \n" + "Transaction Available Flag" + "\t"
                 + ": TransactionAvailableFlag \n" + "Total Debit Count" + "\t" + "\t" + "\t" + ": TotalDebitCount \n"
-                + "Total Debit Amount" + "\t" + "\t" +"\t"+ ": TotalDebitAmount \n" + "Total Credit Count" + "\t" + "\t"
+                + "Total Debit Amount" + "\t" + "\t" + "\t" + ": TotalDebitAmount \n" + "Total Credit Count" + "\t" + "\t"
                 + "\t" + ": TotalCreditCount \n" + "Total Credit Amount" + "\t" + "\t" + ": TotalCreditAmount \n"
-                + "NAQD Count" + "\t" +"\t"+ "\t" + "\t" + ": NAQDCount \n" + "NAQD Amount" + "\t" + "\t"+"\t" + "\t"
-                + ": NAQDAmount \n" + "C/ADV Count" + "\t" +"\t"+ "\t" + "\t" + ": CADVCount \n" + "C/ADV Amount" + "\t"
-                + "\t"+"\t" + "\t" + ": CADVAmount \n" + "Auth Count" + "\t"+"\t" + "\t" + "\t" + ": AuthCount \n" + "Auth Amount"
-                + "\t"+"\t" + "\t" + "\t" + ": AuthAmount \n" + "Total Count" +"\t"+ "\t" + "\t" + "\t" + ": TotalCount \n"
-                + "Total Amount" + "\t"+"\t" + "\t" + "\t" + ": TotalAmount \n";
-        String printSettlmentPosDetails = "Transaction Available Flag" +"\t" + ": TransactionAvailableFlag \n"
-                + "Scheme Name" + "\t" + "\t"+"\t" + "\t" + ": SchemeName \n" + "P/OFF Count" + "\t" + "\t"+"\t" + "\t"
-                + ": POFFCount \n" + "P/OFF Amount" + "\t"+"\t" + "\t" + "\t" + ": POFFAmount \n" + "P/ON Count" + "\t"
-                + "\t"+"\t" + "\t" + ": PONCount \n" + "P/ON Amount" + "\t"+"\t" + "\t" + "\t" + ": PONAmount \n" + "NAQD Count"
-                + "\t"+"\t" + "\t" + "\t" + ": NAQDCount \n" + "NAQD Amount" + "\t" +"\t"+ "\t" + "\t" + ": NAQDAmount \n"
-                + "REVERSAL Count" + "\t" + "\t" + "\t" + ": REVERSALCount \n" + "REVERSAL Amount" + "\t"+"\t" + "\t"
-                + ": REVERSALAmount \n" + "REFUND Count" + "\t"+"\t" + "\t" + "\t" + ": REFUNDCount \n" + "REFUND Amount"
-                + "\t" + "\t" + "\t" + ": REFUNDAmount \n" + "COMP Count" + "\t" + "\t"+"\t" + "\t" + ": COMPCount \n"
-                + "COMP Amount" + "\t"+"\t" + "\t" + "\t" + ": COMPAmount \n";
+                + "NAQD Count" + "\t" + "\t" + "\t" + "\t" + ": NAQDCount \n" + "NAQD Amount" + "\t" + "\t" + "\t" + "\t"
+                + ": NAQDAmount \n" + "C/ADV Count" + "\t" + "\t" + "\t" + "\t" + ": CADVCount \n" + "C/ADV Amount" + "\t"
+                + "\t" + "\t" + "\t" + ": CADVAmount \n" + "Auth Count" + "\t" + "\t" + "\t" + "\t" + ": AuthCount \n" + "Auth Amount"
+                + "\t" + "\t" + "\t" + "\t" + ": AuthAmount \n" + "Total Count" + "\t" + "\t" + "\t" + "\t" + ": TotalCount \n"
+                + "Total Amount" + "\t" + "\t" + "\t" + "\t" + ": TotalAmount \n";
+        String printSettlmentPosDetails1 = "Transaction Available Flag" + "\t" + ": TransactionAvailableFlag \n"
+                + "Scheme Name" + "\t" + "\t" + "\t" + "\t" + ": SchemeName \n" + "P/OFF Count" + "\t" + "\t" + "\t" + "\t"
+                + ": POFFCount \n" + "P/OFF Amount" + "\t" + "\t" + "\t" + "\t" + ": POFFAmount \n" + "P/ON Count" + "\t"
+                + "\t" + "\t" + "\t" + ": PONCount \n" + "P/ON Amount" + "\t" + "\t" + "\t" + "\t" + ": PONAmount \n" + "NAQD Count"
+                + "\t" + "\t" + "\t" + "\t" + ": NAQDCount \n" + "NAQD Amount" + "\t" + "\t" + "\t" + "\t" + ": NAQDAmount \n"
+                + "REVERSAL Count" + "\t" + "\t" + "\t" + ": REVERSALCount \n" + "REVERSAL Amount" + "\t" + "\t" + "\t"
+                + ": REVERSALAmount \n" + "REFUND Count" + "\t" + "\t" + "\t" + "\t" + ": REFUNDCount \n" + "REFUND Amount"
+                + "\t" + "\t" + "\t" + ": REFUNDAmount \n" + "COMP Count" + "\t" + "\t" + "\t" + "\t" + ": COMPCount \n"
+                + "COMP Amount" + "\t" + "\t" + "\t" + "\t" + ": COMPAmount \n";
 
         StringBuilder printFinalReport1 = new StringBuilder("");
         int k = 8;
         int totalSchemeLength = Integer.parseInt(resp[8]);
+        logger.debug("Sceme length   :" + totalSchemeLength);
         for (int i = 1; i <= totalSchemeLength; i++) {
 
             if (resp[k + 2].equalsIgnoreCase("0")) {
-                String printSettlmentNO = "Scheme Name" + "\t"+"\t" + "\t" + "\t" + ": " + resp[k + 1] + "\n"
+                String printSettlmentNO = "Scheme Name" + "\t" + "\t" + "\t" + "\t" + ": " + resp[k + 1] + "\n"
                         + "<No Transaction> \n";
                 k = k + 2;
                 StringBuilder printSettlment2 = new StringBuilder(printSettlmentNO);
                 printFinalReport1.append(printSettlment2);
             } else {
                 if (resp[k + 3].equalsIgnoreCase("POS TERMINAL")) {
+                    String printSettlmentPos = printSettlmentPos1;
                     printSettlmentPos = printSettlmentPos.replace("SchemeName", resp[k + 1]);
                     printSettlmentPos = printSettlmentPos.replace("TransactionAvailableFlag", resp[k + 2]);
                     printSettlmentPos = printSettlmentPos.replace("SchemeHOST", resp[k + 3]);
@@ -341,6 +335,7 @@ public class BufferResponseViewModel extends ViewModel {
                     k = k + 15;
                     printFinalReport1.append(printSettlmentPos);
                 } else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL DETAILS")) {
+                    String printSettlmentPosDetails = printSettlmentPosDetails1;
                     i = i - 1;
                     printSettlmentPosDetails = printSettlmentPosDetails.replace("TransactionAvailableFlag",
                             resp[k + 1]);
@@ -363,19 +358,19 @@ public class BufferResponseViewModel extends ViewModel {
             }
         }
         return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" + "Response Code" + "\t" + "\t" + "\t"
-                + ": " + resp[2] + "\n" + "Response Message" + "\t" + "\t" +"\t"+ ": " + resp[3] + "\n" + "Date Time Stamp"
-                + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" + "Trace Number" + "\t" + "\t" + "\t" +"\t"+ ": " + resp[5]
-                + "\n" + "Buss Code" + "\t" + "\t" + "\t" +"\t"+ ": " + resp[6] + "\n" + "Application Version" + "\t"+"\t" + "\t"
+                + ": " + resp[2] + "\n" + "Response Message" + "\t" + "\t" + "\t" + ": " + resp[3] + "\n" + "Date Time Stamp"
+                + "\t" + "\t" + "\t" + ": " + resp[4] + "\n" + "Trace Number" + "\t" + "\t" + "\t" + "\t" + ": " + resp[5]
+                + "\n" + "Buss Code" + "\t" + "\t" + "\t" + "\t" + ": " + resp[6] + "\n" + "Application Version" + "\t" + "\t" + "\t"
                 + ": " + resp[7] + "\n" + "Total Scheme Length" + "\t" + "\t" + ": " + resp[8] + "\n"
                 + printFinalReport1 + "ECRTransaction ReferenceNo: " + resp[k + 1] + "\n" + "Signature" + "\t"
-                + "\t" + "\t" +"\t"+"\t"+ ": " + resp[k + 2] + "\n";
+                + "\t" + "\t" + "\t" + "\t" + ": " + resp[k + 2] + "\n";
     }
 
     public String printResponseSummaryReport(String[] resp) {
 
-        logger.debug("arrayLength>>"+resp.length);
+        logger.debug("arrayLength>>" + resp.length);
 
-        String printSummaryReportString = "Transaction transactionNumberHead\n"
+        String printSummaryReportString1 = "Transaction transactionNumberHead\n"
                 + "----------------------------------------------------------\n" + "Transaction Type" + "\t" + "\t"
                 + "\t" + ": TransactionType1  \n" + "Date" + "\t" + "\t" + "\t" + "\t" + ": Date1 \n" + "RRN" + "\t"
                 + "\t" + "\t" + "\t" + ": RRN1 \n" + "Transaction Amount" + "\t" + "\t" + ": TransactionAmount1 \n"
@@ -390,6 +385,7 @@ public class BufferResponseViewModel extends ViewModel {
             transactionsLength = 17;
         }
         for (int a = 1; a <= transactionsLength; a++) {
+            String printSummaryReportString = printSummaryReportString1;
             printSummaryReportString = printSummaryReportString.replace("transactionNumberHead", String.valueOf(a));
             printSummaryReportString = printSummaryReportString.replace("TransactionType1", resp[k]);
             printSummaryReportString = printSummaryReportString.replace("Date1", resp[k + 1]);

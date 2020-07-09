@@ -530,7 +530,7 @@ public class PrintReceiptViewModel extends ViewModel {
             is = context.getResources().getAssets().open("printReceipt/PosTable.html");
             summaryHtmlString = getHtmlString(is);
 
-            is = context.getResources().getAssets().open("printReceipt/madaHostTable.html");
+            is = context.getResources().getAssets().open("printReceipt/MadaHostTable.html");
             madaHostTable = getHtmlString(is);
 
             is = context.getResources().getAssets().open("printReceipt/PosTerminalDetails.html");
@@ -721,13 +721,13 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
             htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID());
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
+            htmlString = htmlString.replace("responseCode", receiveDataArray[2]);
         }
         return htmlString;
     }
 
     @SuppressLint("DefaultLocale")
-    public String printReceiptPrintDetail(String[] receiveDataArray, Context context) throws IOException {
+    public String printReceiptRunningTotal(String[] receiveDataArray, Context context) throws IOException {
 
         String posTableRunning = "";
         String posTerminalDetails = "";
@@ -830,13 +830,14 @@ public class PrintReceiptViewModel extends ViewModel {
         return htmlString;
     }
 
+    @SuppressLint("DefaultLocale")
     public String printReceiptPrintSummary(String[] receiveDataArray, Context context) throws IOException {
 
         InputStream is;
         String htmlString = "";
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         String summaryHtmlString = "";
-        String summaryFinalReport = "";
+        StringBuilder summaryFinalReport = new StringBuilder();
 
 
         is = context.getResources().getAssets().open("printReceipt/Summary_Report.html");
@@ -847,13 +848,13 @@ public class PrintReceiptViewModel extends ViewModel {
 
         String htmlSummaryReport = summaryHtmlString;
 
-
         String respDateTime = receiveDataArray[4];
-
-        String currentDate = respDateTime.substring(2, 4) + " / " + respDateTime.substring(0, 2) + " / " + date;
-        String currentTime = respDateTime.substring(4, 6) + " :" + respDateTime.substring(6, 8) + " : " + respDateTime.substring(8, 10);
+        String currentDate = respDateTime.substring(2, 4) + " / "
+                + respDateTime.substring(0, 2) + "/" + date;
+        String currentTime = respDateTime.substring(4,6) + ":" + respDateTime.substring(6, 8) + ":" + respDateTime.substring(8, 10);
 
         int j = 7;
+
         int transactionsLength = Integer.parseInt(receiveDataArray[6]);
 
         if (transactionsLength > 17) {
@@ -862,12 +863,17 @@ public class PrintReceiptViewModel extends ViewModel {
 
         for (int i = 1; i <= transactionsLength; i++) {
             String date1 = receiveDataArray[j + 1];
-            date1 = date1.substring(2, 4) + " - " + respDateTime.substring(0, 2) + " - " + date;
+
+            date1 = date1.substring(0, 2) + "-" + date1.substring(2, 4) + "-" + date1.substring(4, 6);
             String time = receiveDataArray[j + 6];
+
+            time = time.substring(0, 2) + ":" + time.substring(2, 4);
+
             htmlSummaryReport = htmlSummaryReport.replace("transactionType", receiveDataArray[j]);
             htmlSummaryReport = htmlSummaryReport.replace("transactionDate", date1);
             htmlSummaryReport = htmlSummaryReport.replace("transactionRRN", receiveDataArray[j + 2]);
-            htmlSummaryReport = htmlSummaryReport.replace("transactionAmount", receiveDataArray[j + 3]);
+            htmlSummaryReport = htmlSummaryReport.replace("transactionAmount",
+                    String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 3]))));
             htmlSummaryReport = htmlSummaryReport.replace("Claim1", receiveDataArray[j + 4]);
             htmlSummaryReport = htmlSummaryReport.replace("transactionState", receiveDataArray[j + 5]);
             htmlSummaryReport = htmlSummaryReport.replace("transactionTime", time);
@@ -875,11 +881,11 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlSummaryReport = htmlSummaryReport.replace("authCode", receiveDataArray[j + 8]);
             htmlSummaryReport = htmlSummaryReport.replace("transactionNumber", receiveDataArray[j + 9]);
             j = j + 10;
-            summaryFinalReport += htmlSummaryReport;
+            summaryFinalReport.append(htmlSummaryReport);
             htmlSummaryReport = summaryHtmlString;
         }
 
-        htmlString = htmlString.replace("no_Transaction", summaryFinalReport);
+        htmlString = htmlString.replace("no_Transaction", summaryFinalReport.toString());
         htmlString = htmlString.replace("currentTime", currentTime);
         htmlString = htmlString.replace("currentDate", currentDate);
         htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID());
@@ -937,23 +943,16 @@ public class PrintReceiptViewModel extends ViewModel {
         return str;
     }
 
-    public static String numToArabicConverter(String num) {
-        StringBuilder arabic = new StringBuilder();
-        char[] numChar = num.toCharArray();
-        char[] arabicChar = { '۰', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩' };
-        for (char temp : numChar) {
-            String temp1 = String.valueOf(temp);
-            if (temp1.equals(".")) {
-                arabic.append(".");
-            }
-            for (int j = 0; j < arabicChar.length; j++) {
-                String tempj = String.valueOf(j);
-                if (tempj.equals(temp1)) {
-                    arabic.append(arabicChar[j]);
-                }
-            }
+    public static String numToArabicConverter(String num)
+    {
+        int  arabic_zero_unicode= 1632;
+        StringBuilder builder = new StringBuilder();
+
+        for(int i =0; i < num.length(); ++i ) {
+            builder.append((char)((int)num.charAt(i) - 48 + arabic_zero_unicode));
         }
-        return arabic.toString();
+        return builder.toString();
+
     }
 
     private String maskPAn(String s) {
