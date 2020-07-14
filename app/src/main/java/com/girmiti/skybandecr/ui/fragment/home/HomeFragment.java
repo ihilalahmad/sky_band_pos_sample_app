@@ -3,6 +3,7 @@ package com.girmiti.skybandecr.ui.fragment.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -128,13 +129,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View v) {
 
-                homeViewModel.setReqData(selectedItem, getContext());
-                logger.info(getClass() + getString(R.string.request_data_set));
-
                 boolean validated = false;
 
                 try {
-                    validated = homeViewModel.validateData();
+                    validated = homeViewModel.validateData(selectedItem, getContext());
                 } catch (Exception e) {
                     logger.severe("Exception on validating", e);
                     Toast.makeText(getActivity(), e.getMessage() + "", Toast.LENGTH_LONG).show();
@@ -146,6 +144,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     Toast.makeText(getActivity(), R.string.invalid_input, Toast.LENGTH_LONG).show();
                     return;
                 }
+
+                homeViewModel.setReqData(selectedItem, getContext());
+                logger.info(getClass() + getString(R.string.request_data_set));
+
                 if (Objects.equals(generalParamCache.getString(CONNECTION_STATUS), CONNECTED)) {
 
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);

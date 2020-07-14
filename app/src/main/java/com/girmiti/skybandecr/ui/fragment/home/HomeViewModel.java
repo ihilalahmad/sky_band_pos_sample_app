@@ -267,19 +267,6 @@ public class HomeViewModel extends ViewModel implements Constant {
         }
         String completion = "1";
 
-        if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
-            GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
-        }
-
-        if (ecrSelected == ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
-            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
-        } else {
-            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(ECR_NUMBER);
-        }
-
-        logger.debug(getClass() + ":: Ecr refrence no>>" + ecrReferenceNo);
-        logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
-
         switch (transactionTypeString) {
             case PURCHASE:
                 reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
@@ -444,13 +431,28 @@ public class HomeViewModel extends ViewModel implements Constant {
         return resultSHA;
     }
 
-    public boolean validateData() throws Exception {
+    public boolean validateData(String selectedItem, Context context) throws Exception {
 
         if (transactionTypeString != TransactionType.REGISTER && !ActiveTxnData.getInstance().isRegistered()) {
             throw new Exception("Please Register First");
         } else if (transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && !ActiveTxnData.getInstance().isSessionStarted()) {
             throw new Exception("Please Start Session");
         }
+
+
+        if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
+            GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
+        }
+
+        if (ecrSelected == ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
+            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
+        } else {
+            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(ECR_NUMBER);
+        }
+
+        logger.debug(getClass() + ":: Ecr refrence no>>" + ecrReferenceNo);
+        logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
+
 
         switch (transactionTypeString) {
             case PURCHASE:
