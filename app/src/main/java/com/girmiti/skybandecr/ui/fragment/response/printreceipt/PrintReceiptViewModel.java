@@ -18,6 +18,17 @@ public class PrintReceiptViewModel extends ViewModel {
 
     private Logger logger = Logger.getNewLogger(PrintReceiptViewModel.class.getName());
 
+    public static String numToArabicConverter(String num) {
+        int arabic_zero_unicode = 1632;
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < num.length(); ++i) {
+            builder.append((char) ((int) num.charAt(i) - 48 + arabic_zero_unicode));
+        }
+        return builder.toString();
+
+    }
+
     @SuppressLint("DefaultLocale")
     public String printReceiptPurchase(String[] receiveDataArray, Context context) throws IOException {
 
@@ -38,6 +49,9 @@ public class PrintReceiptViewModel extends ViewModel {
                 pan = maskPAn(receiveDataArray[4]);
             } else {
                 pan = receiveDataArray[4];
+            }
+            if (receiveDataArray[21].equalsIgnoreCase("CONTACTLESS") && amount >= 5.0) {
+                htmlString = htmlString.replace("No Verification Required", "CARD HOLDER PIN VERIFIED");
             }
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
@@ -101,6 +115,9 @@ public class PrintReceiptViewModel extends ViewModel {
             } else {
                 pan = receiveDataArray[4];
             }
+            if (receiveDataArray[23].equalsIgnoreCase("CONTACTLESS") && transactionAmount >= 5.0) {
+                htmlString = htmlString.replace("No Verification Required", "CARD HOLDER PIN VERIFIED");
+            }
             String receiveDataArrayDateTime = receiveDataArray[10];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -159,6 +176,9 @@ public class PrintReceiptViewModel extends ViewModel {
             String expiryDate = receiveDataArray[9];
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
+            }
+            if (receiveDataArray[21].equalsIgnoreCase("CONTACTLESS") && amount >= 5.0) {
+                htmlString = htmlString.replace("No Verification Required", "CARD HOLDER PIN VERIFIED");
             }
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
@@ -527,15 +547,6 @@ public class PrintReceiptViewModel extends ViewModel {
             is = context.getResources().getAssets().open("printReceipt/Reconcilation.html");
             htmlString = getHtmlString(is);
 
-            is = context.getResources().getAssets().open("printReceipt/PosTable.html");
-            summaryHtmlString = getHtmlString(is);
-
-            is = context.getResources().getAssets().open("printReceipt/MadaHostTable.html");
-            madaHostTable = getHtmlString(is);
-
-            is = context.getResources().getAssets().open("printReceipt/PosTerminalDetails.html");
-            posTerminalDetails = getHtmlString(is);
-
             String respDateTime = receiveDataArray[4];
             String currentDate = respDateTime.substring(2, 4) + " / "
                     + respDateTime.substring(0, 2) + " / " + date;
@@ -546,7 +557,7 @@ public class PrintReceiptViewModel extends ViewModel {
             int totalSchemeLengthL = Integer.parseInt(receiveDataArray[9]);
             for (int j = 1; j <= totalSchemeLengthL; j++) {
 
-                if (receiveDataArray[b + 2].equals("0")) {
+                if (receiveDataArray[b + 2].equalsIgnoreCase("0")) {
 
                     is = context.getResources().getAssets().open("printReceipt/ReconcilationTable.html");
                     reconcilationTable = getHtmlString(is);
@@ -558,6 +569,8 @@ public class PrintReceiptViewModel extends ViewModel {
                     b = b + 3;
                     summaryFinalReport.append(reconcilationTable);
                 } else {
+                    is = context.getResources().getAssets().open("printReceipt/MadaHostTable.html");
+                    madaHostTable = getHtmlString(is);
                     if (receiveDataArray[b + 3].equalsIgnoreCase("mada Host")) {
                         j = j - 1;
                         String arabic = checkingArabic(receiveDataArray[b + 1]);
@@ -586,6 +599,9 @@ public class PrintReceiptViewModel extends ViewModel {
                         summaryFinalReport.append(madaHostTable);
                     } else if (receiveDataArray[b + 2].equalsIgnoreCase("POS TERMINAL")) {
                         j = j - 1;
+                        is = context.getResources().getAssets().open("printReceipt/PosTable.html");
+                        summaryHtmlString = getHtmlString(is);
+
                         summaryHtmlString = summaryHtmlString.replace("totalDBCount", receiveDataArray[b + 3]);
                         summaryHtmlString = summaryHtmlString.replace("totalDBAmount",
                                 String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 4])) / 100));
@@ -608,6 +624,9 @@ public class PrintReceiptViewModel extends ViewModel {
                         summaryFinalReport.append(summaryHtmlString);
                     } else if (receiveDataArray[b + 2].equalsIgnoreCase("POS TERMINAL DETAILS")) {
                         j = j - 1;
+                        is = context.getResources().getAssets().open("printReceipt/PosTerminalDetails.html");
+                        posTerminalDetails = getHtmlString(is);
+
                         posTerminalDetails = posTerminalDetails.replace("totalDBCount", receiveDataArray[b + 3]);
                         posTerminalDetails = posTerminalDetails.replace("totalDBAmount",
                                 String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 4])) / 100));
@@ -647,8 +666,10 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("currentDate", currentDate);
             htmlString = htmlString.replace("AppVersion", receiveDataArray[8]);
             htmlString = htmlString.replace("TerminalId", ActiveTxnData.getInstance().getTerminalID());
+
+            return htmlString;
         }
-        return htmlString;
+        return null;
     }
 
     @SuppressLint("DefaultLocale")
@@ -851,7 +872,7 @@ public class PrintReceiptViewModel extends ViewModel {
         String respDateTime = receiveDataArray[4];
         String currentDate = respDateTime.substring(2, 4) + " / "
                 + respDateTime.substring(0, 2) + "/" + date;
-        String currentTime = respDateTime.substring(4,6) + ":" + respDateTime.substring(6, 8) + ":" + respDateTime.substring(8, 10);
+        String currentTime = respDateTime.substring(4, 6) + ":" + respDateTime.substring(6, 8) + ":" + respDateTime.substring(8, 10);
 
         int j = 7;
 
@@ -941,18 +962,6 @@ public class PrintReceiptViewModel extends ViewModel {
         String str = new String(buffer);
         logger.debug(getClass() + "LoadedHtml>>" + str);
         return str;
-    }
-
-    public static String numToArabicConverter(String num)
-    {
-        int  arabic_zero_unicode= 1632;
-        StringBuilder builder = new StringBuilder();
-
-        for(int i =0; i < num.length(); ++i ) {
-            builder.append((char)((int)num.charAt(i) - 48 + arabic_zero_unicode));
-        }
-        return builder.toString();
-
     }
 
     private String maskPAn(String s) {

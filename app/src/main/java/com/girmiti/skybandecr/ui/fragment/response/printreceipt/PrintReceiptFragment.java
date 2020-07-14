@@ -70,7 +70,7 @@ public class PrintReceiptFragment extends Fragment {
         logger.debug(getClass() + "::" + "GetRespData>>> " + receiveData);
         String[] receiveDataArray = receiveData.split(";");
         logger.debug(getClass() + "Received Data Array>>" + receiveDataArray);
-        if(receiveDataArray[1].equals("23") && (receiveDataArray.length > 15)){
+        if (receiveDataArray[1].equals("23") && (receiveDataArray.length > 15)) {
             receiveDataArray = ActiveTxnData.getInstance().getReplacedArray();
         }
         String replacedHtmlString = getPrintReceipt(receiveDataArray);
@@ -127,16 +127,16 @@ public class PrintReceiptFragment extends Fragment {
                 return printReceiptViewModel.printReceiptReconciliation(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "20":
-                return printReceiptViewModel.printReceiptBillPayment(receiveDataArray,Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptBillPayment(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "11":
-                return printReceiptViewModel.printReceiptParameterDownload(receiveDataArray,Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptParameterDownload(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "21":
-                return printReceiptViewModel.printReceiptRunningTotal(receiveDataArray,Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptRunningTotal(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "22":
-                return printReceiptViewModel.printReceiptPrintSummary(receiveDataArray,Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptPrintSummary(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "12":
             case "14":

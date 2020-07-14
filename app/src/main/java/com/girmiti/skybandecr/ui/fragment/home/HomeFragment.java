@@ -3,7 +3,6 @@ package com.girmiti.skybandecr.ui.fragment.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -237,7 +236,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         homeViewModel.resetVisibilityOfViews(homeFragmentBinding);
         homeViewModel.getVisibilityOfViews(selectedItem);
-    };
+    }
+
+    ;
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

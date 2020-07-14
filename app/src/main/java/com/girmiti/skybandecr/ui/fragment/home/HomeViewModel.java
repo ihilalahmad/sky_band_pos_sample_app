@@ -262,35 +262,35 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         date = new SimpleDateFormat("ddMMyyhhmmss", Locale.getDefault()).format(new Date());
         int print = TransactionSettingViewModel.getPrint();
-        if(print != 1) {
+        if (print != 1) {
             print = 0;
         }
         String completion = "1";
 
         switch (transactionTypeString) {
             case PURCHASE:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PURCHASE_CASHBACK:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText()))*100 + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText()))) * 100 + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REFUND:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.refundAmt.getText()))*100 + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.refundAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTHORISATION:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_COMPLETION:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText()))*100 + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_EXTENSION:
                 reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_VOID:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.origTransactionAmt.getText()))*100 + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.origTransactionAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case CASH_ADVANCE:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.cashAdvanceAmt.getText()))*100 + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.cashAdvanceAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REVERSAL:
                 reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + ecrReferenceNo + "!";
@@ -305,7 +305,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 reqData = date + ";" + homeFragmentBinding.terminalLanguage.getText() + ";" + ecrReferenceNo + "!";
                 break;
             case BILL_PAYMENT:
-                reqData = date + ";" + Double.parseDouble(String.valueOf(homeFragmentBinding.billPayAmt.getText()))*100 + ";" + homeFragmentBinding.billerId.getText() + ";" + homeFragmentBinding.billerNumber.getText() + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.billPayAmt.getText())) * 100) + ";" + homeFragmentBinding.billerId.getText() + ";" + homeFragmentBinding.billerNumber.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REGISTER:
             case START_SESSION:
@@ -330,7 +330,7 @@ public class HomeViewModel extends ViewModel implements Constant {
                 reqData = date + ";" + ecrReferenceNo + "!";
                 break;
         }
-
+        logger.debug("req data" + reqData);
         // save to active txn cache
         ActiveTxnData.getInstance().setReqData(reqData);
         ActiveTxnData.getInstance().setTransactionType(transactionTypeString);
@@ -433,12 +433,12 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     public boolean validateData(String selectedItem, Context context) throws Exception {
 
-        if (transactionTypeString != TransactionType.REGISTER && !ActiveTxnData.getInstance().isRegistered()) {
+     /*   if (transactionTypeString != TransactionType.REGISTER && !ActiveTxnData.getInstance().isRegistered()) {
             throw new Exception("Please Register First");
         } else if (transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && !ActiveTxnData.getInstance().isSessionStarted()) {
             throw new Exception("Please Start Session");
         }
-
+*/
 
         if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
             GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));

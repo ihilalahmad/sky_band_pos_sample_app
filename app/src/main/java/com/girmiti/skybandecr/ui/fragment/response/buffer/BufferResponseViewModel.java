@@ -38,7 +38,7 @@ public class BufferResponseViewModel extends ViewModel {
                 "TSI" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + ": " + resp[20] + "\n" +
                 "Card Entry Mode" + "\t" + "\t" + "\t" + ": " + resp[21] + "\n" +
                 "Merchant Category Code" + "\t" + "\t" + ": " + resp[22] + "\n" +
-                "Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
+                "Terminal Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
                 "Scheme Label" + "\t" + "\t" + "\t" + "\t" + ": " + resp[24] + "\n" +
                 "Store and Cashier Info" + "\t" + "\t" + ": " + resp[25] + "\n" +
                 "Product Info" + "\t" + "\t" + "\t" + "\t" + ": " + resp[26] + "\n" +
@@ -180,7 +180,7 @@ public class BufferResponseViewModel extends ViewModel {
                     printFinalReport1.append(printSettlment);
 
                 } else if (resp[k + 2].equalsIgnoreCase("POS TERMINAL")) {
-                   String printSettlmentPos = printSettlmentPos1;
+                    String printSettlmentPos = printSettlmentPos1;
                     i = i - 1;
                     printSettlmentPos = printSettlmentPos.replace("TransactionAvailableFlag", resp[k + 1]);
                     printSettlmentPos = printSettlmentPos.replace("SchemeName", resp[k + 2]);
@@ -280,6 +280,11 @@ public class BufferResponseViewModel extends ViewModel {
                 "Response Message   : " + resp[3] + "\n";
     }
 
+    public String printResponseOtherTransaction(String[] resp) {
+        return "Response Code      : " + resp[2] + "\n" +
+                "Response Message   : " + resp[3] + "\n";
+    }
+
     public String printResponseRunningTotal(String[] resp) {
 
         String printSettlmentPos1 = "Scheme Name" + "\t" + "\t" + "\t" + "\t" + ": SchemeName \n" + "Scheme HOST" + "\t" + "\t" + "\t"
@@ -366,6 +371,14 @@ public class BufferResponseViewModel extends ViewModel {
                 + "\t" + "\t" + "\t" + "\t" + ": " + resp[k + 2] + "\n";
     }
 
+    public String printResponseRunningTotalDefault(String[] resp) {
+        return "Transaction type" + "\t" + "\t" + "\t" + ": " + resp[1] + "\n" +
+                "Response Code" + "\t" + "\t" + "\t" + ": " + resp[2] + "\n" +
+                "Response Message" + "\t" + "\t" + ": " + resp[3] + "\n" +
+                "ECR Transaction Reference Number : " + resp[4] + "\n" +
+                "Signature" + "\t" + "\t" + "\t" + ": " + resp[5] + "\n";
+    }
+
     public String printResponseSummaryReport(String[] resp) {
 
         logger.debug("arrayLength>>" + resp.length);
@@ -438,6 +451,7 @@ public class BufferResponseViewModel extends ViewModel {
                 "TSI" + "\t" + "\t" + "\t" + "\t" + ": " + resp[20] + "\n" +
                 "Card Entry Mode" + "\t" + "\t" + "\t" + ": " + resp[21] + "\n" +
                 "Merchant Category Code" + "\t" + "\t" + ": " + resp[22] + "\n" +
+                "Terminal Transaction Type" + "\t" + "\t" + "\t" + ": " + resp[23] + "\n" +
                 "Scheme Label" + "\t" + "\t" + "\t" + ": " + resp[24] + "\n" +
                 "Store and Cashier Info" + "\t" + "\t" + ": " + resp[25] + "\n" +
                 "Product Info" + "\t" + "\t" + "\t" + ": " + resp[26] + "\n" +

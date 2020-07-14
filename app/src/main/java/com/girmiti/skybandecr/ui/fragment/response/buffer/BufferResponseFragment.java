@@ -101,7 +101,7 @@ public class BufferResponseFragment extends Fragment {
                 bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                 break;
             case "23":
-                if(receiveDataArray.length > 11) {
+                if (receiveDataArray.length > 11) {
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                 } else {
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
@@ -194,9 +194,14 @@ public class BufferResponseFragment extends Fragment {
 
             case "18":
             case "19":
-                    return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
+                return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
             case "21":
-                return bufferResponseViewModel.printResponseRunningTotal(receiveDataArray);
+
+                if (Integer.parseInt(receiveDataArray[2]) == 0) {
+                    return bufferResponseViewModel.printResponseRunningTotal(receiveDataArray);
+                } else {
+                    return bufferResponseViewModel.printResponseRunningTotalDefault(receiveDataArray);
+                }
 
             case "22":
                 return bufferResponseViewModel.printResponseSummaryReport(receiveDataArray);
@@ -205,8 +210,7 @@ public class BufferResponseFragment extends Fragment {
                 if (receiveDataArray.length > 11) {
                     String[] separateResponse = new String[receiveData.length()];
                     int j = 1;
-                    for (int i = 5; i < receiveDataArray.length - 3; i++)
-                    {
+                    for (int i = 5; i < receiveDataArray.length - 3; i++) {
                         separateResponse[j] = receiveDataArray[i];
                         j = j + 1;
                     }
@@ -218,10 +222,10 @@ public class BufferResponseFragment extends Fragment {
                 }
 
             case "24":
-                if(receiveDataArray.length > 5)
-                return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
+                if (receiveDataArray.length > 5)
+                    return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
             default:
-                return bufferResponseViewModel.printResponseDefault(receiveDataArray);
+                return bufferResponseViewModel.printResponseOtherTransaction(receiveDataArray);
         }
     }
 
@@ -229,76 +233,76 @@ public class BufferResponseFragment extends Fragment {
 
         switch (terminalResponse[1]) {
             case "A0":
-                terminalResponse[1] =  "17";
+                terminalResponse[1] = "17";
                 break;
             case "B6":
-                terminalResponse[1] =  "18";
+                terminalResponse[1] = "18";
                 break;
             case "B7":
-                terminalResponse[1] =  "19";
+                terminalResponse[1] = "19";
                 break;
             case "A1":
-                terminalResponse[1] =  "0";
+                terminalResponse[1] = "0";
                 break;
             case "A2":
-                terminalResponse[1] =  "1";
+                terminalResponse[1] = "1";
                 break;
             case "A3":
-                terminalResponse[1] =  "8";
+                terminalResponse[1] = "8";
                 break;
             case "A4":
-                terminalResponse[1] =  "3";
+                terminalResponse[1] = "3";
                 break;
             case "A5":
-                terminalResponse[1] =  "9";
+                terminalResponse[1] = "9";
                 break;
             case "A6":
-                terminalResponse[1] =  "2";
+                terminalResponse[1] = "2";
                 break;
             case "A7":
-                terminalResponse[1] =  "4";
+                terminalResponse[1] = "4";
                 break;
             case "A8":
-                terminalResponse[1] =  "5";
+                terminalResponse[1] = "5";
                 break;
             case "A9":
-                terminalResponse[1] =  "6";
+                terminalResponse[1] = "6";
                 break;
             case "B1":
-                terminalResponse[1] =  "10";
+                terminalResponse[1] = "10";
                 break;
             case "B2":
-                terminalResponse[1] =  "11";
+                terminalResponse[1] = "11";
                 break;
             case "B3":
-                terminalResponse[1] =  "12";
+                terminalResponse[1] = "12";
                 break;
             case "B4":
-                terminalResponse[1] =  "13";
+                terminalResponse[1] = "13";
                 break;
             case "B5":
-                terminalResponse[1] =  "14";
+                terminalResponse[1] = "14";
                 break;
             case "B8":
-                terminalResponse[1] =  "20";
+                terminalResponse[1] = "20";
                 break;
             case "B9":
-                terminalResponse[1] =  "21";
+                terminalResponse[1] = "21";
                 break;
             case "C1":
-                terminalResponse[1] =  "22";
+                terminalResponse[1] = "22";
                 break;
             case "C2":
-                terminalResponse[1] =  "23";
+                terminalResponse[1] = "23";
                 break;
             case "C3":
-                terminalResponse[1] =  "24";
+                terminalResponse[1] = "24";
                 break;
             case "D1":
-                terminalResponse[1] =  "30";
+                terminalResponse[1] = "30";
                 break;
             default:
-                terminalResponse[1] =  "40";
+                terminalResponse[1] = "40";
                 break;
         }
         return terminalResponse;
