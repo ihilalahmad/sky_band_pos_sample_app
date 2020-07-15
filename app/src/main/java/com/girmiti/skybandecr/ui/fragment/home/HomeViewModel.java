@@ -433,12 +433,11 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     public boolean validateData(String selectedItem, Context context) throws Exception {
 
-     /*   if (transactionTypeString != TransactionType.REGISTER && !ActiveTxnData.getInstance().isRegistered()) {
+        if (transactionTypeString != TransactionType.REGISTER && !ActiveTxnData.getInstance().isRegistered()) {
             throw new Exception("Please Register First");
         } else if (transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && !ActiveTxnData.getInstance().isSessionStarted()) {
             throw new Exception("Please Start Session");
         }
-*/
 
         if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
             GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
