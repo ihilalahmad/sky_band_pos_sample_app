@@ -49,8 +49,7 @@ public class BufferResponseFragment extends Fragment {
     }
 
     private void setupListeners() {
-
-        HomeFragment.setPosition(0);
+        ActiveTxnData.getInstance().setPosition(0);
         bufferResponseFragmentBinding.bufferSend.setText(ActiveTxnData.getInstance().getReqData());
         receiveData = ActiveTxnData.getInstance().getResData();
         String[] receiveDataArray = receiveData.split(";");
@@ -76,6 +75,7 @@ public class BufferResponseFragment extends Fragment {
                 case "13":
                 case "30":
                 case "40":
+                case "24":
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                     break;
                 case "10":
@@ -115,8 +115,6 @@ public class BufferResponseFragment extends Fragment {
                     } else {
                         bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                     }
-                case "24":
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                     break;
                 default:
                     if (receiveDataArray[3].equals("APPROVED") || receiveDataArray[3].equals("DECLINED")) {
@@ -236,6 +234,8 @@ public class BufferResponseFragment extends Fragment {
             case "24":
                 if (receiveDataArray.length > 5)
                     return bufferResponseViewModel.printResponseCheckStatus(receiveDataArray);
+                else
+                    return bufferResponseViewModel.printResponseDefault(receiveDataArray);
             default:
                 return bufferResponseViewModel.printResponseOtherTransaction(receiveDataArray);
         }

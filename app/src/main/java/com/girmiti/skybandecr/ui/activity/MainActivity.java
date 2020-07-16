@@ -8,12 +8,11 @@ import android.view.View;
 
 import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.cache.GeneralParamCache;
-import com.girmiti.skybandecr.constant.Constant;
 import com.girmiti.skybandecr.sdk.ConnectionManager;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements Constant {
+public class MainActivity extends AppCompatActivity {
 
     View view;
     Toolbar toolbar;
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements Constant {
             }
         } catch (IOException e) {
             logger.severe("Exception on disconnecting socket",e);
-            e.printStackTrace();
         }
     }
 }

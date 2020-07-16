@@ -19,13 +19,12 @@ import com.girmiti.skybandecr.sdk.logger.Logger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class HomeViewModel extends ViewModel implements Constant {
+public class HomeViewModel extends ViewModel {
 
-    public TransactionType transactionTypeString = TransactionType.PURCHASE;
+    private TransactionType transactionTypeString = TransactionType.PURCHASE;
     private HomeFragmentBinding homeFragmentBinding;
     private Logger logger = Logger.getNewLogger(HomeViewModel.class.getName());
     private int ecrSelected = TransactionSettingViewModel.getEcr();
@@ -40,7 +39,7 @@ public class HomeViewModel extends ViewModel implements Constant {
     public void resetVisibilityOfViews(HomeFragmentBinding homeFragmentBinding) {
 
         this.homeFragmentBinding = homeFragmentBinding;
-        if (ecrSelected != ONE) {
+        if (ecrSelected != Constant.ONE) {
             this.homeFragmentBinding.ecrNo.setVisibility(View.GONE);
             this.homeFragmentBinding.ecrNoTv.setVisibility(View.GONE);
         } else {
@@ -113,7 +112,7 @@ public class HomeViewModel extends ViewModel implements Constant {
     public void getVisibilityOfViews(String selectedItem) {
 
         transactionTypeString = TransactionType.valueOf(selectedItem.toUpperCase().replace(" ", "_"));
-        prevEcrNo = GeneralParamCache.getInstance().getString(PREV_ECR_NO);
+        prevEcrNo = GeneralParamCache.getInstance().getString(Constant.PREV_ECR_NO);
 
         switch (transactionTypeString) {
             case PURCHASE:
@@ -311,7 +310,7 @@ public class HomeViewModel extends ViewModel implements Constant {
             case START_SESSION:
             case END_SESSION:
                 szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
-                reqData = date + ";" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + "!";
+                reqData = date + ";" + GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + "!";
                 break;
             case REPEAT:
                 reqData = date + ";" + prevEcrNo + ";" + ecrReferenceNo + "!";
@@ -342,16 +341,16 @@ public class HomeViewModel extends ViewModel implements Constant {
     @SuppressLint("DefaultLocale")
     public String getTerminalResponse() throws Exception {
 
-        String ipAddress = GeneralParamCache.getInstance().getString(IP_ADDRESS);
-        int portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(PORT));
+        String ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
+        int portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
         int transactionType = transactionTypeString.ordinal();
         String combinedValue = "";
         transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
 
-        GeneralParamCache.getInstance().putString(PREV_ECR_NO, ecrReferenceNo.substring(ecrReferenceNo.length() - SIX));
+        GeneralParamCache.getInstance().putString(Constant.PREV_ECR_NO, ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX));
 
         if (transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && transactionTypeString != TransactionType.REGISTER) {
-            combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length() - SIX) + ActiveTxnData.getInstance().getTerminalID();
+            combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX) + ActiveTxnData.getInstance().getTerminalID();
             logger.debug(getClass() + "::Combined value>>" + combinedValue);
             logger.debug(getClass() + "::ECR Ref No. Length>>" + ecrReferenceNo.length());
             szSignature = convertSHA(combinedValue);
@@ -359,9 +358,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         logger.debug(getClass() + ":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
 
-        if (ecrSelected != ONE && transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION) {
-            int ecrNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(ECR_NUMBER)) + 1;
-            GeneralParamCache.getInstance().putString(ECR_NUMBER, String.format("%06d", ecrNumber));
+        if (ecrSelected != Constant.ONE && transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION) {
+            int ecrNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER)) + 1;
+            GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, String.format("%06d", ecrNumber));
         }
 
         StringBuilder terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
@@ -447,18 +446,18 @@ public class HomeViewModel extends ViewModel implements Constant {
             throw new Exception("Please Start Session");
         }
 
-        if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) == null) {
-            GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
+        if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) == null) {
+            GeneralParamCache.getInstance().putString(Constant.CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
         }
 
-        if (ecrSelected == ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
-            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
+        if (ecrSelected == Constant.ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
+            ecrReferenceNo = GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
         } else {
-            ecrReferenceNo = GeneralParamCache.getInstance().getString(CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(ECR_NUMBER);
+            ecrReferenceNo = GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER);
         }
 
         logger.debug(getClass() + ":: Ecr refrence no>>" + ecrReferenceNo);
-        logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
+        logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
 
 
         switch (transactionTypeString) {
@@ -507,9 +506,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validatePurchase() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.payAmt.getText().toString().equals("")) {
             throw new Exception("Amount should not be empty");
@@ -522,9 +521,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validatePurchaseCashBack() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.payAmt.getText().toString().equals("")) {
             throw new Exception("Purchase Amount should not be empty");
@@ -541,21 +540,21 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateRefund() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.refundAmt.getText().toString().equals("")) {
             throw new Exception("Refund Amount should not be empty");
         } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.refundAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Refund Amount should not be 0");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == Constant.ZERO) {
             throw new Exception("RRN no. should not be empty");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != TWELVE) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != Constant.TWELVE) {
             throw new Exception("RRN no. length should be 12 digits");
-        } else if (homeFragmentBinding.origRefundDate.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origRefundDate.getText().length() == Constant.ZERO) {
             throw new Exception("Date should not be empty");
-        } else if (homeFragmentBinding.origRefundDate.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origRefundDate.getText().length() != Constant.SIX) {
             throw new Exception("Date length should be 6 digits");
         } else {
             return true;
@@ -564,9 +563,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validatePreAuthorisation() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.authAmt.getText().toString().equals("")) {
             throw new Exception("Auth Amount should not be empty");
@@ -579,25 +578,25 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validatePreAuthCompletion() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == Constant.ZERO) {
             throw new Exception("RRN no. should not be empty");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != TWELVE) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != Constant.TWELVE) {
             throw new Exception("RRN no. length should be 12 digits");
         } else if (homeFragmentBinding.authAmt.getText().toString().equals("")) {
             throw new Exception("Auth Amount should not be empty");
         } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.authAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Auth Amount should not be 0");
-        } else if (homeFragmentBinding.origTransactionDate.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origTransactionDate.getText().length() == Constant.ZERO) {
             throw new Exception("Date should not be 0");
-        } else if (homeFragmentBinding.origTransactionDate.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origTransactionDate.getText().length() != Constant.SIX) {
             throw new Exception("Date length should be 6 digits");
-        } else if (homeFragmentBinding.origApproveCode.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origApproveCode.getText().length() == Constant.ZERO) {
             throw new Exception("Approve code should not be empty");
-        } else if (homeFragmentBinding.origApproveCode.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origApproveCode.getText().length() != Constant.SIX) {
             throw new Exception("Approve code length should be 6 digits");
         } else {
             return true;
@@ -606,21 +605,21 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validatePreAuthExtension() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == Constant.ZERO) {
             throw new Exception("RRN no. should not be empty");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != TWELVE) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != Constant.TWELVE) {
             throw new Exception("RRN no. length should be 12 digits");
-        } else if (homeFragmentBinding.origTransactionDate.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origTransactionDate.getText().length() == Constant.ZERO) {
             throw new Exception("Date should not be 0");
-        } else if (homeFragmentBinding.origTransactionDate.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origTransactionDate.getText().length() != Constant.SIX) {
             throw new Exception("Date length should be 6 digits");
-        } else if (homeFragmentBinding.origApproveCode.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origApproveCode.getText().length() == Constant.ZERO) {
             throw new Exception("Approve code should not be empty");
-        } else if (homeFragmentBinding.origApproveCode.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origApproveCode.getText().length() != Constant.SIX) {
             throw new Exception("Approve code length should be 6 digits");
         } else {
             return true;
@@ -629,25 +628,25 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validatePreAuthVoid() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == Constant.ZERO) {
             throw new Exception("RRN no. should not be empty");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != TWELVE) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != Constant.TWELVE) {
             throw new Exception("RRN no. length should be 12 digits");
         } else if (homeFragmentBinding.origTransactionAmt.getText().toString().equals("")) {
             throw new Exception("Original Transaction Amount should not be empty");
         } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.origTransactionAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Original Transaction Amount should not be 0");
-        } else if (homeFragmentBinding.origTransactionDate.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origTransactionDate.getText().length() == Constant.ZERO) {
             throw new Exception("Date should not be 0");
-        } else if (homeFragmentBinding.origTransactionDate.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origTransactionDate.getText().length() != Constant.SIX) {
             throw new Exception("Date length should be 6 digits");
-        } else if (homeFragmentBinding.origApproveCode.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.origApproveCode.getText().length() == Constant.ZERO) {
             throw new Exception("Approve code should not be empty");
-        } else if (homeFragmentBinding.origApproveCode.getText().length() != SIX) {
+        } else if (homeFragmentBinding.origApproveCode.getText().length() != Constant.SIX) {
             throw new Exception("Approve code length should be 6 digits");
         } else {
             return true;
@@ -656,9 +655,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateCashAdvance() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.cashAdvanceAmt.getText().toString().equals("")) {
             throw new Exception("Cash Advance Amount should not be empty");
@@ -671,13 +670,13 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateReversal() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == Constant.ZERO) {
             throw new Exception("RRN no. should not be empty");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != TWELVE) {
+        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != Constant.TWELVE) {
             throw new Exception("RRN no. length should be 12 digit");
         } else {
             return true;
@@ -686,29 +685,29 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateSetParameter() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
-        } else if (homeFragmentBinding.vendorId.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.vendorId.getText().length() == Constant.ZERO) {
             throw new Exception("Vendor Id should not be empty");
-        } else if (homeFragmentBinding.vendorId.getText().length() != TWO) {
+        } else if (homeFragmentBinding.vendorId.getText().length() != Constant.TWO) {
             throw new Exception("Vendor Id length should be 2 digits");
-        } else if (homeFragmentBinding.vendorTerminalType.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.vendorTerminalType.getText().length() == Constant.ZERO) {
             throw new Exception("Vendor Terminal Type should not be empty");
-        } else if (homeFragmentBinding.vendorTerminalType.getText().length() != TWO) {
+        } else if (homeFragmentBinding.vendorTerminalType.getText().length() != Constant.TWO) {
             throw new Exception("Vendor Terminal Type length should be 2 digits");
-        } else if (homeFragmentBinding.trsmId.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.trsmId.getText().length() == Constant.ZERO) {
             throw new Exception("Trsm Id should not be empty");
-        } else if (homeFragmentBinding.trsmId.getText().length() != SIX) {
+        } else if (homeFragmentBinding.trsmId.getText().length() != Constant.SIX) {
             throw new Exception("Trsm Id length should be 6 digits");
-        } else if (homeFragmentBinding.vendorKeyIndex.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.vendorKeyIndex.getText().length() == Constant.ZERO) {
             throw new Exception("Vendor key Index should not be empty");
-        } else if (homeFragmentBinding.vendorKeyIndex.getText().length() != TWO) {
+        } else if (homeFragmentBinding.vendorKeyIndex.getText().length() != Constant.TWO) {
             throw new Exception("Vendor key Index length should be 2 digits");
-        } else if (homeFragmentBinding.samaKeyIndex.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.samaKeyIndex.getText().length() == Constant.ZERO) {
             throw new Exception("Sama key Index should not be empty");
-        } else if (homeFragmentBinding.samaKeyIndex.getText().length() != TWO) {
+        } else if (homeFragmentBinding.samaKeyIndex.getText().length() != Constant.TWO) {
             throw new Exception("Sama key Index length should be 2 digits");
         } else {
             return true;
@@ -717,9 +716,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateTerminalLanguage() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.terminalLanguage.getText().toString().equals("")) {
             throw new Exception("Terminal language should not be empty");
@@ -730,11 +729,11 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateRegister() throws Exception {
 
-        if (GeneralParamCache.getInstance().getString(CASH_REGISTER_NO).length() != EIGHT) {
+        if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO).length() != Constant.EIGHT) {
             throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
-        } else if (ecrReferenceNo.length() == ZERO) {
+        } else if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else {
             return true;
@@ -743,9 +742,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateEndSession() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (!ActiveTxnData.getInstance().isSessionStarted()) {
             throw new Exception("Session not Started");
@@ -756,21 +755,21 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateBillPayment() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else if (homeFragmentBinding.billPayAmt.getText().toString().equals("")) {
             throw new Exception("Bill Amount should not be empty");
         } else if (String.valueOf(Double.parseDouble(homeFragmentBinding.billPayAmt.getText().toString())).equals("0.0")) {
             throw new Exception("Bill Amount should not be 0");
-        } else if (homeFragmentBinding.billerId.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.billerId.getText().length() == Constant.ZERO) {
             throw new Exception("Bill Id should not be empty");
-        } else if (homeFragmentBinding.billerId.getText().length() != SIX) {
+        } else if (homeFragmentBinding.billerId.getText().length() != Constant.SIX) {
             throw new Exception("Bill Id length should be 6 digits");
-        } else if (homeFragmentBinding.billerNumber.getText().length() == ZERO) {
+        } else if (homeFragmentBinding.billerNumber.getText().length() == Constant.ZERO) {
             throw new Exception("Bill Number should not be empty");
-        } else if (homeFragmentBinding.billerNumber.getText().length() != SIX) {
+        } else if (homeFragmentBinding.billerNumber.getText().length() != Constant.SIX) {
             throw new Exception("Bill Number length should be 6 digits");
         } else {
             return true;
@@ -779,9 +778,9 @@ public class HomeViewModel extends ViewModel implements Constant {
 
     private boolean validateEcrNo() throws Exception {
 
-        if (ecrReferenceNo.length() == ZERO) {
+        if (ecrReferenceNo.length() == Constant.ZERO) {
             throw new Exception("Ecr no. should not be empty");
-        } else if (ecrReferenceNo.length() != FOURTEEN) {
+        } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
         } else {
             return true;

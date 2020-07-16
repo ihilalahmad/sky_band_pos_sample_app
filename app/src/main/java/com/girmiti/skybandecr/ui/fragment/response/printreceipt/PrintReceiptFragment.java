@@ -82,10 +82,9 @@ public class PrintReceiptFragment extends Fragment {
             replacedHtmlString = printReceiptViewModel.printReceiptPrintSummary(ActiveTxnData.getInstance().getSummaryReportArray(), Objects.requireNonNull(getContext()));
         }
 
-        if (replacedHtmlString != null) {
-            String encodedHtml = Base64.encodeToString(replacedHtmlString.getBytes(), Base64.NO_PADDING);
-            printReceiptFragmentBinding.webview.loadData(encodedHtml, "text/html", "base64");
-        }
+        assert replacedHtmlString != null;
+        String encodedHtml = Base64.encodeToString(replacedHtmlString.getBytes(), Base64.NO_PADDING);
+        printReceiptFragmentBinding.webview.loadData(encodedHtml, "text/html", "base64");
 
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
@@ -144,18 +143,8 @@ public class PrintReceiptFragment extends Fragment {
 
             case "22":
                 return printReceiptViewModel.printReceiptPrintSummary(receiveDataArray, Objects.requireNonNull(getContext()));
-
-            case "12":
-            case "14":
-            case "17":
-            case "23":
-            case "18":
-            case "19":
-            case "13":
-            case "15":
-            case "16":
             default:
-                return null;
+                return "";
         }
     }
 }

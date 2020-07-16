@@ -17,13 +17,17 @@ import java.util.Locale;
 public class PrintReceiptViewModel extends ViewModel {
 
     private Logger logger = Logger.getNewLogger(PrintReceiptViewModel.class.getName());
+    private InputStream is;
+    private String htmlString = "";
+    private String pan;
+    private String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
 
     public static String numToArabicConverter(String num) {
-        int arabic_zero_unicode = 1632;
+        int arabicZeroUnicode = 1632;
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < num.length(); ++i) {
-            builder.append((char) ((int) num.charAt(i) - 48 + arabic_zero_unicode));
+            builder.append((char) ((int) num.charAt(i) - 48 + arabicZeroUnicode));
         }
         return builder.toString();
 
@@ -32,10 +36,6 @@ public class PrintReceiptViewModel extends ViewModel {
     @SuppressLint("DefaultLocale")
     public String printReceiptPurchase(String[] receiveDataArray, Context context) throws IOException {
 
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         is = context.getResources().getAssets().open("printReceipt/Purchase(customer_copy).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 27) {
@@ -93,10 +93,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptPurchaseCashback(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Purchase_Cashback(customer_copy)).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 29) {
@@ -163,10 +160,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptRefund(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Refund(customer_copy).html");
         htmlString = getHtmlString(is);
 
@@ -219,10 +213,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptPreAuthorisation(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Pre-Auth(Customer_copy).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 27) {
@@ -270,10 +261,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptPreAuthCompletion(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Purchase_Advice(Customer_copy).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 27) {
@@ -322,10 +310,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptPreAuthExtension(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Pre-Extension(Customer_copy).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 27) {
@@ -374,10 +359,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptPreAuthVoid(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Pre-void(Customer_copy).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 27) {
@@ -426,10 +408,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptCashAdvance(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Cash_Advance(Customer_copy).html");
         htmlString = getHtmlString(is);
         if (receiveDataArray.length > 27) {
@@ -477,10 +456,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptReversal(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Reversal(Customer_copy).html");
         htmlString = getHtmlString(is);
 
@@ -530,10 +506,6 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptReconciliation(String[] receiveDataArray, Context context) throws IOException {
-
-        InputStream is;
-        String htmlString = "";
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
 
         String summaryHtmlString = "";
         String madaHostTable = "";
@@ -675,10 +647,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String printReceiptBillPayment(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String pan;
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Bill_Payment(Customer_copy).html");
         htmlString = getHtmlString(is);
 
@@ -728,9 +697,7 @@ public class PrintReceiptViewModel extends ViewModel {
     }
 
     public String printReceiptParameterDownload(String[] receiveDataArray, Context context) throws IOException {
-        InputStream is;
-        String htmlString = "";
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+
         is = context.getResources().getAssets().open("printReceipt/Parameter_download.html");
         htmlString = getHtmlString(is);
 
@@ -754,9 +721,6 @@ public class PrintReceiptViewModel extends ViewModel {
         String posTableRunning = "";
         String posTerminalDetails = "";
         String reconcilationTable = "";
-        InputStream is;
-        String htmlString = "";
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
 
         if (Integer.parseInt(receiveDataArray[2]) == 0) {
             is = context.getResources().getAssets().open("printReceipt/Detail_Report.html");
@@ -855,12 +819,8 @@ public class PrintReceiptViewModel extends ViewModel {
     @SuppressLint("DefaultLocale")
     public String printReceiptPrintSummary(String[] receiveDataArray, Context context) throws IOException {
 
-        InputStream is;
-        String htmlString = "";
-        String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         String summaryHtmlString = "";
         String summaryFinalReport = "";
-
 
         is = context.getResources().getAssets().open("printReceipt/Summary_Report.html");
         htmlString = getHtmlString(is);
@@ -950,8 +910,6 @@ public class PrintReceiptViewModel extends ViewModel {
     private String getHtmlString(InputStream is) throws IOException {
         int size = is.available();
         byte[] buffer = new byte[size];
-        is.read(buffer);
-        is.close();
         String str = new String(buffer);
         logger.debug(getClass() + "LoadedHtml>>" + str);
         return str;

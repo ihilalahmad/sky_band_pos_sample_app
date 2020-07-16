@@ -1,7 +1,6 @@
 package com.girmiti.skybandecr.ui.fragment.setting.connnect;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -30,9 +29,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConnectSettingFragment extends Fragment implements Constant {
+public class ConnectSettingFragment extends Fragment {
 
-    public ConnectSettingViewModel connectSettingViewModel;
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     private NavController navController;
 
@@ -55,7 +53,6 @@ public class ConnectSettingFragment extends Fragment implements Constant {
         Objects.requireNonNull(getActivity()).findViewById(R.id.left).setVisibility(View.VISIBLE);
 
         connectSettingFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.connect_setting_fragment, container, false);
-        connectSettingViewModel = ViewModelProviders.of(this).get(ConnectSettingViewModel.class);
 
         setupListeners();
 
@@ -64,8 +61,8 @@ public class ConnectSettingFragment extends Fragment implements Constant {
 
     private void setupListeners() {
 
-        ipAddress = generalParamCache.getString(IP_ADDRESS);
-        portNo = generalParamCache.getString(PORT);
+        ipAddress = generalParamCache.getString(Constant.IP_ADDRESS);
+        portNo = generalParamCache.getString(Constant.PORT);
         connectSettingFragmentBinding.ipAddress.setText(ipAddress);
         connectSettingFragmentBinding.portNo.setText(portNo);
 
@@ -97,15 +94,15 @@ public class ConnectSettingFragment extends Fragment implements Constant {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        generalParamCache.putString(IP_ADDRESS, ipAddress);
-                        generalParamCache.putString(PORT, portNo);
+                        generalParamCache.putString(Constant.IP_ADDRESS, ipAddress);
+                        generalParamCache.putString(Constant.PORT, portNo);
                         ecrCore = ECRImpl.getConnectInstance();
                         try {
                             int connectionStatus = ecrCore.doTCPIPConnection(ipAddress, Integer.parseInt(portNo));
                             if (connectionStatus == 0) {
                                 logger.info("Socket Connected");
                                 dialog.dismiss();
-                                generalParamCache.putString(CONNECTION_STATUS, CONNECTED);
+                                generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                             } else {
                                 logger.info("Socket Connection failed");
@@ -128,17 +125,16 @@ public class ConnectSettingFragment extends Fragment implements Constant {
         connectSettingFragmentBinding.disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GeneralParamCache.getInstance().putString(IP_ADDRESS, null);
-                GeneralParamCache.getInstance().putString(PORT, null);
+                GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, null);
+                GeneralParamCache.getInstance().putString(Constant.PORT, null);
 
                 try {
                     connectSettingFragmentBinding.ipAddress.getText().clear();
                     connectSettingFragmentBinding.portNo.getText().clear();
                     if (ecrCore != null && ecrCore.doDisconnection() != 1) {
                         logger.info("Socket Disconnected");
-                        //      GeneralParamCache.getInstance().putString(CASH_REGISTER_NO, null);
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
-                        generalParamCache.putString(CONNECTION_STATUS, DISCONNECTED);
+                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                     } else {
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();
                         logger.info("Socket is Already Disconnected");

@@ -10,7 +10,7 @@ import lombok.Setter;
 public class ActiveTxnData {
 
     private String reqData;
-    public TransactionType transactionType;
+    private TransactionType transactionType;
     private String terminalID;
     private String szSignature;
     private String ecrReferenceNo;
@@ -19,6 +19,7 @@ public class ActiveTxnData {
     private String resData;
     private String[] replacedArray;
     private String[] summaryReportArray;
+    private int position;
 
     private static ActiveTxnData activeTxnData;
 

@@ -24,7 +24,7 @@ import com.girmiti.skybandecr.model.ActiveTxnData;
 
 import java.util.Objects;
 
-public class TransactionSettingFragment extends Fragment implements Constant {
+public class TransactionSettingFragment extends Fragment {
 
     private TransactionSettingViewModel transactionSettingViewModel;
     private TransactionSettingFragmentBinding transactionSettingFragmentBinding;
@@ -45,7 +45,7 @@ public class TransactionSettingFragment extends Fragment implements Constant {
     private void setupListeners() {
 
         if(ActiveTxnData.getInstance().isRegistered()) {
-            transactionSettingFragmentBinding.cashRegisterNo2.setText(GeneralParamCache.getInstance().getString(CASH_REGISTER_NO));
+            transactionSettingFragmentBinding.cashRegisterNo2.setText(GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
         }
 
         if (TransactionSettingViewModel.getEcr() == 1) {

@@ -41,7 +41,9 @@ public class FileLogger extends Logger {
             }
             file = new File(rootPath, fileName);
             if (!file.exists()) {
-                file.createNewFile();
+                if(!file.createNewFile()) {
+                    throw new Exception("File creation error");
+                }
             }
         } catch (IOException e) {
             Log.e("ERROR : ", " Create Log File IOException " + e);
@@ -49,6 +51,7 @@ public class FileLogger extends Logger {
             Log.e("ERROR : ", "Unable to open File I/O connection " + e);
         }
     }
+
 
     protected void writeLog(int logType, String msg) {
 

@@ -38,11 +38,8 @@ import com.girmiti.skybandecr.sdk.logger.Logger;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import lombok.Setter;
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener, Constant {
-    @Setter
-    public static int position;
     private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
     private String selectedItem;
     private HomeViewModel homeViewModel;
@@ -93,10 +90,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onStart() {
-        homeFragmentBinding.transactionSpinner.setSelection(position);
 
-        if (GeneralParamCache.getInstance().getString(ECR_NUMBER) == null) {
-            GeneralParamCache.getInstance().putString(ECR_NUMBER, getEcrNumberString());
+        homeFragmentBinding.transactionSpinner.setSelection(ActiveTxnData.getInstance().getPosition());
+
+        if (GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER) == null) {
+            GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, getEcrNumberString());
         }
 
         if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
@@ -111,7 +109,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         addTextChanged();
 
-        if (Objects.equals(generalParamCache.getString(CONNECTION_STATUS), CONNECTED)) {
+        if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
@@ -147,7 +145,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 homeViewModel.setReqData(selectedItem, getContext());
                 logger.info(getClass() + getString(R.string.request_data_set));
 
-                if (Objects.equals(generalParamCache.getString(CONNECTION_STATUS), CONNECTED)) {
+                if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
 
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
                     dialog.setCancelable(false);
@@ -231,7 +229,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        HomeFragment.position = position;
+        ActiveTxnData.getInstance().setPosition(position);
         selectedItem = parent.getItemAtPosition(position).toString();
 
         homeViewModel.resetVisibilityOfViews(homeFragmentBinding);
