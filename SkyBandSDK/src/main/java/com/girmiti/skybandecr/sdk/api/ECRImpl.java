@@ -6,6 +6,7 @@ import com.girmiti.skybandecr.sdk.api.listener.ECRCore;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ECRImpl implements ECRCore {
 
@@ -34,9 +35,24 @@ public class ECRImpl implements ECRCore {
 
         logger.info("Socket connected");
 
-        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+        if (ConnectionManager.Instance() != null && Objects.requireNonNull(ConnectionManager.Instance()).isConnected()) {
+
             try {
-                terminalResponse = ConnectionManager.Instance().sendAndRecv(packData);
+                if (transactionType != 22) {
+                    terminalResponse = Objects.requireNonNull(ConnectionManager.Instance()).sendAndRecv(packData);
+                    terminalResponse = terminalResponse.replace("�", ";");
+                    logger.debug("After Replace  with ;>>" + terminalResponse);
+                    terminalResponse = changeToTransactionType(terminalResponse);
+                    logger.debug("After Replace with Transactiontype>>" + terminalResponse);
+
+                    return terminalResponse;
+                } else {
+                    terminalResponse = Objects.requireNonNull(ConnectionManager.Instance()).sendAndRecvSummary(packData);
+                    terminalResponse = terminalResponse.replace("�", ";");
+
+                    return terminalResponse;
+                }
+
             } catch (IOException e) {
                 try {
                     ECRImpl.getConnectInstance().doDisconnection();
@@ -47,6 +63,7 @@ public class ECRImpl implements ECRCore {
                     throw new Exception("1");
                 }
             }
+
         } else {
             throw new Exception("2");
         }
@@ -55,12 +72,7 @@ public class ECRImpl implements ECRCore {
         parseData = parseData.replace("�", ";");
         logger.debug("After Replace  with ;>>"+parseData);
         return parseData;*/
-        terminalResponse = terminalResponse.replace("�", ";");
-        logger.debug("After Replace  with ;>>" + terminalResponse);
-        terminalResponse = changeToTransactionType(terminalResponse);
-        logger.debug("After Replace with Transactiontype>>" + terminalResponse);
 
-        return terminalResponse;
     }
 
     private String changeToTransactionType(String terminalResponse) throws Exception {

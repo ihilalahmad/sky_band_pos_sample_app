@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
+import com.girmiti.skybandecr.transaction.TransactionType;
 import com.girmiti.skybandecr.ui.fragment.home.HomeFragment;
 
 import java.util.Objects;
@@ -53,68 +55,78 @@ public class BufferResponseFragment extends Fragment {
         receiveData = ActiveTxnData.getInstance().getResData();
         String[] receiveDataArray = receiveData.split(";");
         logger.debug(getClass() + "::" + "GetRespData>>> " + receiveData);
-        String BufferData = setResponse(receiveDataArray);
-        bufferResponseFragmentBinding.bufferReceive.setText(BufferData);
+        String bufferData;
+        if (ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT) {
+            bufferData = setResponse(receiveDataArray);
+        } else {
+            bufferData = bufferResponseViewModel.printResponseSummaryReport(ActiveTxnData.getInstance().getSummaryReportArray());
+        }
+        String encodedHtml = Base64.encodeToString(bufferData.getBytes(), Base64.NO_PADDING);
+        bufferResponseFragmentBinding.bufferReceive.loadData(encodedHtml, "text/html", "base64");
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
-        switch (receiveDataArray[1]) {
-            case "17":
-            case "18":
-            case "19":
-            case "15":
-            case "16":
-            case "12":
-            case "13":
-            case "30":
-            case "40":
-                bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                break;
-            case "10":
-                if (Integer.parseInt(receiveDataArray[2]) == 500 || Integer.parseInt(receiveDataArray[2]) == 501) {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                } else {
+        if (ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT) {
+            switch (receiveDataArray[1]) {
+                case "17":
+                case "18":
+                case "19":
+                case "15":
+                case "16":
+                case "12":
+                case "13":
+                case "30":
+                case "40":
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                }
-                break;
-            case "9":
-                if (Integer.parseInt(receiveDataArray[2]) != 400) {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                } else {
+                    break;
+                case "10":
+                    if (Integer.parseInt(receiveDataArray[2]) == 500 || Integer.parseInt(receiveDataArray[2]) == 501) {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                    } else {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                    }
+                    break;
+                case "9":
+                    if (Integer.parseInt(receiveDataArray[2]) != 400) {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                    } else {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case "11":
+                    if (Integer.parseInt(receiveDataArray[2]) == 300 && !receiveDataArray[3].equals("DECLINED")) {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                    } else {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                    }
+                    break;
+                case "21":
+                    if (Integer.parseInt(receiveDataArray[2]) != 0) {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                    } else {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case "22":
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                }
-                break;
-            case "11":
-                if (Integer.parseInt(receiveDataArray[2]) == 300 && !receiveDataArray[3].equals("DECLINED")) {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                } else {
+                    break;
+                case "23":
+                    if (receiveDataArray.length > 11) {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                    } else {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                    }
+                case "24":
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                }
-                break;
-            case "21":
-                if (Integer.parseInt(receiveDataArray[2]) != 0) {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                } else {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                }
-                break;
-            case "22":
-                bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                break;
-            case "23":
-                if (receiveDataArray.length > 11) {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                } else {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                }
-            case "24":
-                bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                break;
-            default:
-                if (receiveDataArray[3].equals("APPROVED") || receiveDataArray[3].equals("DECLINED")) {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
-                } else {
-                    bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
-                }
+                    break;
+                default:
+                    if (receiveDataArray[3].equals("APPROVED") || receiveDataArray[3].equals("DECLINED")) {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+                    } else {
+                        bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
+                    }
+            }
+        } else {
+            bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
         }
 
         bufferResponseFragmentBinding.okButton.setOnClickListener(new View.OnClickListener() {

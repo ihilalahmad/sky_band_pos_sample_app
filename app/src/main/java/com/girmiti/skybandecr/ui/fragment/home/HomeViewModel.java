@@ -367,40 +367,38 @@ public class HomeViewModel extends ViewModel implements Constant {
         StringBuilder terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
         String terminalResponseString = terminalResponse.toString();
         String[] responseArray = terminalResponseString.split(";");
-        String[] responseTemp;
-
+        String[] splittedResponse;
+        String thirdResponse;
         logger.debug("FirstApicall length>> " + responseArray.length);
 
-        if (Double.parseDouble(responseArray[1]) == 22 && Double.parseDouble(responseArray[5]) != 0) {
-            responseTemp = new String[terminalResponseString.length() - 2];
-            int count = Integer.parseInt(responseArray[5]);
-            int m = 1;
+        if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
 
-            for (int n = 1; n < terminalResponseString.length() - 2; n++) {
-                responseTemp[m] = responseArray[n];
-                m = m + 1;
-            }
+            int count = Integer.parseInt(responseArray[4]);
 
-            if (count > 0) {
-                for (int i = 1; i <= count; i++) {
-                    reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                    String terminalResponseString1 = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
-                    logger.debug("terminal Response Sumarry Report>> " + i + terminalResponseString1);
-                    String[] responseArray1 = terminalResponseString1.split(";");
-                    responseTemp = new String[responseArray1.length - 6];
-                    int j = 0;
-                    for (int k = 4; k < responseArray1.length - 2; k++) {
-                        responseTemp[j] = responseArray1[k];
-                        j = j + 1;
-                    }
-                    terminalResponseString = Arrays.toString(responseTemp);
-                    terminalResponse.append(terminalResponseString);
+            for (int i = 1; i <= count; i++) {
+                String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
+                String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                String[] secondResponse = resp.split(";");
+                System.out.println(secondResponse.length);
+                String[] respTemp = new String[secondResponse.length - 2];
+                System.out.println(respTemp.length);
+                int j = 0;
+                for (int k = 3; k < secondResponse.length; k++) {
+                    respTemp[j] = secondResponse[k];
+                    j = j + 1;
                 }
+                thirdResponse = terminalResponseString + arrayIntoString(respTemp);
+                System.out.println("ThirdResponse" + thirdResponse);
+
+                splittedResponse = thirdResponse.split(";");
+                splittedResponse[0] = "22";
+                terminalResponseString = thirdResponse;
+                ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
             }
         }
 
         if (transactionTypeString == TransactionType.REGISTER) {
-            String[] splittedArray = terminalResponse.toString().split(";");
+            String[] splittedArray = terminalResponseString.split(";");
 
             for (int i = 0; i < splittedArray.length; i++) {
                 if (i == 3) {
@@ -412,7 +410,17 @@ public class HomeViewModel extends ViewModel implements Constant {
 
         logger.debug(getClass() + "::Terminal ID>>" + terminalID);
 
-        return terminalResponse.toString();
+        return terminalResponseString;
+    }
+
+
+    public String arrayIntoString(String[] resp) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < resp.length; i++) {
+            sb.append(resp[i]);
+            sb.append(";");
+        }
+        return sb.toString();
     }
 
     private String convertSHA(String combinedValue) throws NoSuchAlgorithmException {

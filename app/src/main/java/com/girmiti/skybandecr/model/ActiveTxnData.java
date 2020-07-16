@@ -18,6 +18,7 @@ public class ActiveTxnData {
     private boolean sessionStarted;
     private String resData;
     private String[] replacedArray;
+    private String[] summaryReportArray;
 
     private static ActiveTxnData activeTxnData;
 

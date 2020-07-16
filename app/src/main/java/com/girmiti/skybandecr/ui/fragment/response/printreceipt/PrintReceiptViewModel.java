@@ -653,6 +653,7 @@ public class PrintReceiptViewModel extends ViewModel {
                         reconcilationTable1 = getHtmlString(is);
 
                         summaryFinalReport.append(reconcilationTable1);
+                        b = b + 1;
                     }
 
                 }
@@ -858,7 +859,7 @@ public class PrintReceiptViewModel extends ViewModel {
         String htmlString = "";
         String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
         String summaryHtmlString = "";
-        StringBuilder summaryFinalReport = new StringBuilder();
+        String summaryFinalReport = "";
 
 
         is = context.getResources().getAssets().open("printReceipt/Summary_Report.html");
@@ -869,27 +870,19 @@ public class PrintReceiptViewModel extends ViewModel {
 
         String htmlSummaryReport = summaryHtmlString;
 
-        String respDateTime = receiveDataArray[4];
-        String currentDate = respDateTime.substring(2, 4) + " / "
-                + respDateTime.substring(0, 2) + "/" + date;
-        String currentTime = respDateTime.substring(4, 6) + ":" + respDateTime.substring(6, 8) + ":" + respDateTime.substring(8, 10);
-
-        int j = 7;
-
-        int transactionsLength = Integer.parseInt(receiveDataArray[6]);
-
-        if (transactionsLength > 17) {
-            transactionsLength = 17;
-        }
+        String respDateTime = receiveDataArray[3];
+        System.out.println(respDateTime);
+        String currentDate = respDateTime.substring(2, 4) + " / " + respDateTime.substring(0, 2) + "/" + date;
+        String currentTime = respDateTime.substring(4, 6) + ":" + respDateTime.substring(6, 8) + ":"
+                + respDateTime.substring(8, 10);
+        int j = 6;
+        int transactionsLength = Integer.parseInt(receiveDataArray[5]);
 
         for (int i = 1; i <= transactionsLength; i++) {
             String date1 = receiveDataArray[j + 1];
-
             date1 = date1.substring(0, 2) + "-" + date1.substring(2, 4) + "-" + date1.substring(4, 6);
             String time = receiveDataArray[j + 6];
-
             time = time.substring(0, 2) + ":" + time.substring(2, 4);
-
             htmlSummaryReport = htmlSummaryReport.replace("transactionType", receiveDataArray[j]);
             htmlSummaryReport = htmlSummaryReport.replace("transactionDate", date1);
             htmlSummaryReport = htmlSummaryReport.replace("transactionRRN", receiveDataArray[j + 2]);
@@ -902,16 +895,16 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlSummaryReport = htmlSummaryReport.replace("authCode", receiveDataArray[j + 8]);
             htmlSummaryReport = htmlSummaryReport.replace("transactionNumber", receiveDataArray[j + 9]);
             j = j + 10;
-            summaryFinalReport.append(htmlSummaryReport);
+            summaryFinalReport += htmlSummaryReport;
             htmlSummaryReport = summaryHtmlString;
-        }
 
-        htmlString = htmlString.replace("no_Transaction", summaryFinalReport.toString());
+        }
+        htmlString = htmlString.replace("no_Transaction", summaryFinalReport);
         htmlString = htmlString.replace("currentTime", currentTime);
         htmlString = htmlString.replace("currentDate", currentDate);
         htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID());
-
         return htmlString;
+
     }
 
     public String checkingArabic(String command) {

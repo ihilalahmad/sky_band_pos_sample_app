@@ -2,30 +2,29 @@ package com.girmiti.skybandecr.sdk;
 
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.nio.ByteBuffer;
 
 public class ConnectionManager {
 
-    private Logger logger = Logger.getNewLogger(ConnectionManager.class.getName());
+    private static Logger logger = Logger.getNewLogger(ConnectionManager.class.getName());
 
     private Socket socket;
     private OutputStream output;
     private InputStream input;
-    @Getter
-    private static String serverIp;
-    @Setter
-    private static int serverPort;
+    private String serverIp;
+    private int serverPort;
     private final int SOCKET_TIMEOUT = 120000;
     private static ConnectionManager socketHostConnector;
 
     public static ConnectionManager Instance(String ip, int port) throws IOException {
+
+        logger.info("ConnectionManager | Instance | Entering");
 
         // First time
         if (socketHostConnector == null) {
@@ -36,6 +35,8 @@ public class ConnectionManager {
             socketHostConnector = new ConnectionManager(ip, port);
             socketHostConnector.createConnection();
         }
+
+        logger.info("ConnectionManager | Instance | Exiting");
 
         return socketHostConnector;
     }
@@ -48,15 +49,14 @@ public class ConnectionManager {
      */
     public static ConnectionManager Instance() {
 
+        logger.info("ConnectionManager | Instance | Entering");
+
         if (socketHostConnector != null) {
             return socketHostConnector;
         }
+        logger.info("ConnectionManager | Instance | Exiting");
 
         return null;
-    }
-
-    private Socket getSocket() {
-        return socket;
     }
 
     private ConnectionManager(String ip, int port) {
@@ -67,88 +67,146 @@ public class ConnectionManager {
 
     public void createConnection() throws IOException {
 
-        logger.debug(getClass() + "::Connecting to IP: " + serverIp + " and port: " + serverPort);
+        logger.info("ConnectionManager | CreateConnection | Entering");
+
         socket = new Socket();
         socket.connect(new InetSocketAddress(serverIp, serverPort), SOCKET_TIMEOUT);
         socket.setSoTimeout(SOCKET_TIMEOUT);
-        logger.debug(getClass() + "::" + "Created connection : Ip" + serverIp + "port:" + serverPort);
+
+        logger.info("ConnectionManager | CreateConnection | Exiting");
+
     }
 
     public void disconnect() throws IOException {
+
+        logger.info("ConnectionManager | Disconnect | Entering");
+
         if (socket != null && socket.isConnected()) {
             cleanup();
         }
+
+        logger.info("ConnectionManager | Disconnect | Exiting");
+
     }
 
     public void cleanup() throws IOException {
+
+        logger.info("ConnectionManager | Cleanup | Entering");
 
         if (input != null) {
 
             try {
                 input.close();
-                logger.debug("InputStream Closed>>>");
             } catch (IOException e) {
-                logger.severe("IOException: inputStream", e);
+                logger.severe("Exception while closing",e);
             }
         }
 
         if (output != null) {
 
             output.close();
-            logger.debug("OutputStream Closed>>>");
         }
 
         if (socket != null) {
 
             try {
                 socket.close();
-                logger.debug("Socket successfully Closed>>>");
             } catch (IOException e) {
-                logger.severe("IOException: socket", e);
+                logger.severe("Exception while closing",e);
             }
         }
 
         input = null;
         output = null;
         socket = null;
+
+        logger.info("ConnectionManager | Cleanup | Exiting");
+
     }
 
-    public String sendAndRecv(byte[] in) throws IOException {
+    public String sendAndRecv(byte[] in) throws IOException, InterruptedException {
 
+        logger.info("ConnectionManager | SedAndRecv | Entering");
         output = socket.getOutputStream();
         input = socket.getInputStream();
 
         output.write(in);
+
         output.flush();
 
-        logger.debug("Write Data >>:" + new String(in));
+        byte[] responseBytes = new byte[50000];
 
-        byte[] responseBytes = new byte[15000];
+        int noOfBytesRead = input.read(responseBytes, 0, responseBytes.length);
 
-        int noOfBytesRead = input.read(responseBytes);
-
-        logger.debug("Reading data >>: " + noOfBytesRead);
+        System.out.println(noOfBytesRead);
 
         if (noOfBytesRead <= 0) {
             throw new IOException();
         }
 
-
         byte[] finalResponse = new byte[noOfBytesRead];
+
         System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
         String terminalResponse = new String(finalResponse);
 
-        logger.debug("Response Data >>: " + terminalResponse);
+        logger.info("ConnectionManager | SedAndRecv | Exiting");
 
         return terminalResponse;
     }
 
+
+    public String sendAndRecvSummary(byte[] in) throws IOException, InterruptedException {
+        logger.info("ConnectionManager | SedAndRecv | Entering");
+        output = socket.getOutputStream();
+        input = socket.getInputStream();
+
+        output.write(in);
+
+        output.flush();
+
+        byte[] responseBytes = new byte[50000];
+        byte[] messageByte = new byte[25000];
+
+        DataInputStream in1 = new DataInputStream(socket.getInputStream());
+        int bytesRead = 0;
+
+        messageByte[0] = in1.readByte();
+        messageByte[1] = in1.readByte();
+        ByteBuffer byteBuffer = ByteBuffer.wrap(messageByte, 0, 2);
+
+        int bytesToRead = byteBuffer.getShort();
+
+        Thread.sleep(1000);
+
+        int noOfBytesRead = input.read(responseBytes, 0, responseBytes.length);
+
+        System.out.println(noOfBytesRead);
+
+        if (noOfBytesRead <= 0) {
+            throw new IOException();
+        }
+
+        byte[] finalResponse = new byte[noOfBytesRead];
+
+        System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
+        String terminalResponse = new String(finalResponse);
+
+        logger.info("ConnectionManager | SedAndRecv | Exiting");
+
+        return terminalResponse;
+
+    }
+
     public boolean isConnected() {
+
+        logger.info("ConnectionManager | Isconnected | Entering");
 
         if (socket != null) {
             return socket.isConnected();
         }
+        logger.info("ConnectionManager | Isconnected | Exiting");
 
         return false;
     }
+
 }

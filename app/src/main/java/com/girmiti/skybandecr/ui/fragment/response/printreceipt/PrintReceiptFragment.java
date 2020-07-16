@@ -23,6 +23,7 @@ import com.girmiti.skybandecr.R;
 import com.girmiti.skybandecr.databinding.PrintReceiptFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
+import com.girmiti.skybandecr.transaction.TransactionType;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -67,14 +68,20 @@ public class PrintReceiptFragment extends Fragment {
     private void setupListeners() throws IOException {
 
         receiveData = ActiveTxnData.getInstance().getResData();
+        String replacedHtmlString = "";
         logger.debug(getClass() + "::" + "GetRespData>>> " + receiveData);
         String[] receiveDataArray = receiveData.split(";");
         logger.debug(getClass() + "Received Data Array>>" + receiveDataArray);
-        if (receiveDataArray[1].equals("23") && (receiveDataArray.length > 15)) {
-            receiveDataArray = ActiveTxnData.getInstance().getReplacedArray();
+        if (ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT) {
+            if (receiveDataArray[1].equals("23") && (receiveDataArray.length > 15)) {
+                receiveDataArray = ActiveTxnData.getInstance().getReplacedArray();
+            }
+            replacedHtmlString = getPrintReceipt(receiveDataArray);
+            logger.debug(getClass() + "Replaced Html>>" + replacedHtmlString);
+        } else {
+            replacedHtmlString = printReceiptViewModel.printReceiptPrintSummary(ActiveTxnData.getInstance().getSummaryReportArray(), Objects.requireNonNull(getContext()));
         }
-        String replacedHtmlString = getPrintReceipt(receiveDataArray);
-        logger.debug(getClass() + "Replaced Html>>" + replacedHtmlString);
+
         if (replacedHtmlString != null) {
             String encodedHtml = Base64.encodeToString(replacedHtmlString.getBytes(), Base64.NO_PADDING);
             printReceiptFragmentBinding.webview.loadData(encodedHtml, "text/html", "base64");
