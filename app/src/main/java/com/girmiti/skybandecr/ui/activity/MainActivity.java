@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         generalParamCache.clear();
         try {
-            if(ConnectionManager.Instance() != null){
-                ConnectionManager.Instance().disconnect();
+            if(ConnectionManager.instance() != null){
+                ConnectionManager.instance().disconnect();
             }
         } catch (IOException e) {
             logger.severe("Exception on disconnecting socket",e);

@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, getEcrNumberString());
         }
 
-        if (ConnectionManager.Instance() != null && ConnectionManager.Instance().isConnected()) {
+        if (ConnectionManager.instance() != null && ConnectionManager.instance().isConnected()) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);

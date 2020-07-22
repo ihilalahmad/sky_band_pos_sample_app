@@ -271,7 +271,7 @@ public class HomeViewModel extends ViewModel {
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PURCHASE_CASHBACK:
-                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText()))) * 100 + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REFUND:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.refundAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
@@ -394,6 +394,12 @@ public class HomeViewModel extends ViewModel {
                 terminalResponseString = thirdResponse;
                 ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
             }
+
+            if(count == 0) {
+                splittedResponse = terminalResponseString.split(";");
+                splittedResponse[0] = "22";
+                ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+            }
         }
 
         if (transactionTypeString == TransactionType.REGISTER) {
@@ -506,7 +512,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validatePurchase() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -521,7 +527,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validatePurchaseCashBack() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -540,7 +546,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateRefund() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -563,7 +569,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validatePreAuthorisation() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -578,7 +584,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validatePreAuthCompletion() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -605,7 +611,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validatePreAuthExtension() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -628,7 +634,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validatePreAuthVoid() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -655,7 +661,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateCashAdvance() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -670,7 +676,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateReversal() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -685,7 +691,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateSetParameter() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -716,7 +722,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateTerminalLanguage() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -731,7 +737,7 @@ public class HomeViewModel extends ViewModel {
 
         if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO).length() != Constant.EIGHT) {
             throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
-        } else if (ecrReferenceNo.length() == Constant.ZERO) {
+        } else if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -742,7 +748,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateEndSession() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -755,7 +761,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateBillPayment() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
@@ -778,7 +784,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateEcrNo() throws Exception {
 
-        if (ecrReferenceNo.length() == Constant.ZERO) {
+        if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");

@@ -709,7 +709,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID());
+            htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID().substring(0,8));
             htmlString = htmlString.replace("responseCode", receiveDataArray[2]);
         }
         return htmlString;
@@ -832,7 +832,7 @@ public class PrintReceiptViewModel extends ViewModel {
 
         String respDateTime = receiveDataArray[3];
         System.out.println(respDateTime);
-        String currentDate = respDateTime.substring(2, 4) + " / " + respDateTime.substring(0, 2) + "/" + date;
+        String currentDate = respDateTime.substring(0,2) + " / " + respDateTime.substring(2,4) + "/" + date;
         String currentTime = respDateTime.substring(4, 6) + ":" + respDateTime.substring(6, 8) + ":"
                 + respDateTime.substring(8, 10);
         int j = 6;
@@ -862,7 +862,7 @@ public class PrintReceiptViewModel extends ViewModel {
         htmlString = htmlString.replace("no_Transaction", summaryFinalReport);
         htmlString = htmlString.replace("currentTime", currentTime);
         htmlString = htmlString.replace("currentDate", currentDate);
-        htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID());
+        htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID().substring(0,8));
         return htmlString;
 
     }
@@ -870,20 +870,29 @@ public class PrintReceiptViewModel extends ViewModel {
     public String checkingArabic(String command) {
         String arabic = "";
         switch (command) {
+            case "mada":
+                arabic = "مدى";
+                break;
             case "ELECTRON":
-            case "VISA":
                 arabic = "فيزا";
                 break;
             case "MAESTRO":
                 arabic = "مايسترو";
                 break;
             case "AMEX":
+                arabic = "امريكان اكسبرس";
+                break;
             case "AMERICAN EXPRESS":
                 arabic = "امريكان اكسبرس";
                 break;
             case "MASTER":
+                arabic = "ماستر كارد";
+                break;
             case "MASTERCARD":
                 arabic = "ماستر كارد";
+                break;
+            case "VISA":
+                arabic = "فيزا";
                 break;
             case "GCCNET":
                 arabic = "الشبكة الخليجية";
@@ -897,8 +906,20 @@ public class PrintReceiptViewModel extends ViewModel {
             case "SAR":
                 arabic = "ريال";
                 break;
-            case "mada":
+            case "MADA":
                 arabic = "مدى";
+                break;
+            case "APPROVED":
+                arabic = "العملية مقبولة";
+                break;
+            case "DECLINED":
+                arabic = "العملية مرفوضه";
+                break;
+            case "ACCEPTED":
+                arabic = "مستلمة";
+                break;
+            case "NOT ACCEPTED":
+                arabic = "غير مستلمة";
                 break;
             default:
                 arabic = "";
@@ -910,6 +931,8 @@ public class PrintReceiptViewModel extends ViewModel {
     private String getHtmlString(InputStream is) throws IOException {
         int size = is.available();
         byte[] buffer = new byte[size];
+        is.read(buffer);
+        is.close();
         String str = new String(buffer);
         logger.debug(getClass() + "LoadedHtml>>" + str);
         return str;

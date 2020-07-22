@@ -35,11 +35,11 @@ public class ECRImpl implements ECRCore {
 
         logger.info("Socket connected");
 
-        if (ConnectionManager.Instance() != null && Objects.requireNonNull(ConnectionManager.Instance()).isConnected()) {
+        if (ConnectionManager.instance() != null && Objects.requireNonNull(ConnectionManager.instance()).isConnected()) {
 
             try {
                 if (transactionType != 22) {
-                    terminalResponse = Objects.requireNonNull(ConnectionManager.Instance()).sendAndRecv(packData);
+                    terminalResponse = Objects.requireNonNull(ConnectionManager.instance()).sendAndRecv(packData);
                     terminalResponse = terminalResponse.replace("�", ";");
                     logger.debug("After Replace  with ;>>" + terminalResponse);
                     terminalResponse = changeToTransactionType(terminalResponse);
@@ -47,7 +47,7 @@ public class ECRImpl implements ECRCore {
 
                     return terminalResponse;
                 } else {
-                    terminalResponse = Objects.requireNonNull(ConnectionManager.Instance()).sendAndRecvSummary(packData);
+                    terminalResponse = Objects.requireNonNull(ConnectionManager.instance()).sendAndRecvSummary(packData);
                     terminalResponse = terminalResponse.replace("�", ";");
 
                     return terminalResponse;
@@ -160,7 +160,7 @@ public class ECRImpl implements ECRCore {
 
     @Override
     public int doTCPIPConnection(String ipAddress, int portNumber) throws IOException {
-        if (ConnectionManager.Instance(ipAddress, portNumber).isConnected()) {
+        if (ConnectionManager.instance(ipAddress, portNumber).isConnected()) {
             return 0;
         } else {
             return 1;
@@ -169,8 +169,8 @@ public class ECRImpl implements ECRCore {
 
     @Override
     public int doDisconnection() throws IOException {
-        if (ConnectionManager.Instance() != null) {
-            ConnectionManager.Instance().disconnect();
+        if (ConnectionManager.instance() != null) {
+            ConnectionManager.instance().disconnect();
             return 0;
         } else {
             return 1;

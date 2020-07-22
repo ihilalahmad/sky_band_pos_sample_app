@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Properties;
 
 public class ConnectionManager {
 
@@ -19,10 +20,11 @@ public class ConnectionManager {
     private InputStream input;
     private String serverIp;
     private int serverPort;
-    private final int SOCKET_TIMEOUT = 120000;
     private static ConnectionManager socketHostConnector;
+    private final int SOCKET_TIMEOUT = 120000;
+    private Properties properties = new Properties();
 
-    public static ConnectionManager Instance(String ip, int port) throws IOException {
+    public static ConnectionManager instance(String ip, int port) throws IOException {
 
         logger.info("ConnectionManager | Instance | Entering");
 
@@ -47,7 +49,8 @@ public class ConnectionManager {
      * @return
      * @throws IOException
      */
-    public static ConnectionManager Instance() {
+
+    public static ConnectionManager instance() {
 
         logger.info("ConnectionManager | Instance | Entering");
 
@@ -68,7 +71,6 @@ public class ConnectionManager {
     public void createConnection() throws IOException {
 
         logger.info("ConnectionManager | CreateConnection | Entering");
-
         socket = new Socket();
         socket.connect(new InetSocketAddress(serverIp, serverPort), SOCKET_TIMEOUT);
         socket.setSoTimeout(SOCKET_TIMEOUT);
@@ -193,6 +195,8 @@ public class ConnectionManager {
 
         logger.info("ConnectionManager | SedAndRecv | Exiting");
 
+        logger.info("SocketResponse"+terminalResponse);
+
         return terminalResponse;
 
     }
@@ -207,6 +211,21 @@ public class ConnectionManager {
         logger.info("ConnectionManager | Isconnected | Exiting");
 
         return false;
+    }
+
+    public byte[] TrimTrailingBytes(byte[] buffer, byte trimValue) {
+        int i = buffer.length;
+        while (i > 0 && buffer[--i] == trimValue) {
+            ; // no-op by design
+        }
+        byte[] resized = new byte[i + 1];
+        // Arrays.copy(buffer, resized, resized.length);
+        // System.arraycopy(buffer, 0, resized, 0, buffer.length);
+        for (int j = 0; i < buffer.length; j++)
+            resized[j] = buffer[j];
+        // Arrays.copyOf(buffer, resized.length);
+        System.out.println("ResizedLength:" + resized.length);
+        return resized;
     }
 
 }
