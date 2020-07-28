@@ -22,7 +22,6 @@ import com.girmiti.skybandecr.databinding.BufferResponseFragmentBinding;
 import com.girmiti.skybandecr.model.ActiveTxnData;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 import com.girmiti.skybandecr.transaction.TransactionType;
-import com.girmiti.skybandecr.ui.fragment.home.HomeFragment;
 
 import java.util.Objects;
 
@@ -110,7 +109,7 @@ public class BufferResponseFragment extends Fragment {
                     bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                     break;
                 case "23":
-                    if (receiveDataArray.length > 11) {
+                    if (receiveDataArray.length > 11 && !receiveDataArray[5].equals("22")) {
                         bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                     } else {
                         bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);

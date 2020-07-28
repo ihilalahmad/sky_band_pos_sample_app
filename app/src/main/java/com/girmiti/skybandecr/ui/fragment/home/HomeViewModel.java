@@ -374,31 +374,32 @@ public class HomeViewModel extends ViewModel {
 
             int count = Integer.parseInt(responseArray[4]);
 
-            for (int i = 1; i <= count; i++) {
-                String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
-                String[] secondResponse = resp.split(";");
-                System.out.println(secondResponse.length);
-                String[] respTemp = new String[secondResponse.length - 2];
-                System.out.println(respTemp.length);
-                int j = 0;
-                for (int k = 3; k < secondResponse.length; k++) {
-                    respTemp[j] = secondResponse[k];
-                    j = j + 1;
-                }
-                thirdResponse = terminalResponseString + arrayIntoString(respTemp);
-                System.out.println("ThirdResponse" + thirdResponse);
-
-                splittedResponse = thirdResponse.split(";");
-                splittedResponse[0] = "22";
-                terminalResponseString = thirdResponse;
-                ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
-            }
-
             if(count == 0) {
                 splittedResponse = terminalResponseString.split(";");
                 splittedResponse[0] = "22";
                 ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+            } else {
+
+                for (int i = 1; i <= count; i++) {
+                    String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
+                    String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                    String[] secondResponse = resp.split(";");
+                    System.out.println(secondResponse.length);
+                    String[] respTemp = new String[secondResponse.length - 2];
+                    System.out.println(respTemp.length);
+                    int j = 0;
+                    for (int k = 3; k < secondResponse.length; k++) {
+                        respTemp[j] = secondResponse[k];
+                        j = j + 1;
+                    }
+                    thirdResponse = terminalResponseString + arrayIntoString(respTemp);
+                    System.out.println("ThirdResponse" + thirdResponse);
+
+                    splittedResponse = thirdResponse.split(";");
+                    splittedResponse[0] = "22";
+                    terminalResponseString = thirdResponse;
+                    ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+                }
             }
         }
 

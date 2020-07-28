@@ -8,7 +8,7 @@ public class BufferResponseViewModel extends ViewModel {
 
     private static String htmlStart = "<html><head></head><body><table style='border-collapse: collapse; width: 100%;'>";
     private static String htmlSeperator1 = "<tr style = 'border: 1px solid #ddd; border: 1px solid #ddd; padding: 8px;'><td>";
-    private static String htmlSeperator2 = "</td><td>:</td><td>";
+    private static String   htmlSeperator2 = "</td><td>:</td><td>";
     private static String htmlSeperator3 = "</td></tr>";
     private static String htmlEnd = "</table></body></html>";
     private Logger logger = Logger.getNewLogger(BufferResponseViewModel.class.getName());
@@ -199,9 +199,9 @@ public class BufferResponseViewModel extends ViewModel {
 
         String htmlString = "";
 
-        String[] otherResponse = {"", "ResponseCode", "ResponseMessage"};
+        String[] otherResponse = {"","TransactionType", "ResponseCode", "ResponseMessage"};
 
-        for (int i = 1; i < otherResponse.length; i++)
+        for (int i = 2; i < otherResponse.length; i++)
             htmlString = htmlString + htmlSeperator1 + otherResponse[i] + htmlSeperator2 + resp[i] + htmlSeperator3;
         htmlString = htmlStart + htmlString + htmlEnd;
         return htmlString;
