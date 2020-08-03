@@ -16,8 +16,6 @@ import com.girmiti.skybandecr.ui.fragment.setting.connnect.ConnectSettingFragmen
 import com.girmiti.skybandecr.ui.fragment.setting.transaction.TransactionSettingViewModel;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -353,7 +351,7 @@ public class HomeViewModel extends ViewModel {
             combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX) + ActiveTxnData.getInstance().getTerminalID();
             logger.debug(getClass() + "::Combined value>>" + combinedValue);
             logger.debug(getClass() + "::ECR Ref No. Length>>" + ecrReferenceNo.length());
-            szSignature = convertSHA(combinedValue);
+            szSignature = ConnectSettingFragment.getEcrCore().computeSha256Hash(combinedValue);
         }
 
         logger.debug(getClass() + ":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
@@ -427,22 +425,6 @@ public class HomeViewModel extends ViewModel {
             sb.append(";");
         }
         return sb.toString();
-    }
-
-    private String convertSHA(String combinedValue) throws NoSuchAlgorithmException {
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hashInBytes = md.digest(combinedValue.getBytes());
-
-        StringBuilder sb = new StringBuilder();
-
-        for (byte b : hashInBytes) {
-            sb.append(String.format("%02x", b));
-        }
-
-        String resultSHA = sb.toString();
-
-        return resultSHA;
     }
 
     public boolean validateData(String selectedItem, Context context) throws Exception {

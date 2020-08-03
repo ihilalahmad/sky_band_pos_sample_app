@@ -6,6 +6,8 @@ import com.girmiti.skybandecr.sdk.api.listener.ECRCore;
 import com.girmiti.skybandecr.sdk.logger.Logger;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class ECRImpl implements ECRCore {
@@ -175,5 +177,22 @@ public class ECRImpl implements ECRCore {
         } else {
             return 1;
         }
+    }
+
+    @Override
+    public String computeSha256Hash(String combinedValue) throws NoSuchAlgorithmException {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashInBytes = md.digest(combinedValue.getBytes());
+
+        StringBuilder sb = new StringBuilder();
+
+        for (byte b : hashInBytes) {
+            sb.append(String.format("%02x", b));
+        }
+
+        String resultSHA = sb.toString();
+
+        return resultSHA;
     }
 }

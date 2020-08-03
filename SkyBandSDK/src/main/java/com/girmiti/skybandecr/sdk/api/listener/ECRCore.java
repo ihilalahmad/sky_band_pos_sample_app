@@ -1,6 +1,7 @@
 package com.girmiti.skybandecr.sdk.api.listener;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public interface ECRCore {
 
@@ -9,4 +10,6 @@ public interface ECRCore {
     int doTCPIPConnection(String ipAddress, int portNumber) throws IOException;
 
     int doDisconnection() throws IOException;
+
+    String computeSha256Hash(String combinedValue) throws NoSuchAlgorithmException;
 }
