@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_connect_setting"
-        android:name="com.girmiti.skybandecr.ui.fragment.setting.connnect.ConnectSettingFragment"
+        android:name="com.skyband.ecr.ui.fragment.setting.connnect.ConnectSettingFragment"
         android:label="Connect Setting"
         tools:layout="@layout/connect_setting_fragment">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/transactionSettingFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.setting.transaction.TransactionSettingFragment"
+        android:name="com.skyband.ecr.ui.fragment.setting.transaction.TransactionSettingFragment"
         android:label="transaction_setting_fragment"
         tools:layout="@layout/transaction_setting_fragment" >
         <action
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.home.HomeFragment"
+        android:name="com.skyband.ecr.ui.fragment.home.HomeFragment"
         android:label="home_fragment"
         tools:layout="@layout/home_fragment" >
         <action
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/bufferResponseFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.response.buffer.BufferResponseFragment"
+        android:name="com.skyband.ecr.ui.fragment.response.buffer.BufferResponseFragment"
         android:label="buffer_response_fragment"
         tools:layout="@layout/buffer_response_fragment" >
         <action
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.setting.SettingFragment"
+        android:name="com.skyband.ecr.ui.fragment.setting.SettingFragment"
         android:label="SettingFragment" >
         <action
             android:id="@+id/action_settingFragment_to_navigation_connect_setting"
@@ -63,7 +63,7 @@
 
     <fragment
         android:id="@+id/connectedFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.connected.ConnectedFragment"
+        android:name="com.skyband.ecr.ui.fragment.connected.ConnectedFragment"
         android:label="ConnectedFragment" >
         <action
             android:id="@+id/action_connectedFragment_to_homeFragment"
@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/printReceiptFragment"
-        android:name="com.girmiti.skybandecr.ui.fragment.response.printreceipt.PrintReceiptFragment"
+        android:name="com.skyband.ecr.ui.fragment.response.printreceipt.PrintReceiptFragment"
         android:label="PrintReceiptFragment" >
         <action
             android:id="@+id/action_printReceiptFragment_to_homeFragment"

@@ -10,12 +10,12 @@ extern "C" {
 #endif
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_girmiti_skybandecr_sdk_CLibraryLoad_pack(JNIEnv *env, jobject obj, jstring requestData,
+Java_com_skyband_ecr_sdk_CLibraryLoad_pack(JNIEnv *env, jobject obj, jstring requestData,
                                                   jint transactionType, jstring szSignature,
                                                   jstring szEcrBuffer);
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_girmiti_skybandecr_sdk_CLibraryLoad_parse(JNIEnv *env, jobject obj, jstring respData,
+Java_com_skyband_ecr_sdk_CLibraryLoad_parse(JNIEnv *env, jobject obj, jstring respData,
                                                    jstring respOutData);
 
 #ifdef __cplusplus
