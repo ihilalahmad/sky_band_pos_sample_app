@@ -9,7 +9,7 @@ public enum TransactionType {
     PURCHASE_CASHBACK("Purchase CashBack"),
     REFUND("Refund"),
     PRE_AUTHORISATION("Pre Authorisation"),
-    PRE_AUTH_COMPLETION("Pre Auth Completion"),
+    PURCHASE_ADVICE("Purchase Advice"),
     PRE_AUTH_EXTENSION("Pre Auth Extension"),
     PRE_AUTH_VOID("Pre Auth Void"),
     ADVICE("Advice"),

@@ -116,7 +116,7 @@ public class PrintReceiptFragment extends Fragment {
                 return printReceiptViewModel.printReceiptPreAuthorisation(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "4":
-                return printReceiptViewModel.printReceiptPreAuthCompletion(receiveDataArray, Objects.requireNonNull(getContext()));
+                return printReceiptViewModel.printReceiptPurchaseAdvice(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "5":
                 return printReceiptViewModel.printReceiptPreAuthExtension(receiveDataArray, Objects.requireNonNull(getContext()));

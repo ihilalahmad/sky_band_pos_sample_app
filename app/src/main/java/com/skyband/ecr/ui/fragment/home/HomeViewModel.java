@@ -145,7 +145,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmt.setText("");
                 break;
-            case PRE_AUTH_COMPLETION:
+            case PURCHASE_ADVICE:
                 homeFragmentBinding.authAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmt.setText("");
@@ -277,7 +277,7 @@ public class HomeViewModel extends ViewModel {
             case PRE_AUTHORISATION:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case PRE_AUTH_COMPLETION:
+            case PURCHASE_ADVICE:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case PRE_AUTH_EXTENSION:
@@ -458,7 +458,7 @@ public class HomeViewModel extends ViewModel {
                 return validateRefund();
             case PRE_AUTHORISATION:
                 return validatePreAuthorisation();
-            case PRE_AUTH_COMPLETION:
+            case PURCHASE_ADVICE:
                 return validatePreAuthCompletion();
             case PRE_AUTH_EXTENSION:
                 return validatePreAuthExtension();

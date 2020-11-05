@@ -94,7 +94,7 @@
         <item>Purchase CashBack</item>
         <item>Refund</item>
         <item>Pre Authorisation</item>
-        <item>Pre Auth Completion</item>
+        <item>Purchase Advice</item>
         <item>Pre Auth Extension</item>
         <item>Pre Auth Void</item>
         <item>Cash advance</item>
@@ -104,8 +104,8 @@
         <item>SET Settings</item>
         <item>GET Settings</item>
         <!--<item>Set Terminal Language</item>-->
-       <!-- <item>Terminal Status</item>
-        <item>Previous Transaction Details</item>-->
+        <!-- <item>Terminal Status</item>
+         <item>Previous Transaction Details</item>-->
         <item>Bill Payment</item>
         <item>Running Total</item>
         <item>Print Summary Report</item>

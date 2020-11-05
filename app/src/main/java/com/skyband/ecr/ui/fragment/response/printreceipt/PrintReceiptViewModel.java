@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
+import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.model.ActiveTxnData;
 import com.skyband.ecr.sdk.logger.Logger;
 
@@ -50,43 +51,47 @@ public class PrintReceiptViewModel extends ViewModel {
             } else {
                 pan = receiveDataArray[4];
             }
-            if (receiveDataArray[21].equalsIgnoreCase("CONTACTLESS") && amount >= 5.0) {
-                htmlString = htmlString.replace("No Verification Required", "CARD HOLDER PIN VERIFIED");
+            if (receiveDataArray[21].equalsIgnoreCase(Constant.CONTACTLESS) && amount >= 5.0) {
+                htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, Constant.CARD_HOLDER_PIN_VERIFIED);
             }
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + "/" + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("panNumber", pan);
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.PAN_NUMBER, pan);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
             String arabic = checkingArabic(receiveDataArray[3]);
-            arabic = arabic.replace("\u08F1", "");
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("العملية مقبولة", arabic);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
     }
@@ -112,48 +117,54 @@ public class PrintReceiptViewModel extends ViewModel {
             } else {
                 pan = receiveDataArray[4];
             }
-            if (receiveDataArray[23].equalsIgnoreCase("CONTACTLESS") && transactionAmount >= 5.0) {
-                htmlString = htmlString.replace("No Verification Required", "CARD HOLDER PIN VERIFIED");
+            if (receiveDataArray[21].equalsIgnoreCase(Constant.CONTACTLESS) && transactionAmount >= 5.0) {
+                htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, Constant.CARD_HOLDER_PIN_VERIFIED);
             }
             String receiveDataArrayDateTime = receiveDataArray[10];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSARPUR", numToArabicConverter((String.format("%.2f", transactionAmount))));
-            htmlString = htmlString.replace("amountSARcashback", numToArabicConverter((String.format("%.2f", cashBackAmount))));
-            htmlString = htmlString.replace("amountSARtotal", numToArabicConverter((String.format("%.2f", totalAmount))));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[13]));
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace("amountSARPUR",
+                    numToArabicConverter((String.format("%.2f", transactionAmount))));
+            htmlString = htmlString.replace("amountSARcashback",
+                    numToArabicConverter((String.format("%.2f", cashBackAmount))));
+            htmlString = htmlString.replace("amountSARtotal",
+                    numToArabicConverter((String.format("{%.2f", totalAmount))));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[13]));
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", pan);
-            htmlString = htmlString.replace("authCode", receiveDataArray[13]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, pan);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[13]);
             String arabic = checkingArabic(receiveDataArray[3]);
-            arabic = arabic.replace("\u08F1", "");
-            htmlString = htmlString.replace("العملية مقبولة", arabic);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[8]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[8]);
             htmlString = htmlString.replace("TransactionAmount", String.format("%.2f", transactionAmount));
             htmlString = htmlString.replace("CashbackAmount", String.format("%.2f", cashBackAmount));
             htmlString = htmlString.replace("TotalAmount", String.format("%.2f", totalAmount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[23]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[17]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[21]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[20]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[18]);
-            htmlString = htmlString.replace("CID", receiveDataArray[19]);
-            htmlString = htmlString.replace("MID", receiveDataArray[15]);
-            htmlString = htmlString.replace("TID", receiveDataArray[14]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[12]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[9]);
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[23]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[20]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[14]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[9]);
             htmlString = htmlString.replace("TSI", receiveDataArray[22]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[29]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[26]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[26]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[31]);
         }
         return htmlString;
     }
@@ -171,41 +182,45 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
-            if (receiveDataArray[21].equalsIgnoreCase("CONTACTLESS") && amount >= 5.0) {
-                htmlString = htmlString.replace("No Verification Required", "CARD HOLDER PIN VERIFIED");
+            if (receiveDataArray[21].equalsIgnoreCase(Constant.CONTACTLESS) && amount >= 5.0) {
+                htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED,Constant.CARD_HOLDER_PIN_VERIFIED);
             }
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
 
@@ -223,44 +238,51 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            if (receiveDataArray[21].equalsIgnoreCase(Constant.CONTACTLESS) && amount >= 5.0) {
+                htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED,Constant.CARD_HOLDER_PIN_VERIFIED);
+            }
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
     }
 
     @SuppressLint("DefaultLocale")
-    public String printReceiptPreAuthCompletion(String[] receiveDataArray, Context context) throws IOException {
+    public String printReceiptPurchaseAdvice(String[] receiveDataArray, Context context) throws IOException {
 
         is = context.getResources().getAssets().open("printReceipt/Purchase_Advice(Customer_copy).html");
         htmlString = getHtmlString(is);
@@ -277,33 +299,37 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
     }
@@ -326,33 +352,37 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
     }
@@ -374,34 +404,37 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
-
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
     }
@@ -423,33 +456,37 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
         }
         return htmlString;
     }
@@ -472,35 +509,40 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[28]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[29]);
 
         }
+
         return htmlString;
     }
 
@@ -663,36 +705,37 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
-                htmlString = htmlString.replace("panNumber", maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace("arabicSAR", checkingArabic("SAR"));
-            htmlString = htmlString.replace("amountSAR", numToArabicConverter(String.format("%.2f", amount)));
-            htmlString = htmlString.replace("approovalcodearabic", numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace("Buzzcode", receiveDataArray[6]);
-            htmlString = htmlString.replace("authCode", receiveDataArray[11]);
-            htmlString = htmlString.replace("approved", receiveDataArray[3]);
-            htmlString = htmlString.replace("CurrentAmount", String.format("%.2f", amount));
-            htmlString = htmlString.replace("ExpiryDate", expiryDate);
-            htmlString = htmlString.replace("CONTACTLESS", receiveDataArray[21]);
-            htmlString = htmlString.replace("ResponseCode", receiveDataArray[2]);
-            htmlString = htmlString.replace("AIDaid", receiveDataArray[15]);
-            htmlString = htmlString.replace("TVR", receiveDataArray[19]);
-            htmlString = htmlString.replace("CVR", receiveDataArray[18]);
-            htmlString = htmlString.replace("applicationCryptogram", receiveDataArray[16]);
-            htmlString = htmlString.replace("CID", receiveDataArray[17]);
-            htmlString = htmlString.replace("MID", receiveDataArray[13]);
-            htmlString = htmlString.replace("TID", receiveDataArray[12]);
-            htmlString = htmlString.replace("RRN", receiveDataArray[10]);
-            htmlString = htmlString.replace("StanNo", receiveDataArray[7]);
+                htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
+            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.AMOUNT_SAR,
+                    numToArabicConverter(String.format("%.2f", amount)));
+            htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
+                    numToArabicConverter(receiveDataArray[11]));
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
+            htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
+            htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
+            htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
+            htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
+            htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
+            htmlString = htmlString.replace(Constant.CVR, receiveDataArray[18]);
+            htmlString = htmlString.replace(Constant.APPLICATION_CRYPTOGRAM, receiveDataArray[16]);
+            htmlString = htmlString.replace(Constant.CID, receiveDataArray[17]);
+            htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
+            htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
+            htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
+            htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace("TSI", receiveDataArray[20]);
-            htmlString = htmlString.replace("ApplicationVersion", receiveDataArray[27]);
-            htmlString = htmlString.replace("SchemeLabel", receiveDataArray[24]);
-            htmlString = htmlString.replace("MerchantCategoryCode", receiveDataArray[22]);
+            htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[27]);
+            htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[22]);
 
         }
-
         return htmlString;
     }
 
@@ -707,11 +750,12 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace("currentTime", currentTime);
-            htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID().substring(0,8));
+            htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+            htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
+            htmlString = htmlString.replace(Constant.TERMINAL_ID,ActiveTxnData.getInstance().getTerminalID().substring(0, 8));
             htmlString = htmlString.replace("responseCode", receiveDataArray[2]);
         }
+
         return htmlString;
     }
 
@@ -750,15 +794,15 @@ public class PrintReceiptViewModel extends ViewModel {
                     reconcilationTable = getHtmlString(is);
 
                     String arabi = checkingArabic(receiveDataArray[b + 1]);
-                    arabi = arabi.replace("\u08F1", "");
+                    arabi = arabi.replace(Constant.ARABIC_WORD, "");
                     reconcilationTable = reconcilationTable.replace("Scheme", receiveDataArray[b + 1]);
-                    reconcilationTable = reconcilationTable.replace("قَدِيرٞ", arabi);
+                    reconcilationTable = reconcilationTable.replace(Constant.ARABIC_WORD2, arabi);
                     b = b + 2;
                     summaryFinalReport.append(reconcilationTable);
                 } else {
                     if (receiveDataArray[b + 3].equalsIgnoreCase("POS TERMINAL")) {
                         String arabi = checkingArabic(receiveDataArray[b + 1]);
-                        arabi = arabi.replace("\u08F1", "");
+                        arabi = arabi.replace(Constant.ARABIC_WORD, "");
                         posTableRunning = posTableRunning.replace("مدى", arabi);
                         posTableRunning = posTableRunning.replace("schemename", receiveDataArray[b + 1]);
                         posTableRunning = posTableRunning.replace("totalDBCount", receiveDataArray[b + 4]);
@@ -812,6 +856,8 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("BuzzCode", receiveDataArray[6]);
             htmlString = htmlString.replace("AppVersion", receiveDataArray[7]);
             htmlString = htmlString.replace("TerminalId", ActiveTxnData.getInstance().getTerminalID());
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[b + 1]);
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[b + 2]);
         }
         return htmlString;
     }
@@ -819,6 +865,7 @@ public class PrintReceiptViewModel extends ViewModel {
     @SuppressLint("DefaultLocale")
     public String printReceiptPrintSummary(String[] receiveDataArray, Context context) throws IOException {
 
+        String htmlString = "";
         String summaryHtmlString = "";
         String summaryFinalReport = "";
 
@@ -827,12 +874,10 @@ public class PrintReceiptViewModel extends ViewModel {
 
         is = context.getResources().getAssets().open("printReceipt/Summary.html");
         summaryHtmlString = getHtmlString(is);
-
         String htmlSummaryReport = summaryHtmlString;
 
         String respDateTime = receiveDataArray[3];
-        System.out.println(respDateTime);
-        String currentDate = respDateTime.substring(0,2) + " / " + respDateTime.substring(2,4) + "/" + date;
+        String currentDate = respDateTime.substring(0, 2) + " / " + respDateTime.substring(2, 4) + "/" + date;
         String currentTime = respDateTime.substring(4, 6) + ":" + respDateTime.substring(6, 8) + ":"
                 + respDateTime.substring(8, 10);
         int j = 6;
@@ -860,11 +905,13 @@ public class PrintReceiptViewModel extends ViewModel {
 
         }
         htmlString = htmlString.replace("no_Transaction", summaryFinalReport);
-        htmlString = htmlString.replace("currentTime", currentTime);
-        htmlString = htmlString.replace("currentDate", currentDate);
-        htmlString = htmlString.replace("terminalId", ActiveTxnData.getInstance().getTerminalID().substring(0,8));
-        return htmlString;
+        htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
+        htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
+        htmlString = htmlString.replace(Constant.TERMINAL_ID, ActiveTxnData.getInstance().getTerminalID().substring(0, 8));
+        htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[j]);
+        htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[j + 1]);
 
+        return htmlString;
     }
 
     public String checkingArabic(String command) {
