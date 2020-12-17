@@ -31,10 +31,11 @@ public class BufferResponseViewModel extends ViewModel {
             pan = resp[4];
         }
         String[] purchaseArray = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE,
-                "PanNumber", "TransactionAmount", Constant.BUZZ_CODE, "StanNo", Constant.DATE_TIME, "CardExpriyDate",
+                "PanNumber", "TransactionAmount", Constant.BUSS_CODE, "StanNo", Constant.DATE_TIME, "CardExpriyDate",
                 "RRN", "AuthCode", "TID", "MID", "BatchNo", "AID", "ApplicationCryptogram", "CID", "CVR", "TVR", "TSI",
-                "CardEntryMode", "MerchantCategoryCode", "TerminalTransactionType", "Schemelabel", "Store&CashierInfo",
-                "ProductInfo", Constant.APPLICATION_VERSION, Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,
+                "CardEntryMode", "MerchantCategoryCode", "TerminalTransactionType", "Schemelabel", "ProductInfo",
+                Constant.APPLICATION_VERSION, Constant.VERIFICATION_INFO,
+                Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,Constant.MERCHANT_NAME_ARABIC__HEX_DATA, Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA,
                 Constant.ECR_TRANSACTION_REFERENCE_NUMBER, Constant.SIGNATURE };
         for (int i = 1; i < purchaseArray.length; i++) {
             if (i != 4) {
@@ -93,10 +94,11 @@ public class BufferResponseViewModel extends ViewModel {
         }
         String[] purchaseCashBackArray = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE,
                 Constant.RESPONSE_MESSAGE, "PanNumber", "TransactionAmount", "CashBackAmount", "TotalAmount",
-                Constant.BUZZ_CODE, "StanNo", Constant.DATE_TIME, "CardExpriyDate", "RRN", "AuthCode", "TID", "MID",
+                Constant.BUSS_CODE, "StanNo", Constant.DATE_TIME, "CardExpriyDate", "RRN", "AuthCode", "TID", "MID",
                 "BatchNo", "AID", "ApplicationCryptogram", "CID", "CVR", "TVR", "TSI", "CardEntryMode",
-                "MerchantCategoryCode", "TerminalTransactionType", "Schemelabel", "Store&CashierInfo", "ProductInfo",
-                Constant.APPLICATION_VERSION, Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,
+                "MerchantCategoryCode", "TerminalTransactionType", "Schemelabel", "ProductInfo",
+                Constant.APPLICATION_VERSION, Constant.VERIFICATION_INFO,
+                Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,Constant.MERCHANT_NAME_ARABIC__HEX_DATA, Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA,
                 Constant.ECR_TRANSACTION_REFERENCE_NUMBER, Constant.SIGNATURE };
 
         for (int i = 1; i < purchaseCashBackArray.length; i++) {
@@ -134,7 +136,7 @@ public class BufferResponseViewModel extends ViewModel {
                     Constant.NAQD_COUNT, Constant.NAQD_AMOUNT, "C/ADV Count", "C/ADV Amount", "Auth Count",
                     "Auth Amount", "Total Count", "Total Amount" };
             String[] reconcilation = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE,
-                    Constant.DATE_TIME, "MerchantId", Constant.BUZZ_CODE, "TraceNumber", Constant.APPLICATION_VERSION,
+                    Constant.DATE_TIME, "MerchantId", Constant.BUSS_CODE, "TraceNumber", Constant.APPLICATION_VERSION,
                     "TotalSchemeLength" };
             int k = 9;
             int totalSchemeLength = Integer.parseInt(resp[9]);
@@ -234,23 +236,35 @@ public class BufferResponseViewModel extends ViewModel {
             htmlString.append(htmlSeperator3);
 
             htmlString.append(htmlSeperator1);
+            htmlString.append(Constant.MERCHANT_NAME_ARABIC__HEX_DATA);
+            htmlString.append(htmlSeperator2);
+            htmlString.append(resp[k + 3]);
+            htmlString.append(htmlSeperator3);
+
+            htmlString.append(htmlSeperator1);
+            htmlString.append(Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA);
+            htmlString.append(htmlSeperator2);
+            htmlString.append(resp[k + 4]);
+            htmlString.append(htmlSeperator3);
+
+            htmlString.append(htmlSeperator1);
             htmlString.append(Constant.ECR_TRANSACTION_REFERENCE_NUMBER);
             htmlString.append(htmlSeperator2);
-            htmlString.append(resp[k+3]);
+            htmlString.append(resp[k + 5]);
             htmlString.append(htmlSeperator3);
 
             htmlString.append(htmlSeperator1);
             htmlString.append(Constant.SIGNATURE);
             htmlString.append(htmlSeperator2);
-            htmlString.append(resp[k+4]);
+            htmlString.append(resp[k + 6]);
             htmlString.append(htmlSeperator3);
 
             return responseToHtml(htmlString);
         } else {
             StringBuilder htmlString = new StringBuilder();
             String[] runningDetail = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE,
-                    Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS, Constant.ECR_TRANSACTION_REFERENCE_NUMBER,
-                    Constant.SIGNATURE };
+                    Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,Constant.MERCHANT_NAME_ARABIC__HEX_DATA, Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA,
+                    Constant.ECR_TRANSACTION_REFERENCE_NUMBER, Constant.SIGNATURE };
             for (int i = 1; i < runningDetail.length; i++) {
                 htmlString.append(htmlSeperator1);
                 htmlString.append(runningDetail[i]);
@@ -344,7 +358,7 @@ public class BufferResponseViewModel extends ViewModel {
 
         StringBuilder htmlString = new StringBuilder();
         String[] runningTotal = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE,
-                Constant.DATE_TIME, "TraceNumber", Constant.BUZZ_CODE, Constant.APPLICATION_VERSION,
+                Constant.DATE_TIME, "TraceNumber", Constant.BUSS_CODE, Constant.APPLICATION_VERSION,
                 "TotalSchemeLength" };
         String[] printSettlementPos = { "", "Scheme Name", Constant.TRANSACTION_AVAILABLE_FLAG, "Scheme Host",
                 "Total Debit Count", "Total Debit Amount", "Total Credit Count", "Total Credit Amount",
@@ -418,15 +432,27 @@ public class BufferResponseViewModel extends ViewModel {
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_NAME_ARABIC__HEX_DATA);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 3]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 4]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
         htmlString.append(Constant.ECR_TRANSACTION_REFERENCE_NUMBER);
         htmlString.append(htmlSeperator2);
-        htmlString.append(resp[k+3]);
+        htmlString.append(resp[k + 5]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
         htmlString.append(Constant.SIGNATURE);
         htmlString.append(htmlSeperator2);
-        htmlString.append(resp[k+4]);
+        htmlString.append(resp[k + 6]);
         htmlString.append(htmlSeperator3);
 
         return responseToHtml(htmlString);
@@ -435,7 +461,8 @@ public class BufferResponseViewModel extends ViewModel {
     public String printResponseRunningTotalDefault(String[] resp) {
         StringBuilder htmlString = new StringBuilder();
         String[] runningDetail = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE,
-                Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS, "EcrReferenceNumber", Constant.SIGNATURE };
+                Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS, Constant.MERCHANT_NAME_ARABIC__HEX_DATA, Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA,
+                "EcrReferenceNumber", Constant.SIGNATURE };
         for (int i = 1; i < runningDetail.length; i++) {
             htmlString.append(htmlSeperator1);
             htmlString.append(runningDetail[i]);
@@ -493,15 +520,27 @@ public class BufferResponseViewModel extends ViewModel {
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_NAME_ARABIC__HEX_DATA);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 2]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 3]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
         htmlString.append(Constant.ECR_TRANSACTION_REFERENCE_NUMBER);
         htmlString.append(htmlSeperator2);
-        htmlString.append(resp[k+2]);
+        htmlString.append(resp[k +  4]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
         htmlString.append(Constant.SIGNATURE);
         htmlString.append(htmlSeperator2);
-        htmlString.append(resp[k+3]);
+        htmlString.append(resp[k + 5]);
         htmlString.append(htmlSeperator3);
 
         logger.info("PrintResponse | PrintResponseSummary | Exited");
@@ -520,11 +559,12 @@ public class BufferResponseViewModel extends ViewModel {
             pan = resp[4];
         }
         String[] purchaseArray = { "", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE,
-                "PanNumber", "TransactionAmount", Constant.BUZZ_CODE, "StanNo", Constant.DATE_TIME, "CardExpriyDate",
+                "PanNumber", "TransactionAmount", Constant.BUSS_CODE, "StanNo", Constant.DATE_TIME, "CardExpriyDate",
                 "RRN", "AuthCode", "TID", "MID", "BatchNo", "AID", "ApplicationCryptogram", "CID", "CVR", "TVR", "TSI",
-                "CardEntryMode", "MerchantCategoryCode", "TerminalTransactionType", "Schemelabel", "Store&CashierInfo",
-                "ProductInfo", Constant.APPLICATION_VERSION, Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,
-                Constant.ECR_TRANSACTION_REFERENCE_NUMBER, Constant.SIGNATURE };
+                "CardEntryMode", "MerchantCategoryCode", "TerminalTransactionType", "Schemelabel",
+                "ProductInfo", Constant.APPLICATION_VERSION, Constant.VERIFICATION_INFO,
+                Constant.MERCHANT_NAME, Constant.MERCHANT_ADDRESS,Constant.MERCHANT_NAME_ARABIC__HEX_DATA,
+                Constant.MERCHANT_ADDRESS_ARABIC__HEX_DATA, Constant.ECR_TRANSACTION_REFERENCE_NUMBER, Constant.SIGNATURE };
         for (int i = 1; i < purchaseArray.length; i++) {
             if (i != 4) {
                 htmlString.append(htmlSeperator1);
