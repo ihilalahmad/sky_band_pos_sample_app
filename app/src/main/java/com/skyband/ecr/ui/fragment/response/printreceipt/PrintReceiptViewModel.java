@@ -26,14 +26,24 @@ public class PrintReceiptViewModel extends ViewModel {
     private String date = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
 
     public static String numToArabicConverter(String num) {
-        int arabicZeroUnicode = 1632;
-        StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < num.length(); ++i) {
-            builder.append((char) ((int) num.charAt(i) - 48 + arabicZeroUnicode));
+        StringBuilder arabic = new StringBuilder();
+        char[] numChar = num.toCharArray();
+        char[] arabicChar = { '۰', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩' };
+        for (int i = 0; i < numChar.length; i++) {
+            char temp = numChar[i];
+            String temp1 = String.valueOf(temp);
+            if (temp1.equals(".")) {
+                arabic.append(".");
+            }
+            for (int j = 0; j < arabicChar.length; j++) {
+                String tempj = String.valueOf(j);
+                if (tempj.equals(temp1)) {
+                    arabic.append(arabicChar[j]);
+                }
+            }
         }
-        return builder.toString();
-
+        return arabic.toString();
     }
 
     @SuppressLint("DefaultLocale")
@@ -626,22 +636,22 @@ public class PrintReceiptViewModel extends ViewModel {
                         madaHostTable = madaHostTable.replace("schemename", receiveDataArray[b + 1]);
                         madaHostTable = madaHostTable.replace("totalDBCount", receiveDataArray[b + 4]);
                         madaHostTable = madaHostTable.replace("totalDBAmount",
-                                String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 5])) / 100));
+                                customFormat(receiveDataArray[b + 5]));
                         madaHostTable = madaHostTable.replace("totalCBCount", receiveDataArray[b + 6]);
                         madaHostTable = madaHostTable.replace("totalCBAmount",
-                                String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 7])) / 100));
+                                customFormat(receiveDataArray[b + 7]));
                         madaHostTable = madaHostTable.replace("NAQDCount", receiveDataArray[b + 8]);
                         madaHostTable = madaHostTable.replace("NAQDAmount",
-                                String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 9])) / 100));
+                                customFormat(receiveDataArray[b + 9]));
                         madaHostTable = madaHostTable.replace("CADVCount", receiveDataArray[b + 10]);
                         madaHostTable = madaHostTable.replace("CADVAmount",
-                                String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 11])) / 100));
+                                customFormat(receiveDataArray[b + 11]));
                         madaHostTable = madaHostTable.replace("AUTHCount", receiveDataArray[b + 12]);
                         madaHostTable = madaHostTable.replace("AUTHAmount",
-                                String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 13])) / 100));
+                                customFormat(receiveDataArray[b + 13]));
                         madaHostTable = madaHostTable.replace("TOTALSCount", receiveDataArray[b + 14]);
                         madaHostTable = madaHostTable.replace("TOTALSAmount",
-                                String.format("%.2f", (Double.parseDouble(receiveDataArray[b + 15])) / 100));
+                                customFormat(receiveDataArray[b + 15]));
                         b = b + 15;
                         summaryFinalReport.append(madaHostTable);
                     } else if (receiveDataArray[b + 2].equalsIgnoreCase("POS TERMINAL")) {
@@ -896,7 +906,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("PosTable", summaryFinalReport.toString());
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace("BuzzCode", receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace("AppVersion", receiveDataArray[7]);
             htmlString = htmlString.replace("TerminalId", ActiveTxnData.getInstance().getTerminalID());
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[b + 1]);
@@ -922,7 +932,7 @@ public class PrintReceiptViewModel extends ViewModel {
         String htmlSummaryReport = summaryHtmlString;
 
         String respDateTime = receiveDataArray[3];
-        String currentDate = respDateTime.substring(0, 2) + " / " + respDateTime.substring(2, 4) + "/" + date;
+        String currentDate = respDateTime.substring(2, 4) + " / " + respDateTime.substring(0, 2) + "/" + date;
         String currentTime = respDateTime.substring(4, 6) + ":" + respDateTime.substring(6, 8) + ":"
                 + respDateTime.substring(8, 10);
         int j = 6;
@@ -1064,5 +1074,35 @@ public class PrintReceiptViewModel extends ViewModel {
         logger.debug("aaaa" + decodedToISO88591);
 
         return decodedToISO88591;
+    }
+
+    public static String customFormat(String amount) {
+        double d1 = Double.parseDouble(amount)/100;
+        d1 = Math.round(d1 * 100.0) / 100.0;
+        String s2 =String.format("%.2f", d1);
+        String[] st = s2.split("\\.");
+        return getIndianCurrencyFormat(st[0])+ "." + st[1];
+    }
+
+    public static String getIndianCurrencyFormat(String amount) {
+        StringBuilder stringBuilder = new StringBuilder();
+        char amountArray[] = amount.toCharArray();
+        int a = 0, b = 0;
+        for (int i = amountArray.length - 1; i >= 0; i--) {
+            if (a < 3) {
+                stringBuilder.append(amountArray[i]);
+                a++;
+            } else if (b < 2) {
+                if (b == 0) {
+                    stringBuilder.append(",");
+                    stringBuilder.append(amountArray[i]);
+                    b++;
+                } else {
+                    stringBuilder.append(amountArray[i]);
+                    b = 0;
+                }
+            }
+        }
+        return stringBuilder.reverse().toString();
     }
 }

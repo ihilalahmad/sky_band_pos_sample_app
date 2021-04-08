@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-6"?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +23,10 @@
         .header {
             text-align: center;
         }
+	.ff{
+            text-transform: uppercase;
+            font-weight: bold;
+	}
 
         .float-right {
             float: right;
@@ -69,8 +74,7 @@
         .b {
             font-weight: bold;
         }
-
-        .d {
+	.d {
             font-size: 25px;
         }
 
@@ -78,8 +82,28 @@
             font-size: 20px;
         }
 
+	.right {
+		  text-align: right;
+		}
+
+    .flex-container {
+               display: flex;
+               justify-content: space-between;
+         }
+
         .m-30 {
             margin-top: 30px;
+        }
+
+         .center {
+	  text-align: left;
+	}
+
+         .border {
+        border:none;
+        border-top:2px dashed;
+        height:2px;
+        width:100%;
         }
     </style>
 </head>
@@ -87,9 +111,9 @@
 <body>
 <div class="container">
     <div class="header">
-        <h3>Arabic Name</h3>
+        <h3>MerchantNameArabic</h3>
         <h3>Merchant Name</h3>
-        <h3>Arabic Address</h3>
+        <h3>MerchantAddressArabic</h3>
         <h5>Merchant Address</h5>
     </div>
     <div class="p-10 clear-fix">
@@ -97,46 +121,47 @@
         <div class="float-right">currentTime</div>
     </div>
     <div class="serial">
-        <small>RAJB &nbsp&nbsp MID &nbsp&nbsp TID</small>
-        <small>BussCode &nbsp&nbsp  StanNo &nbsp ApplicationVersion &nbsp &nbsp&nbsp RRN</small>
+        <small>RAJB &nbsp&nbsp MID &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TID</small>
+        <small>BussCode &nbsp&nbsp&nbsp StanNo &nbsp ApplicationVersion &nbsp&nbsp&nbsp&nbsp RRN</small>
     </div>
     <bdo dir="rtl" class="b">
-        مدى
+        &#1605;&#1583;&#1609;
     </bdo>
     <div class="b">mada</div>
     <bdo dir="rtl" class="b">
-        شراء
+        &#1588;&#1585;&#1575;&#1569;
     </bdo>
     <div class="caps">
         purchase
     </div>
     <div class="clear-fix">
-        <div class="float-left">panNumber</div>
+        <div class="float-left ff" >panNumber</div>
         <div class="float-right">ExpiryDate</div>
     </div>
     <bdo dir="rtl" class="b">
-        مبلغ الشراء
+        &#1605;&#1576;&#1604;&#1594; &#1575;&#1604;&#1588;&#1585;&#1575;&#1569;
     </bdo>
 
-    <div class="s"><h4  class="float-left ">arabicSAR</h4><h4>amountSAR</h4></div>
-    <h4 class="caps">purchase amount</h4>
-    <div class="text-right caps b d">
+    <div class = "s" ><h4  class="float-left">arabicSAR &nbsp</h4><h4>amountSAR</h4></div>
+    <div class ="caps"><h4>purchase amount</h4></div>
+    <div class="text-right caps b d"><h3>
         sar CurrentAmount
-    </div>
+        <h3></div>
     <div class="text-center">
         <div class="b">
-            العملية مقبولة
+            &#1575;&#1604;&#1593;&#1605;&#1604;&#1610;&#1577; &#1605;&#1602;&#1576;&#1608;&#1604;&#1577;
         </div>
         <div class="b caps">
             approved
         </div>
-        <div>
-            Arabic Verification Status
+        <div class = "b">
+            <!--   &#1604;&#1575; &#1610;&#1578;&#1591;&#1604;&#1576; &#1575;&#1604;&#1578;&#1581;&#1602;&#1602;-->
+            StatusArabic
         </div>
-        <small class="caps">verification status</small>
+        <small class="ff">no verification required</small>
         <div class="clear-fix">
             <div class="float-left b">approovalcodearabic</div>
-            <div class="float-right b">رمز الموافقة</div>
+            <div class="float-right b">&#1585;&#1605;&#1586; &#1575;&#1604;&#1605;&#1608;&#1575;&#1601;&#1602;&#1577;</div>
         </div>
         <div class="clear-fix b">
             <div class="float-left caps">
@@ -151,21 +176,110 @@
             <div class="float-right">currentTime</div>
         </div>
         <div>
-            شكرا لاستخدامكم مدى
-        </div>
-        <div >
-            <h  class="caps">thank you for using</h> <h>SchemeLabel</h>
+            &#1588;&#1603;&#1585;&#1575; &#1604;&#1575;&#1587;&#1578;&#1582;&#1583;&#1575;&#1605;&#1603;&#1605; &#1605;&#1583;&#1609;
         </div>
         <div>
-            يرجي الاحتفاظ بالإيصال
+            THANK YOU FOR USING SchemeLabel
         </div>
-        <div class="caps">please retain reciept</div>
-        <div class="b">** نسخة التاجر **</div>
+        <div>
+            &#1610;&#1585;&#1580;&#1610; &#1575;&#1604;&#1575;&#1581;&#1578;&#1601;&#1575;&#1592; &#1576;&#1575;&#1604;&#1573;&#1610;&#1589;&#1575;&#1604;
+        </div>
+        <div class="caps">please retain receipt</div>
+        <div class="b">** &#1606;&#1587;&#1582;&#1577; &#1575;&#1604;&#1578;&#1575;&#1580;&#1585; **</div>
+        <div class="b caps">** retailer copy **</div>
+        <div class="serial">
+            <div class ="center"><small>CONTACTLESS ResponseCode &nbsp AIDaid &nbspTVR</small></div>
+            <div class ="float-left"><small>CVR &nbsp &nbsp &nbsp CID &nbsp applicationCryptogram &nbsp&nbsp&nbsp&nbsp 03 </small></div>
+            <div class ="float-left"><small>00000000000000000000000000000 &nbsp&nbsp&nbsp&nbsp TSI</small></div>
+        </div>
+    </div>
+</div>
+
+<br><br>
+<hr class="border">
+
+<div class="container">
+    <div class="header">
+        <h3>MerchantNameArabic</h3>
+        <h3>Merchant Name</h3>
+        <h3>MerchantAddressArabic</h3>
+        <h5>Merchant Address</h5>
+    </div>
+    <div class="p-10 clear-fix">
+        <div class="float-left">currentDate</div>
+        <div class="float-right">currentTime</div>
+    </div>
+    <div class="serial">
+        <small>RAJB &nbsp&nbsp MID &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TID</small>
+        <small>BussCode &nbsp&nbsp&nbsp StanNo &nbsp ApplicationVersion &nbsp&nbsp&nbsp&nbsp RRN</small>
+    </div>
+    <bdo dir="rtl" class="b">
+        &#1605;&#1583;&#1609;
+    </bdo>
+    <div class="b">mada</div>
+    <bdo dir="rtl" class="b">
+        &#1588;&#1585;&#1575;&#1569;
+    </bdo>
+    <div class="caps">
+        purchase
+    </div>
+    <div class="clear-fix">
+        <div class="float-left ff" >panNumber</div>
+        <div class="float-right">ExpiryDate</div>
+    </div>
+    <bdo dir="rtl" class="b">
+        &#1605;&#1576;&#1604;&#1594; &#1575;&#1604;&#1588;&#1585;&#1575;&#1569;
+    </bdo>
+
+    <div class = "s" ><h4  class="float-left">arabicSAR &nbsp</h4><h4>amountSAR</h4></div>
+    <div class ="caps"><h4>purchase amount</h4></div>
+    <div class="text-right caps b d"><h3>
+        sar CurrentAmount
+        <h3></div>
+    <div class="text-center">
+        <div class="b">
+            &#1575;&#1604;&#1593;&#1605;&#1604;&#1610;&#1577; &#1605;&#1602;&#1576;&#1608;&#1604;&#1577;
+        </div>
+        <div class="b caps">
+            approved
+        </div>
+        <div class = "b">
+            <!--   &#1604;&#1575; &#1610;&#1578;&#1591;&#1604;&#1576; &#1575;&#1604;&#1578;&#1581;&#1602;&#1602;-->
+            StatusArabic
+        </div>
+        <small class="ff">no verification required</small>
+        <div class="clear-fix">
+            <div class="float-left b">approovalcodearabic</div>
+            <div class="float-right b">&#1585;&#1605;&#1586; &#1575;&#1604;&#1605;&#1608;&#1575;&#1601;&#1602;&#1577;</div>
+        </div>
+        <div class="clear-fix b">
+            <div class="float-left caps">
+                approval code
+            </div>
+            <div class="float-right caps">
+                authCode
+            </div>
+        </div>
+        <div class="clear-fix">
+            <div class="float-left">currentDate</div>
+            <div class="float-right">currentTime</div>
+        </div>
+        <div>
+            &#1588;&#1603;&#1585;&#1575; &#1604;&#1575;&#1587;&#1578;&#1582;&#1583;&#1575;&#1605;&#1603;&#1605; &#1605;&#1583;&#1609;
+        </div>
+        <div>
+            THANK YOU FOR USING SchemeLabel
+        </div>
+        <div>
+            &#1610;&#1585;&#1580;&#1610; &#1575;&#1604;&#1575;&#1581;&#1578;&#1601;&#1575;&#1592; &#1576;&#1575;&#1604;&#1573;&#1610;&#1589;&#1575;&#1604;
+        </div>
+        <div class="caps">please retain receipt</div>
+        <div class="b">** &#1606;&#1587;&#1582;&#1577; &#1575;&#1604;&#1593;&#1605;&#1610;&#1604; **</div>
         <div class="b caps">** customer copy **</div>
         <div class="serial">
-            <small>CONTACTLESS ResponseCode &nbsp AIDaid &nbsp TVR</small>
-            <small>CVR &nbsp CID &nbsp applicationCryptogram &nbsp 03 </small>
-            <small>00000000000000000000000000000 &nbsp TSI</small>
+            <div class ="center"><small>CONTACTLESS ResponseCode &nbsp AIDaid &nbspTVR</small></div>
+            <div class ="float-left"><small>CVR &nbsp &nbsp &nbsp CID &nbsp applicationCryptogram &nbsp&nbsp&nbsp&nbsp 03 </small></div>
+            <div class ="float-left"><small>00000000000000000000000000000 &nbsp&nbsp&nbsp&nbsp TSI</small></div>
         </div>
     </div>
 </div>

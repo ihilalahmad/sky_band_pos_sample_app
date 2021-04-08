@@ -59,7 +59,7 @@ public class Constant {
     public static final String APPROOVAL_CODE_ARABIC = "approovalcodearabic";
     public static final String ARABIC_WORD = "\u08F1";
     public static final String BUSS_CODE = "BussCode";
-    public static final String ARABIC_WORD1 = "العملية مقبولة";
+    public static final String ARABIC_WORD1 = "&#1575;&#1604;&#1593;&#1605;&#1604;&#1610;&#1577; &#1605;&#1602;&#1576;&#1608;&#1604;&#1577;";
     public static final String ARABIC_WORD2 = "قَدِيرٞ";
     public static final String NAQD_COUNT = "NAQDCount";
     public static final String NAQD_AMOUNT = "NAQDAmount";
@@ -69,11 +69,11 @@ public class Constant {
     public static final String MERCHANT_NAME = "Merchant Name";
     public static final String MERCHANT_ADDRESS = "Merchant Address";
     public static final String TERMINAL_ID = "terminalId";
-    public static final String ARABIC_MERCHANT_NAME = "Arabic Name";
-    public static final String ARABIC_MERCHANT_ADDRESS = "Arabic Address";
+    public static final String ARABIC_MERCHANT_NAME = "MerchantNameArabic";
+    public static final String ARABIC_MERCHANT_ADDRESS = "MerchantAddressArabic";
     public static final String MERCHANT_NAME_ARABIC__HEX_DATA = "Merchant Name Arabic Hex Data";
     public static final String MERCHANT_ADDRESS_ARABIC__HEX_DATA = "Merchant Address Arabic Hex Data";
     public static final String VERIFICATION_INFO = "verification status";
-    public static final String ARABIC_VERIFICATION_INFO = "Arabic Verification Status";
+    public static final String ARABIC_VERIFICATION_INFO = "StatusArabic";
 
 }
