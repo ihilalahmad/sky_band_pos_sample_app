@@ -150,6 +150,12 @@ public class ECRImpl implements ECRCore {
             case "C3":
                 terminalResponse = terminalResponse.replaceFirst("C3", String.valueOf(24));
                 break;
+            case "C4":
+                terminalResponse = terminalResponse.replaceFirst("C4", String.valueOf(25));
+                break;
+            case "C5":
+                terminalResponse = terminalResponse.replaceFirst("C5", String.valueOf(26));
+                break;
             case "D1":
                 terminalResponse = terminalResponse.replaceFirst("D1", String.valueOf(30));
                 break;

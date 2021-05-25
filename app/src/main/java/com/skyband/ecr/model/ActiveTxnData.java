@@ -20,6 +20,7 @@ public class ActiveTxnData {
     private String[] replacedArray;
     private String[] summaryReportArray;
     private int position;
+    private boolean isPartialCapture;
 
     private static ActiveTxnData activeTxnData;
 

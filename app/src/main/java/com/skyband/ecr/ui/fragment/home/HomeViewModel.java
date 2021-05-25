@@ -118,7 +118,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.payAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.payAmt.setText("");
                 break;
-            case PURCHASE_CASHBACK:
+            case PURCHASE_WITH_NAQD:
                 homeFragmentBinding.payAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.payAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.payAmt.setText("");
@@ -140,12 +140,12 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.origRefundDateTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origRefundDate.setText("");
                 break;
-            case PRE_AUTHORISATION:
+            case AUTHORIZATION:
                 homeFragmentBinding.authAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmt.setText("");
                 break;
-            case PURCHASE_ADVICE:
+            case PURCHASE_ADVICE_FULL:
                 homeFragmentBinding.authAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.authAmt.setText("");
@@ -162,7 +162,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origApproveCode.setText("");
                 break;
-            case PRE_AUTH_EXTENSION:
+            case AUTH_EXTENSION:
                 homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
                 homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
                 homeFragmentBinding.rrnNoEditText.setText("");
@@ -175,7 +175,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origApproveCode.setText("");
                 break;
-            case PRE_AUTH_VOID:
+            case AUTH_VOID:
                 homeFragmentBinding.origTransactionAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origTransactionAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origTransactionAmt.setText("");
@@ -196,11 +196,6 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.cashAdvanceAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.cashAdvanceAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.cashAdvanceAmt.setText("");
-                break;
-            case REVERSAL:
-                homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
-                homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
-                homeFragmentBinding.rrnNoEditText.setText("");
                 break;
             case SET_SETTINGS:
                 homeFragmentBinding.vendorId.setVisibility(View.VISIBLE);
@@ -247,7 +242,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.billerNumberTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.billerNumber.setText("");
                 break;
-            case REPEAT:
+            case DUPLICATE:
                 homeFragmentBinding.prevEcrNo.setVisibility(View.VISIBLE);
                 homeFragmentBinding.prevEcrNoTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.prevEcrNo.setText(prevEcrNo);
@@ -262,38 +257,42 @@ public class HomeViewModel extends ViewModel {
         if (print != 1) {
             print = 0;
         }
-        String completion = "1";
+
+        String capture;
+        if(ActiveTxnData.getInstance().isPartialCapture()) {
+            capture = "0";
+        } else {
+            capture = "1";
+        }
 
         switch (transactionTypeString) {
             case PURCHASE:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case PURCHASE_CASHBACK:
+            case PURCHASE_WITH_NAQD:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.payAmt.getText())) * 100) + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.cashBackAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REFUND:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.refundAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + homeFragmentBinding.origRefundDate.getText() + ";" + ecrReferenceNo + "!";
                 break;
-            case PRE_AUTHORISATION:
+            case AUTHORIZATION:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case PURCHASE_ADVICE:
-                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + completion + ";" + print + ";" + ecrReferenceNo + "!";
+            case PURCHASE_ADVICE_FULL:
+                reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + capture + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case PRE_AUTH_EXTENSION:
+            case AUTH_EXTENSION:
                 reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case PRE_AUTH_VOID:
+            case AUTH_VOID:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.origTransactionAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case CASH_ADVANCE:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.cashAdvanceAmt.getText())) * 100) + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case REVERSAL:
-                reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + print + ";" + ecrReferenceNo + "!";
-                break;
             case RECONCILIATION:
-                reqData = date + ";" + print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";"+ print + ";" + ecrReferenceNo + "!";
                 break;
             case SET_SETTINGS:
                 reqData = date + ";" + homeFragmentBinding.vendorId.getText() + ";" + homeFragmentBinding.vendorTerminalType.getText() + ";" + homeFragmentBinding.trsmId.getText() + ";" + homeFragmentBinding.vendorKeyIndex.getText() + ";" + homeFragmentBinding.samaKeyIndex.getText() + ";" + ecrReferenceNo + "!";
@@ -310,17 +309,19 @@ public class HomeViewModel extends ViewModel {
                 szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
                 reqData = date + ";" + GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + "!";
                 break;
-            case REPEAT:
+            case DUPLICATE:
                 reqData = date + ";" + prevEcrNo + ";" + ecrReferenceNo + "!";
                 break;
             case PRINT_SUMMARY_REPORT:
                 reqData = date + ";" + "0" + ";" + ecrReferenceNo + "!";
                 break;
             case PARAMETER_DOWNLOAD:
+            case PARTIAL_DOWNLOAD:
             case GET_SETTINGS:
             case TERMINAL_STATUS:
             case PREVIOUS_TRANSACTION_DETAILS:
             case RUNNING_TOTAL:
+            case SNAPSHOT_TOTAL:
             case CHECK_STATUS:
 
             default:
@@ -342,6 +343,8 @@ public class HomeViewModel extends ViewModel {
         String ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
         int portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
         int transactionType = transactionTypeString.ordinal();
+         logger.debug(">>>TransactionType:-" + transactionType);
+
         String combinedValue = "";
         transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
 
@@ -445,24 +448,24 @@ public class HomeViewModel extends ViewModel {
             ecrReferenceNo = GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER);
         }
 
-        logger.debug(getClass() + ":: Ecr refrence no>>" + ecrReferenceNo);
+        logger.debug(getClass() + ":: Ecr reference no>>" + ecrReferenceNo);
         logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
 
 
         switch (transactionTypeString) {
             case PURCHASE:
                 return validatePurchase();
-            case PURCHASE_CASHBACK:
+            case PURCHASE_WITH_NAQD:
                 return validatePurchaseCashBack();
             case REFUND:
                 return validateRefund();
-            case PRE_AUTHORISATION:
+            case AUTHORIZATION:
                 return validatePreAuthorisation();
-            case PURCHASE_ADVICE:
+            case PURCHASE_ADVICE_FULL:
                 return validatePreAuthCompletion();
-            case PRE_AUTH_EXTENSION:
+            case AUTH_EXTENSION:
                 return validatePreAuthExtension();
-            case PRE_AUTH_VOID:
+            case AUTH_VOID:
                 return validatePreAuthVoid();
             case CASH_ADVANCE:
                 return validateCashAdvance();
@@ -485,7 +488,7 @@ public class HomeViewModel extends ViewModel {
             case PREVIOUS_TRANSACTION_DETAILS:
             case RUNNING_TOTAL:
             case PRINT_SUMMARY_REPORT:
-            case REPEAT:
+            case DUPLICATE:
             case CHECK_STATUS:
             case START_SESSION:
                 return validateEcrNo();
@@ -663,10 +666,6 @@ public class HomeViewModel extends ViewModel {
             throw new Exception("Ecr no. should not be empty");
         } else if (ecrReferenceNo.length() != Constant.FOURTEEN) {
             throw new Exception("Ecr no. length should be 6 digits");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() == Constant.ZERO) {
-            throw new Exception("RRN no. should not be empty");
-        } else if (homeFragmentBinding.rrnNoEditText.getText().length() != Constant.TWELVE) {
-            throw new Exception("RRN no. length should be 12 digit");
         } else {
             return true;
         }

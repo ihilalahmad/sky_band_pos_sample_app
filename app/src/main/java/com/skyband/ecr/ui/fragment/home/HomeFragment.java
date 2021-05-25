@@ -31,6 +31,7 @@ import com.skyband.ecr.model.ActiveTxnData;
 import com.skyband.ecr.sdk.ConnectionManager;
 import com.skyband.ecr.transaction.StartTransaction;
 import com.skyband.ecr.databinding.HomeFragmentBinding;
+import com.skyband.ecr.transaction.TransactionType;
 import com.skyband.ecr.transaction.listener.TransactionListener;
 import com.skyband.ecr.sdk.ThreadPoolExecutorService;
 import com.skyband.ecr.sdk.logger.Logger;
@@ -231,12 +232,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         ActiveTxnData.getInstance().setPosition(position);
         selectedItem = parent.getItemAtPosition(position).toString();
-
+        logger.debug("Dropdown Selected Item>>" + selectedItem);
+        if (selectedItem.equals(TransactionType.PURCHASE_ADVICE_FULL.getTransactionType())) {
+            ActiveTxnData.getInstance().setPartialCapture(false);
+            selectedItem = "Purchase Advice Full";
+        } else if (selectedItem.equals("Purchase Advice(Partial)")) {
+            ActiveTxnData.getInstance().setPartialCapture(true);
+            selectedItem = "Purchase Advice Full";
+        }
         homeViewModel.resetVisibilityOfViews(homeFragmentBinding);
         homeViewModel.getVisibilityOfViews(selectedItem);
     }
-
-    ;
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

@@ -92,6 +92,7 @@ public class BufferResponseFragment extends Fragment {
                     }
                     break;
                 case "11":
+                case "25":
                     if (Integer.parseInt(receiveDataArray[2]) == 300 && !receiveDataArray[3].equals("DECLINED")) {
                         bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
                     } else {
@@ -99,6 +100,7 @@ public class BufferResponseFragment extends Fragment {
                     }
                     break;
                 case "21":
+                case "26":
                     if (Integer.parseInt(receiveDataArray[2]) != 0) {
                         bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                     } else {
@@ -181,6 +183,7 @@ public class BufferResponseFragment extends Fragment {
 
             case "11":
             case "12":
+            case "25":
                 if (receiveDataArray.length > 4) {
                     return bufferResponseViewModel.printResponseParameterDownload(receiveDataArray);
                 } else {
@@ -205,7 +208,7 @@ public class BufferResponseFragment extends Fragment {
             case "19":
                 return bufferResponseViewModel.printResponseStartSession(receiveDataArray);
             case "21":
-
+            case "26":
                 if (Integer.parseInt(receiveDataArray[2]) == 0) {
                     return bufferResponseViewModel.printResponseRunningTotal(receiveDataArray);
                 } else {
@@ -308,6 +311,12 @@ public class BufferResponseFragment extends Fragment {
                 break;
             case "C3":
                 terminalResponse[1] = "24";
+                break;
+            case "C4":
+                terminalResponse[1] = "25";
+                break;
+            case "C5":
+                terminalResponse[1] = "26";
                 break;
             case "D1":
                 terminalResponse[1] = "30";

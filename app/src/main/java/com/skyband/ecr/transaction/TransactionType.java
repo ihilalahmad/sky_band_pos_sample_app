@@ -6,12 +6,12 @@ import lombok.Setter;
 public enum TransactionType {
 
     PURCHASE("Purchase"),
-    PURCHASE_CASHBACK("Purchase CashBack"),
+    PURCHASE_WITH_NAQD("Purchase with Naqd"),
     REFUND("Refund"),
-    PRE_AUTHORISATION("Pre Authorisation"),
-    PURCHASE_ADVICE("Purchase Advice"),
-    PRE_AUTH_EXTENSION("Pre Auth Extension"),
-    PRE_AUTH_VOID("Pre Auth Void"),
+    AUTHORIZATION("Authorization"),
+    PURCHASE_ADVICE_FULL("Purchase Advice(Full)"),
+    AUTH_EXTENSION("Authorization Extension"),
+    AUTH_VOID("Authorization Void"),
     ADVICE("Advice"),
     CASH_ADVANCE("Cash Advance"),
     REVERSAL("Reversal"),
@@ -28,8 +28,10 @@ public enum TransactionType {
     BILL_PAYMENT("Bill Payment"),
     RUNNING_TOTAL("Running Total"),
     PRINT_SUMMARY_REPORT("Print Summary Report"),
-    REPEAT("Repeat"),
-    CHECK_STATUS("Check Status");
+    DUPLICATE("Duplicate"),
+    CHECK_STATUS("Check Status"),
+    PARTIAL_DOWNLOAD("Partial Download"),
+    SNAPSHOT_TOTAL("Snapshot Total");
 
     @Getter
     @Setter

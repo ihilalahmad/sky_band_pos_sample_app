@@ -137,9 +137,11 @@ public class PrintReceiptFragment extends Fragment {
                 return printReceiptViewModel.printReceiptBillPayment(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "11":
+            case "25":
                 return printReceiptViewModel.printReceiptParameterDownload(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "21":
+            case "26":
                 return printReceiptViewModel.printReceiptRunningTotal(receiveDataArray, Objects.requireNonNull(getContext()));
 
             case "22":

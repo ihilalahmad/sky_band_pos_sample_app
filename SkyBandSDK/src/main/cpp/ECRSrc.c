@@ -114,6 +114,12 @@ char *getCommand(int tranType)
 		case TYPE_CHECK_STATUS:
 			return CMD_CHECK_STATUS;	//Check Status
 
+		case TYPE_PARTIAL_DOWNLOAD:
+			return CMD_PARTIAL_DOWNLOAD;	//Partial Download
+
+		case TYPE_SNAPSHOT_TOTAL:
+			return CMD_SNAPSHOT_TOTAL;	//Snapshot Total
+
 		default:
 			break;
 	}
