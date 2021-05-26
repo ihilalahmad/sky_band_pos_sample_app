@@ -162,7 +162,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origApproveCode.setText("");
                 break;
-            case AUTH_EXTENSION:
+            case AUTHORIZATION_EXTENSION:
                 homeFragmentBinding.rrnNoEditText.setVisibility(View.VISIBLE);
                 homeFragmentBinding.rrnNoTextView.setVisibility(View.VISIBLE);
                 homeFragmentBinding.rrnNoEditText.setText("");
@@ -175,7 +175,7 @@ public class HomeViewModel extends ViewModel {
                 homeFragmentBinding.origApproveCodeTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origApproveCode.setText("");
                 break;
-            case AUTH_VOID:
+            case AUTHORIZATION_VOID:
                 homeFragmentBinding.origTransactionAmt.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origTransactionAmtTv.setVisibility(View.VISIBLE);
                 homeFragmentBinding.origTransactionAmt.setText("");
@@ -281,10 +281,10 @@ public class HomeViewModel extends ViewModel {
             case PURCHASE_ADVICE_FULL:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.authAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + capture + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case AUTH_EXTENSION:
+            case AUTHORIZATION_EXTENSION:
                 reqData = date + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
-            case AUTH_VOID:
+            case AUTHORIZATION_VOID:
                 reqData = date + ";" + (int) (Double.parseDouble(String.valueOf(homeFragmentBinding.origTransactionAmt.getText())) * 100) + ";" + homeFragmentBinding.rrnNoEditText.getText() + ";" + homeFragmentBinding.origTransactionDate.getText() + ";" + homeFragmentBinding.origApproveCode.getText() + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case CASH_ADVANCE:
@@ -463,9 +463,9 @@ public class HomeViewModel extends ViewModel {
                 return validatePreAuthorisation();
             case PURCHASE_ADVICE_FULL:
                 return validatePreAuthCompletion();
-            case AUTH_EXTENSION:
+            case AUTHORIZATION_EXTENSION:
                 return validatePreAuthExtension();
-            case AUTH_VOID:
+            case AUTHORIZATION_VOID:
                 return validatePreAuthVoid();
             case CASH_ADVANCE:
                 return validateCashAdvance();
@@ -483,10 +483,12 @@ public class HomeViewModel extends ViewModel {
                 return validateTerminalLanguage();
             case RECONCILIATION:
             case PARAMETER_DOWNLOAD:
+            case PARTIAL_DOWNLOAD:
             case GET_SETTINGS:
             case TERMINAL_STATUS:
             case PREVIOUS_TRANSACTION_DETAILS:
             case RUNNING_TOTAL:
+            case SNAPSHOT_TOTAL:
             case PRINT_SUMMARY_REPORT:
             case DUPLICATE:
             case CHECK_STATUS:
