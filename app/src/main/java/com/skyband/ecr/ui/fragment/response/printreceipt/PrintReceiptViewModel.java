@@ -64,7 +64,6 @@ public class PrintReceiptViewModel extends ViewModel {
             } else {
                 pan = receiveDataArray[4];
             }
-
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + "/" + date;
@@ -72,16 +71,16 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
             htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
             htmlString = htmlString.replace(Constant.PAN_NUMBER, pan);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
-            String arabic = checkingArabic(receiveDataArray[3]);
+            String arabic = CheckingArabic(receiveDataArray[3]);
             arabic = arabic.replace(Constant.ARABIC_WORD, "");
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
@@ -97,20 +96,20 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC,CheckingArabic(receiveDataArray[30]));
+
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
+
         }
         return htmlString;
     }
@@ -136,7 +135,6 @@ public class PrintReceiptViewModel extends ViewModel {
             } else {
                 pan = receiveDataArray[4];
             }
-
             String receiveDataArrayDateTime = receiveDataArray[10];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -144,7 +142,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
             htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace("amountSARPUR",
                     numToArabicConverter((String.format("%.2f", transactionAmount))));
             htmlString = htmlString.replace("amountSARcashback",
@@ -156,16 +154,16 @@ public class PrintReceiptViewModel extends ViewModel {
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, pan);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[13]);
-            String arabic = checkingArabic(receiveDataArray[3]);
+            String arabic = CheckingArabic(receiveDataArray[3]);
             arabic = arabic.replace(Constant.ARABIC_WORD, "");
             htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[8]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[8]);
             htmlString = htmlString.replace("TransactionAmount", String.format("%.2f", transactionAmount));
             htmlString = htmlString.replace("CashbackAmount", String.format("%.2f", cashBackAmount));
             htmlString = htmlString.replace("TotalAmount", String.format("%.2f", totalAmount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[26]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[23]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[17]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[21]);
@@ -176,21 +174,19 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[14]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[9]);
-            //
+            htmlString = htmlString.replace("TSI", receiveDataArray[22]);
             htmlString = htmlString.replace("KID", receiveDataArray[23]);
             htmlString = htmlString.replace("PAR", receiveDataArray[24]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[25]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[31]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, receiveDataArray[32]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC, CheckingArabic(receiveDataArray[32]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[29]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[27]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[32]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[33]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[34]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[35]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[36]));
-
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[35]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[36]));
         }
         return htmlString;
     }
@@ -208,6 +204,9 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
 
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
@@ -216,7 +215,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
             htmlString = htmlString.replace(Constant.CURRENT_TIME, currentTime);
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
@@ -224,11 +223,11 @@ public class PrintReceiptViewModel extends ViewModel {
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -239,24 +238,20 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC, CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
-
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
         }
         return htmlString;
-
     }
 
     @SuppressLint("DefaultLocale")
@@ -272,6 +267,10 @@ public class PrintReceiptViewModel extends ViewModel {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
 
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -285,13 +284,13 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -302,20 +301,18 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED,receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC, CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
         }
         return htmlString;
     }
@@ -333,6 +330,11 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -342,17 +344,17 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -363,20 +365,18 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED,receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC, CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
         }
         return htmlString;
     }
@@ -394,6 +394,10 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -403,17 +407,17 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -424,20 +428,18 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC,CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
         }
         return htmlString;
     }
@@ -454,6 +456,10 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -463,17 +469,17 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -484,20 +490,18 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED,receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC, CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
         }
         return htmlString;
     }
@@ -514,12 +518,16 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
             String currentTime = receiveDataArrayDateTime.substring(4, 6) + " :"
                     + receiveDataArrayDateTime.substring(6, 8) + " : " + receiveDataArrayDateTime.substring(8, 10);
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
@@ -529,11 +537,11 @@ public class PrintReceiptViewModel extends ViewModel {
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -544,21 +552,18 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
+            htmlString = htmlString.replace(Constant.NO_VERIFICATION_REQUIRED, receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC,CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
-
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
         }
         return htmlString;
     }
@@ -576,6 +581,10 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -585,17 +594,17 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -605,26 +614,21 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.MID, receiveDataArray[13]);
             htmlString = htmlString.replace(Constant.TID, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[10]);
-            //
             htmlString = htmlString.replace("KID", receiveDataArray[21]);
             htmlString = htmlString.replace("PAR", receiveDataArray[22]);
             htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
-            //
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[7]);
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
 
         }
-
-        return htmlString;
-    }
+		return htmlString;
+}
 
     @SuppressLint("DefaultLocale")
     public String printReceiptReconciliation(String[] receiveDataArray, Context context) throws IOException {
@@ -656,7 +660,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     is = context.getResources().getAssets().open("printReceipt/ReconcilationTable.html");
                     reconcilationTable = getHtmlString(is);
 
-                    String arabi = checkingArabic(receiveDataArray[b + 1]);
+                    String arabi = CheckingArabic(receiveDataArray[b + 1]);
                     arabi = arabi.replace("\u08F1", "");
                     reconcilationTable = reconcilationTable.replace("Scheme", receiveDataArray[b + 1]);
                     reconcilationTable = reconcilationTable.replace("قَدِيرٞ", arabi);
@@ -667,7 +671,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     madaHostTable = getHtmlString(is);
                     if (receiveDataArray[b + 3].equalsIgnoreCase("mada Host")) {
                         j = j - 1;
-                        String arabic = checkingArabic(receiveDataArray[b + 1]);
+                        String arabic = CheckingArabic(receiveDataArray[b + 1]);
                         arabic = arabic.replace("\u08F1", "");
                         madaHostTable = madaHostTable.replace("قَدِيرٞ", arabic);
                         madaHostTable = madaHostTable.replace("schemename", receiveDataArray[b + 1]);
@@ -755,7 +759,7 @@ public class PrintReceiptViewModel extends ViewModel {
             }
             htmlString = htmlString.replace("PosTable", summaryFinalReport);
             htmlString = htmlString.replace("merchantId", receiveDataArray[5]);
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace("traceNumber", receiveDataArray[7]);
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
@@ -763,8 +767,8 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("TerminalId", ActiveTxnData.getInstance().getTerminalID());
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[b + 1]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[b + 2]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[b + 3]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[b + 4]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[b + 3]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[b + 4]));
 
             return htmlString;
         }
@@ -784,6 +788,10 @@ public class PrintReceiptViewModel extends ViewModel {
             if (!expiryDate.equals("")) {
                 expiryDate = expiryDate.substring(0, 2) + "/" + expiryDate.substring(2, 4);
             }
+            String arabic = CheckingArabic(receiveDataArray[3]);
+            arabic = arabic.replace(Constant.ARABIC_WORD, "");
+            htmlString = htmlString.replace(Constant.ARABIC_WORD1, arabic);
+
             String receiveDataArrayDateTime = receiveDataArray[8];
             String currentDate = receiveDataArrayDateTime.substring(2, 4) + " / "
                     + receiveDataArrayDateTime.substring(0, 2) + " / " + date;
@@ -793,12 +801,12 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.CURRENT_DATE, currentDate);
             if (receiveDataArray[4].length() > 12)
                 htmlString = htmlString.replace(Constant.PAN_NUMBER, maskPAn(receiveDataArray[4]));
-            htmlString = htmlString.replace(Constant.ARABICSAR, checkingArabic("SAR"));
+            htmlString = htmlString.replace(Constant.ARABICSAR, CheckingArabic("SAR"));
             htmlString = htmlString.replace(Constant.AMOUNT_SAR,
                     numToArabicConverter(String.format("%.2f", amount)));
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace(Constant.AUTH_CODE, receiveDataArray[11]);
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
@@ -822,16 +830,17 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[29]);
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[27]);
             htmlString = htmlString.replace(Constant.MERCHANT_CATEGORY_CODE, receiveDataArray[25]);
-            htmlString = htmlString.replace( Constant.VERIFICATION_INFO, receiveDataArray[30]);
-            htmlString = htmlString.replace(Constant.ARABIC_VERIFICATION_INFO, checkingArabic(receiveDataArray[30]));
+            htmlString = htmlString.replace( Constant.NO_VERIFICATION_REQUIRED, receiveDataArray[30]);
+            htmlString = htmlString.replace(Constant.STATUS_ARABIC, CheckingArabic(receiveDataArray[30]));
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[32]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[33]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[34]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[33]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[34]));
 
         }
         return htmlString;
     }
+
 
     public String printReceiptParameterDownload(String[] receiveDataArray, Context context) throws IOException {
 
@@ -887,7 +896,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     is = context.getResources().getAssets().open("printReceipt/ReconcilationTable.html");
                     reconcilationTable = getHtmlString(is);
 
-                    String arabi = checkingArabic(receiveDataArray[b + 1]);
+                    String arabi = CheckingArabic(receiveDataArray[b + 1]);
                     arabi = arabi.replace(Constant.ARABIC_WORD, "");
                     reconcilationTable = reconcilationTable.replace("Scheme", receiveDataArray[b + 1]);
                     reconcilationTable = reconcilationTable.replace(Constant.ARABIC_WORD2, arabi);
@@ -895,7 +904,7 @@ public class PrintReceiptViewModel extends ViewModel {
                     summaryFinalReport.append(reconcilationTable);
                 } else {
                     if (receiveDataArray[b + 3].equalsIgnoreCase("POS TERMINAL")) {
-                        String arabi = checkingArabic(receiveDataArray[b + 1]);
+                        String arabi = CheckingArabic(receiveDataArray[b + 1]);
                         arabi = arabi.replace(Constant.ARABIC_WORD, "");
                         posTableRunning = posTableRunning.replace("مدى", arabi);
                         posTableRunning = posTableRunning.replace("schemename", receiveDataArray[b + 1]);
@@ -950,13 +959,13 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("PosTable", summaryFinalReport.toString());
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
-            htmlString = htmlString.replace(Constant.BUSS_CODE, receiveDataArray[6]);
+            htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace("AppVersion", receiveDataArray[7]);
             htmlString = htmlString.replace("TerminalId", ActiveTxnData.getInstance().getTerminalID());
             htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[b + 1]);
             htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[b + 2]);
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[b + 3]));
-            htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[b + 4]));
+            htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[b + 3]));
+            htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[b + 4]));
         }
         return htmlString;
     }
@@ -1013,7 +1022,7 @@ public class PrintReceiptViewModel extends ViewModel {
         return htmlString;
     }
 
-    public String checkingArabic(String command) {
+    public String CheckingArabic(String command) {
         String arabic = "";
         switch (command) {
             case "mada":
@@ -1056,7 +1065,7 @@ public class PrintReceiptViewModel extends ViewModel {
                 arabic = "مدى";
                 break;
             case "APPROVED":
-                arabic = "العملية مقبولة";
+                arabic = Constant.ARABIC_WORD1;
                 break;
             case "DECLINED":
                 arabic = "العملية مرفوضه";
@@ -1103,7 +1112,7 @@ public class PrintReceiptViewModel extends ViewModel {
         return s.substring(0, 5) + "******" + s.substring(s.length() - 4);
     }
 
-    private String convertToArabic(String hex) throws UnsupportedEncodingException {
+    private String hexToArabicConversion(String hex) throws UnsupportedEncodingException {
 
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < hex.length(); i += 2) {
