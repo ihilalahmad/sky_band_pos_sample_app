@@ -1018,8 +1018,8 @@ public class PrintReceiptViewModel extends ViewModel {
         htmlString = htmlString.replace(Constant.TERMINAL_ID, ActiveTxnData.getInstance().getTerminalID().substring(0, 8));
         htmlString = htmlString.replace(Constant.MERCHANT_NAME, receiveDataArray[j + 6]);
         htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[j + 7]);
-        htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_NAME, convertToArabic(receiveDataArray[j + 8]));
-        htmlString = htmlString.replace(Constant.ARABIC_MERCHANT_ADDRESS, convertToArabic(receiveDataArray[j + 9]));
+        htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[j + 8]));
+        htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[j + 9]));
         htmlString = htmlString.replace("dbCount", receiveDataArray[j + 1]);
         htmlString = htmlString.replace("dbAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 2]))));
         htmlString = htmlString.replace("crCount", receiveDataArray[j + 3]);
@@ -1072,7 +1072,7 @@ public class PrintReceiptViewModel extends ViewModel {
                 arabic = "مدى";
                 break;
             case "APPROVED":
-                arabic = Constant.ARABIC_WORD1;
+                arabic = "مقبولة";
                 break;
             case "DECLINED":
                 arabic = "العملية مرفوضه";
