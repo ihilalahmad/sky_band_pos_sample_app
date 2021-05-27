@@ -315,7 +315,7 @@ public class HomeViewModel extends ViewModel {
             case PRINT_SUMMARY_REPORT:
                 reqData = date + ";" + "0" + ";" + ecrReferenceNo + "!";
                 break;
-            case PARAMETER_DOWNLOAD:
+            case FULL_DOWNLOAD:
             case PARTIAL_DOWNLOAD:
             case GET_SETTINGS:
             case TERMINAL_STATUS:
@@ -482,7 +482,7 @@ public class HomeViewModel extends ViewModel {
             case SET_TERMINAL_LANGUAGE:
                 return validateTerminalLanguage();
             case RECONCILIATION:
-            case PARAMETER_DOWNLOAD:
+            case FULL_DOWNLOAD:
             case PARTIAL_DOWNLOAD:
             case GET_SETTINGS:
             case TERMINAL_STATUS:

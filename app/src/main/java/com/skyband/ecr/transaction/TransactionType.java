@@ -16,7 +16,7 @@ public enum TransactionType {
     CASH_ADVANCE("Cash Advance"),
     REVERSAL("Reversal"),
     RECONCILIATION("Reconciliation"),
-    PARAMETER_DOWNLOAD("Parameter Download"),
+    FULL_DOWNLOAD("Full Download"),
     SET_SETTINGS("SET Settings"),
     GET_SETTINGS("GET Settings"),
     SET_TERMINAL_LANGUAGE("Set Terminal Language"),

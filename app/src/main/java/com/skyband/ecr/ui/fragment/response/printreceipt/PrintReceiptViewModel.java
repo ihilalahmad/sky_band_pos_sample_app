@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.model.ActiveTxnData;
 import com.skyband.ecr.sdk.logger.Logger;
+import com.skyband.ecr.transaction.TransactionType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -176,9 +177,9 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.RRN, receiveDataArray[12]);
             htmlString = htmlString.replace(Constant.STAN_NO, receiveDataArray[9]);
             //
-            htmlString = htmlString.replace("KID", receiveDataArray[21]);
-            htmlString = htmlString.replace("PAR", receiveDataArray[22]);
-            htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[23]);
+            htmlString = htmlString.replace("KID", receiveDataArray[23]);
+            htmlString = htmlString.replace("PAR", receiveDataArray[24]);
+            htmlString = htmlString.replace("PANSUFFIX", receiveDataArray[25]);
             //
             htmlString = htmlString.replace(Constant.APPLICATION_VERSION, receiveDataArray[31]);
             htmlString = htmlString.replace(Constant.SCHEME_LABEL, receiveDataArray[29]);
@@ -942,6 +943,9 @@ public class PrintReceiptViewModel extends ViewModel {
                         summaryFinalReport.append(posTerminalDetails);
                     }
                 }
+            }
+            if(ActiveTxnData.getInstance().getTransactionType() == TransactionType.SNAPSHOT_TOTAL){
+                htmlString = htmlString.replace("running", "Snapshot");
             }
             htmlString = htmlString.replace("PosTable", summaryFinalReport.toString());
             htmlString = htmlString.replace("currentTime", currentTime);
