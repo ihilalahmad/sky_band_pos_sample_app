@@ -1020,12 +1020,12 @@ public class PrintReceiptViewModel extends ViewModel {
         htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS, receiveDataArray[j + 7]);
         htmlString = htmlString.replace(Constant.MERCHANT_NAME_RECEIPT, hexToArabicConversion(receiveDataArray[j + 8]));
         htmlString = htmlString.replace(Constant.MERCHANT_ADDRESS_RECEIPT, hexToArabicConversion(receiveDataArray[j + 9]));
-        htmlString = htmlString.replace("dbCount", receiveDataArray[j + 1]);
-        htmlString = htmlString.replace("dbAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 2]))));
-        htmlString = htmlString.replace("crCount", receiveDataArray[j + 3]);
-        htmlString = htmlString.replace("crAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 4]))));
-        htmlString = htmlString.replace("totalAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 5]))));
-
+        htmlString = htmlString.replace("Summary Report", receiveDataArray[j]);
+		htmlString = htmlString.replace("dbCount", receiveDataArray[j+1]);
+		htmlString = htmlString.replace("dbAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 2])/100)));
+		htmlString = htmlString.replace("crCount", receiveDataArray[j + 3]);
+		htmlString = htmlString.replace("crAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 4])/100)));
+		htmlString = htmlString.replace("totalAmount", String.format("%.2f", (Double.parseDouble(receiveDataArray[j + 5])/100)));
         return htmlString;
     }
 
