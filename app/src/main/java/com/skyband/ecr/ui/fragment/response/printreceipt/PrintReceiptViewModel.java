@@ -163,7 +163,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("CashbackAmount", String.format("%.2f", cashBackAmount));
             htmlString = htmlString.replace("TotalAmount", String.format("%.2f", totalAmount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[23]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[26]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[17]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[21]);
@@ -227,7 +227,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -290,7 +290,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROOVAL_CODE_ARABIC,
                     numToArabicConverter(receiveDataArray[11]));
             htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -354,7 +354,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -417,7 +417,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -479,7 +479,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -541,7 +541,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
@@ -604,7 +604,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace(Constant.APPROVED, receiveDataArray[3]);
             htmlString = htmlString.replace(Constant.CURRENT_AMOUNT, String.format("%.2f", amount));
             htmlString = htmlString.replace(Constant.EXPIRY_DATE, expiryDate);
-            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[21]);
+            htmlString = htmlString.replace(Constant.CONTACTLESS, receiveDataArray[24]);
             htmlString = htmlString.replace(Constant.RECEIVED_AT_AARRAY_ONSECODE, receiveDataArray[2]);
             htmlString = htmlString.replace(Constant.AID_AID, receiveDataArray[15]);
             htmlString = htmlString.replace(Constant.TVR, receiveDataArray[19]);
