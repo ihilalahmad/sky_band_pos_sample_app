@@ -98,6 +98,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, getEcrNumberString());
         }
 
+       // checking connection type
+
+
+
         if (ConnectionManager.instance() != null && ConnectionManager.instance().isConnected()) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {

@@ -2,34 +2,52 @@ package com.skyband.ecr.ui.fragment.setting.connnect;
 
 import androidx.databinding.DataBindingUtil;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skyband.ecr.R;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.databinding.ConnectSettingFragmentBinding;
+import com.skyband.ecr.model.ActiveTxnData;
+import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.api.ECRImpl;
 import com.skyband.ecr.sdk.api.listener.ECRCore;
 import com.skyband.ecr.sdk.logger.Logger;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConnectSettingFragment extends Fragment {
+public class ConnectSettingFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
     private NavController navController;
@@ -37,6 +55,27 @@ public class ConnectSettingFragment extends Fragment {
     private String ipAddress = "";
     private String portNo = "";
     private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
+
+    //Added for bluetooth
+
+    String selectedItem;
+    private ConnectSettingViewModel connectSettingViewModel;
+    private Dialog dialog;
+    private BluetoothAdapter bluetoothAdapter;
+    private ListView listView;
+    public static final String DEVICE_OBJECT = "device_name";
+    private ArrayAdapter<String> discoveredDevicesAdapter;
+    private BluetoothConnectionManager bluetoothConnectionManager;
+    private BluetoothDevice connectingDevice;
+
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_OBJECT = 4;
+    public static final int MESSAGE_TOAST = 5;
+
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+    //
 
     public static ECRCore getEcrCore() {
         return ecrCore;
@@ -54,9 +93,18 @@ public class ConnectSettingFragment extends Fragment {
 
         connectSettingFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.connect_setting_fragment, container, false);
 
+        connectSettingViewModel = ViewModelProviders.of(this).get(ConnectSettingViewModel.class);
+
         setupListeners();
 
         return connectSettingFragmentBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        connectSettingFragmentBinding.connectionTypeSpinner.setSelection(ActiveTxnData.getInstance().getConnectPosition());
+        bluetoothConnectionManager = new BluetoothConnectionManager(getContext(), handler);
+        super.onStart();
     }
 
     private void setupListeners() {
@@ -66,7 +114,15 @@ public class ConnectSettingFragment extends Fragment {
         connectSettingFragmentBinding.ipAddress.setText(ipAddress);
         connectSettingFragmentBinding.portNo.setText(portNo);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
+                R.array.connection_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        connectSettingFragmentBinding.connectionTypeSpinner.setAdapter(adapter);
+
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
+
+        connectSettingFragmentBinding.connectionTypeSpinner.setOnItemSelectedListener(this);
 
         connectSettingFragmentBinding.connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +175,7 @@ public class ConnectSettingFragment extends Fragment {
                         }
                     }
                 }).start();
+
             }
         });
 
@@ -143,6 +200,21 @@ public class ConnectSettingFragment extends Fragment {
                     logger.severe("Exception on disconnecting", e);
                     Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        //bluetooth connect button
+        connectSettingFragmentBinding.btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPrinterPickDialog();
+            }
+        });
+
+        connectSettingFragmentBinding.sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage("fjhfehfhf");
             }
         });
     }
@@ -170,4 +242,205 @@ public class ConnectSettingFragment extends Fragment {
 
         return matcher.matches();
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ActiveTxnData.getInstance().setConnectPosition(position);
+        selectedItem = parent.getItemAtPosition(position).toString();
+        connectSettingViewModel.resetVisibilityOfViews(connectSettingFragmentBinding);
+        connectSettingViewModel.getVisibilityOfViews(selectedItem);
+
+        if (selectedItem.equals("Bluetooth")) {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (bluetoothAdapter == null) {
+                Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Bluetooth is not available!", Toast.LENGTH_SHORT).show();
+            }
+
+            btnEnableDisable_Discoverable();
+        }
+
+    }
+
+    private void btnEnableDisable_Discoverable() {
+        Log.d("TAG", "btnEnableDisable_Discoverable: Making device discoverable for 300 seconds.");
+
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivity(discoverableIntent);
+    }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            logger.info(">>handler msg:" + msg);
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case 3:
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: " + connectingDevice.getName(), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2:
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connecting..." , Toast.LENGTH_SHORT).show();
+                            break;
+                        case 1:
+                        case 0:
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not connected" + connectingDevice.getName(), Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                    break;
+                case MESSAGE_DEVICE_OBJECT:
+                    connectingDevice = msg.getData().getParcelable(DEVICE_OBJECT);
+                    logger.info("Connecting Device" + connectingDevice);
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to " + connectingDevice.getName(),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+
+                    String writeMessage = new String(writeBuf);
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Write " + writeMessage, Toast.LENGTH_SHORT).show();
+
+                    break;
+                case MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Read " + readMessage, Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), msg.getData().getString("toast"),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+            return false;
+        }
+    });
+
+    private void sendMessage(String message) {
+        if (bluetoothConnectionManager.getState() != 3) {
+            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connection was lost!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (message.length() > 0) {
+            byte[] send = message.getBytes();
+            bluetoothConnectionManager.write(send);
+        }
+    }
+
+    private void showPrinterPickDialog() {
+        dialog = new Dialog(getActivity());
+        dialog.setCancelable(true);
+
+        View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.layout_bluetooth, null);
+        dialog.setContentView(view);
+        dialog.setTitle("Bluetooth Devices");
+
+        if (bluetoothAdapter.isDiscovering()) {
+            Log.e("TAG", "doing");
+            bluetoothAdapter.cancelDiscovery();
+        }
+        bluetoothAdapter.startDiscovery();
+
+        //Initializing bluetooth adapters
+        ArrayAdapter<String> pairedDevicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
+        discoveredDevicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
+
+        //locate listviews and attatch the adapters
+        ListView listView = (ListView) dialog.findViewById(R.id.pairedDeviceList);
+        ListView listView2 = (ListView) dialog.findViewById(R.id.discoveredDeviceList);
+        listView.setAdapter(pairedDevicesAdapter);
+        listView2.setAdapter(discoveredDevicesAdapter);
+
+        // Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
+
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+        // If there are paired devices, add each one to the ArrayAdapter
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                pairedDevicesAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        } else {
+            pairedDevicesAdapter.add(getString(R.string.none_paired));
+        }
+
+        //Handling listview item click event
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                bluetoothAdapter.cancelDiscovery();
+                String info = ((TextView) view).getText().toString();
+                String address = info.substring(info.length() - 17);
+                logger.info("address" + address);
+                connectToDevice(address);
+                dialog.dismiss();
+            }
+
+        });
+
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                bluetoothAdapter.cancelDiscovery();
+                String info = ((TextView) view).getText().toString();
+                String address = info.substring(info.length() - 17);
+
+                connectToDevice(address);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+
+    private void connectToDevice(String deviceAddress) {
+        bluetoothAdapter.cancelDiscovery();
+        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
+        logger.info("device" + device);
+        bluetoothConnectionManager.connect(device);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
+    private final BroadcastReceiver discoveryFinishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (Objects.requireNonNull(device).getBondState() != BluetoothDevice.BOND_BONDED) {
+                    discoveredDevicesAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                if (discoveredDevicesAdapter.getCount() == 0) {
+                    discoveredDevicesAdapter.add(getString(R.string.none_found));
+                }
+            }
+        }
+    };
 }

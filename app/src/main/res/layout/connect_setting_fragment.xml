@@ -10,27 +10,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp15"
+                android:layout_marginTop="@dimen/dp25"
                 android:text="Connection  Settings"
                 android:textSize="@dimen/sp20"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/connection_type_spinner"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp35"
-                android:layout_marginTop="@dimen/dp35"
-                android:text="TCP/IP Settings"
-                android:textSize="@dimen/sp20"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="@dimen/dp25"
+                android:layout_marginTop="@dimen/dp25"
+                android:dropDownVerticalOffset="10dp"
+                android:entries="@array/connection_type"
+                android:overlapAnchor="false"
+                android:prompt="@string/connection_type_prompt"
+                android:spinnerMode="dropdown" />
+
 
             <TextView
+                android:id="@+id/ip_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp35"
@@ -53,6 +59,7 @@
                 android:padding="@dimen/dp10" />
 
             <TextView
+                android:id="@+id/port_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp35"
@@ -71,9 +78,16 @@
                 android:hint="@string/port_no"
                 android:padding="@dimen/dp10" />
 
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7" />
+
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -99,6 +113,45 @@
                 android:background="@color/white"
                 android:textColor="@color/blue"
                 android:text="Disconnect" />
+
+        </LinearLayout>
+
+      <!--  <Button
+            android:id="@+id/btn_connect"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
+            android:textColor="@color/white"
+            android:background="@color/blue"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
+            android:text="Connect" />-->
+        <LinearLayout
+            android:id="@+id/bot_bluetooth_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <Button
+                android:id="@+id/btn_connect"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp60"
+                android:layout_weight="50"
+                android:textSize="@dimen/dp15"
+                android:textColor="@color/white"
+                android:background="@color/blue"
+                android:text="Connect" />
+
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp60"
+                android:textSize="@dimen/dp15"
+                android:layout_weight="50"
+                android:background="@color/white"
+                android:textColor="@color/blue"
+                android:text="Send" />
 
         </LinearLayout>
 
