@@ -259,7 +259,7 @@ public class HomeViewModel extends ViewModel {
         }
 
         String capture;
-        if(ActiveTxnData.getInstance().isPartialCapture()) {
+        if (ActiveTxnData.getInstance().isPartialCapture()) {
             capture = "0";
         } else {
             capture = "1";
@@ -292,7 +292,7 @@ public class HomeViewModel extends ViewModel {
                 break;
             case REVERSAL:
             case RECONCILIATION:
-                reqData = date + ";"+ print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case SET_SETTINGS:
                 reqData = date + ";" + homeFragmentBinding.vendorId.getText() + ";" + homeFragmentBinding.vendorTerminalType.getText() + ";" + homeFragmentBinding.trsmId.getText() + ";" + homeFragmentBinding.vendorKeyIndex.getText() + ";" + homeFragmentBinding.samaKeyIndex.getText() + ";" + ecrReferenceNo + "!";
@@ -339,11 +339,16 @@ public class HomeViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String getTerminalResponse() throws Exception {
+        String ipAddress = null;
+        int portNumber = 0;
 
-        String ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
-        int portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
+            ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
+            portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
+        }
+
         int transactionType = transactionTypeString.ordinal();
-         logger.debug(">>>TransactionType:-" + transactionType);
+        logger.debug(">>>TransactionType:-" + transactionType);
 
         String combinedValue = "";
         transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
@@ -363,8 +368,15 @@ public class HomeViewModel extends ViewModel {
             int ecrNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER)) + 1;
             GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, String.format("%06d", ecrNumber));
         }
+        StringBuilder terminalResponse;
+        //  StringBuilder terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
+        //  terminalResponse using Bluetooth Connection
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
+            terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
+        } else {
+            terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doBluetoothTransaction(reqData, transactionType, szSignature));
+        }
 
-        StringBuilder terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
         String terminalResponseString = terminalResponse.toString();
         String[] responseArray = terminalResponseString.split(";");
         String[] splittedResponse;
@@ -375,7 +387,7 @@ public class HomeViewModel extends ViewModel {
 
             int count = Integer.parseInt(responseArray[4]);
 
-            if(count == 0) {
+            if (count == 0) {
                 splittedResponse = terminalResponseString.split(";");
                 splittedResponse[0] = "22";
                 ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
@@ -383,7 +395,11 @@ public class HomeViewModel extends ViewModel {
 
                 for (int i = 1; i <= count; i++) {
                     String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                    String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                    //      String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                    String resp = "";
+                    //
+                    //response using bluetooth connection
+
                     String[] secondResponse = resp.split(";");
                     System.out.println(secondResponse.length);
                     String[] respTemp = new String[secondResponse.length - 2];

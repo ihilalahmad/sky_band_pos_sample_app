@@ -62,10 +62,9 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     private ConnectSettingViewModel connectSettingViewModel;
     private Dialog dialog;
     private BluetoothAdapter bluetoothAdapter;
-    private ListView listView;
     public static final String DEVICE_OBJECT = "device_name";
     private ArrayAdapter<String> discoveredDevicesAdapter;
-    private BluetoothConnectionManager bluetoothConnectionManager;
+    public static BluetoothConnectionManager bluetoothConnectionManager;
     private BluetoothDevice connectingDevice;
 
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -73,6 +72,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_OBJECT = 4;
     public static final int MESSAGE_TOAST = 5;
+    public static String readMessage;
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     //
@@ -103,7 +103,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     @Override
     public void onStart() {
         connectSettingFragmentBinding.connectionTypeSpinner.setSelection(ActiveTxnData.getInstance().getConnectPosition());
-        bluetoothConnectionManager = new BluetoothConnectionManager(getContext(), handler);
+        bluetoothConnectionManager = BluetoothConnectionManager.instance(handler);
         super.onStart();
     }
 
@@ -246,6 +246,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         ActiveTxnData.getInstance().setConnectPosition(position);
+        logger.info("Selected Position" + position);
         selectedItem = parent.getItemAtPosition(position).toString();
         connectSettingViewModel.resetVisibilityOfViews(connectSettingFragmentBinding);
         connectSettingViewModel.getVisibilityOfViews(selectedItem);
@@ -279,6 +280,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     switch (msg.arg1) {
                         case 3:
                             Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: " + connectingDevice.getName(), Toast.LENGTH_SHORT).show();
+                            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
                             break;
                         case 2:
                             Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connecting..." , Toast.LENGTH_SHORT).show();
@@ -294,6 +296,8 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     logger.info("Connecting Device" + connectingDevice);
                     Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to " + connectingDevice.getName(),
                             Toast.LENGTH_SHORT).show();
+                    //Added for navigating after connection
+                    navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                     break;
                 case MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
@@ -304,9 +308,10 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     break;
                 case MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
+                     readMessage = new String(readBuf, 0, msg.arg1);
 
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Read " + readMessage, Toast.LENGTH_SHORT).show();
+                    logger.info("Read" + readMessage);
+
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), msg.getData().getString("toast"),
@@ -318,11 +323,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         }
     });
 
-    private void sendMessage(String message) {
-        if (bluetoothConnectionManager.getState() != 3) {
-            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connection was lost!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public static void sendMessage(String message) {
 
         if (message.length() > 0) {
             byte[] send = message.getBytes();
@@ -414,6 +415,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
 
     private void connectToDevice(String deviceAddress) {
+        ecrCore = ECRImpl.getConnectInstance();
         bluetoothAdapter.cancelDiscovery();
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
         logger.info("device" + device);

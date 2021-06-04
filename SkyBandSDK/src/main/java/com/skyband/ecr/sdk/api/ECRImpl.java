@@ -1,5 +1,13 @@
 package com.skyband.ecr.sdk.api;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.CLibraryLoad;
 import com.skyband.ecr.sdk.ConnectionManager;
 import com.skyband.ecr.sdk.api.listener.ECRCore;
@@ -9,11 +17,24 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ECRImpl implements ECRCore {
 
     private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ECRImpl.class.getName());
+
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_OBJECT = 4;
+    public static final int MESSAGE_TOAST = 5;
+    private static String readMessage = null;
+    private byte[] packData;
+    String response;
+    String terminalResponse = null;
+    BluetoothConnectionManager bluetoothConnectionManager;
 
     public static ECRCore getConnectInstance() {
         if (ecrCore == null) {
@@ -201,4 +222,89 @@ public class ECRImpl implements ECRCore {
 
         return resultSHA;
     }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            logger.info(">>handler msg:" + msg);
+            switch (msg.what) {
+                case MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+
+                    readMessage = new String(readBuf, 0, msg.arg1);
+//                    try {
+//                        getTerminalResponse();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+                    logger.info("Read" + readMessage);
+                    break;
+
+            }
+            return false;
+        }
+    });
+
+    @Override
+    public String doBluetoothTransaction(String requestData, int transactionType, String signature) throws Exception {
+
+        packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
+
+
+        bluetoothConnectionManager = BluetoothConnectionManager.instance(handler);
+        bluetoothConnectionManager.write(packData);
+
+
+        for (int i = 0; i < 10; i++) {
+            if (readMessage == null) {
+                i = 0;
+            }
+            if (bluetoothConnectionManager.getState() == 3) {
+              /*  new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (readMessage != null) {
+                                terminalResponse = getTerminalResponse();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 1000);
+            }*/
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (readMessage != null) {
+                                terminalResponse = getTerminalResponse();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 1000);
+                if (terminalResponse != null) {
+                    readMessage = null;
+                    bluetoothConnectionManager.stop();
+                    break;
+                }
+            }
+        }
+        return terminalResponse;
+    }
+
+        private String getTerminalResponse () throws Exception {
+
+            logger.info("Terminal Response" + terminalResponse);
+            terminalResponse = readMessage.replace("�", ";");
+            logger.debug("After Replace  with ;>>" + terminalResponse);
+            terminalResponse = changeToTransactionType(terminalResponse);
+            logger.debug("After Replace with Transactiontype>>" + terminalResponse);
+            return terminalResponse;
+        }
+
 }

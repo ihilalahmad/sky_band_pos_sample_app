@@ -46,6 +46,13 @@ public class BluetoothConnectionManager {
     public static final int MESSAGE_DEVICE_OBJECT = 4;
     public static final int MESSAGE_TOAST = 5;
 
+    public BluetoothSocket socket;
+    private BluetoothSocket bluetoothSocket;
+    private BluetoothDevice device;
+
+    private InputStream inputStream;
+    private OutputStream outputStream;
+
     private static BluetoothConnectionManager bluetoothConnectionManager;
 
     public static BluetoothConnectionManager instance() {
@@ -55,17 +62,17 @@ public class BluetoothConnectionManager {
         return null;
     }
 
-    public static BluetoothConnectionManager instance(Context context, Handler handler) {
+    public static BluetoothConnectionManager instance(Handler handler) {
 
         if (bluetoothConnectionManager == null) {
-            bluetoothConnectionManager = new BluetoothConnectionManager(context, handler);
+            bluetoothConnectionManager = new BluetoothConnectionManager(handler);
         } else {
             bluetoothConnectionManager.setHandler(handler);
         }
         return bluetoothConnectionManager;
     }
 
-    public BluetoothConnectionManager(Context context, Handler handler) {
+    public BluetoothConnectionManager(Handler handler) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         state = STATE_NONE;
 
@@ -106,7 +113,9 @@ public class BluetoothConnectionManager {
     }
 
     // initiate connection to remote device
-    public synchronized void connect(BluetoothDevice device) {
+    public synchronized void connect(BluetoothDevice device1) {
+
+        device = device1;
         // Cancel any thread
         if (state == STATE_CONNECTING) {
             if (connectThread != null) {
@@ -122,13 +131,13 @@ public class BluetoothConnectionManager {
         }
 
         // Start the thread to connect with the given device
-        connectThread = new ConnectThread(device);
+        connectThread = new ConnectThread();
         connectThread.start();
         setState(STATE_CONNECTING);
     }
 
     // manage Bluetooth connection
-    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
+    public synchronized void connected() {
         // Cancel the thread
         if (connectThread != null) {
             connectThread.cancel();
@@ -149,7 +158,7 @@ public class BluetoothConnectionManager {
         logger.info("connected Thread");
 
         // Start the thread to manage the connection and perform transmissions
-        connectedThread = new ReadWriteThread(socket);
+        connectedThread = new ReadWriteThread();
         connectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
@@ -243,7 +252,7 @@ public class BluetoothConnectionManager {
                             case STATE_LISTEN:
                             case STATE_CONNECTING:
                                 // start the connected thread.
-                                connected(socket, socket.getRemoteDevice());
+                                connected();
                                 break;
                             case STATE_NONE:
                             case STATE_CONNECTED:
@@ -270,12 +279,9 @@ public class BluetoothConnectionManager {
 
     // runs while attempting to make an outgoing connection
     private class ConnectThread extends Thread {
-        private final BluetoothSocket socket;
-        private final BluetoothDevice device;
 
-        public ConnectThread(BluetoothDevice device) {
+        public ConnectThread() {
             logger.info("Inside Connect thread");
-            this.device = device;
             BluetoothSocket tmp = null;
             try {
                 tmp = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
@@ -302,14 +308,14 @@ public class BluetoothConnectionManager {
                 connectionFailed();
                 return;
             }
-           logger.info("After socket.connect()");
+            logger.info("After socket.connect()");
             // Reset the ConnectThread because we're done
             synchronized (BluetoothConnectionManager.this) {
                 connectThread = null;
             }
 
             // Start the connected thread
-            connected(socket, device);
+            connected();
         }
 
         public void cancel() {
@@ -322,12 +328,9 @@ public class BluetoothConnectionManager {
 
     // runs during a connection with a remote device
     private class ReadWriteThread extends Thread {
-        private final BluetoothSocket bluetoothSocket;
-        private final InputStream inputStream;
-        private final OutputStream outputStream;
 
-        public ReadWriteThread(BluetoothSocket socket) {
-            this.bluetoothSocket = socket;
+        public ReadWriteThread() {
+            bluetoothSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
@@ -381,4 +384,5 @@ public class BluetoothConnectionManager {
             }
         }
     }
+
 }
