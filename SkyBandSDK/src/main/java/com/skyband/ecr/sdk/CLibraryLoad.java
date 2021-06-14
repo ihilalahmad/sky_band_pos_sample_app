@@ -23,13 +23,15 @@ public class CLibraryLoad {
         return instance;
     }
 
-    public byte[] getPackData(String reqData, int tranType, String szSignature) {
+    public byte[] getPackData(String reqData, int tranType, String szSignature) throws Exception {
 
         logger.debug("Calling Pack >>> " + reqData + " szSignature >>> " + szSignature);
 
         byte[] packedData = pack(reqData, tranType, szSignature, null);
         String packData = new String(packedData);
-
+        if(packData.isEmpty()){
+            throw new Exception("4");
+        }
         logger.debug("Packed Data:" + packData);
         logger.debug("Sending Packed Data to Terminal>>>");
 

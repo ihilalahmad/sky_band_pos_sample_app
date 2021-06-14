@@ -124,3 +124,135 @@ char *getCommand(int tranType)
 			break;
 	}
 }
+
+
+#define PURCHASE_FIELDS_COUNT 			4
+#define PURCHASE_CASHBACK_FIELDS_COUNT 	5
+#define REFUND_FIELDS_COUNT 			6
+#define PREAUTH_FIELDS_COUNT 			4
+#define PRECOMP_FIELDS_COUNT 			8
+#define PREAUTH_EXT_FIELDS_COUNT 		6
+#define PREAUTH_VOID_FIELDS_COUNT 		8
+#define CASH_ADVANCE_FIELDS_COUNT 		4
+#define REVERSAL_FIELDS_COUNT 			3
+#define RECONCILATION_FIELDS_COUNT 		3
+#define PARAM_DOWNLOAD_FIELDS_COUNT 	2
+#define SET_PARAM_FIELDS_COUNT 			7
+#define GET_PARAM_FIELDS_COUNT 			2
+#define REGISTER_FIELDS_COUNT 			2
+#define START_SESSION_FIELDS_COUNT 		2
+#define END_SESSION_FIELDS_COUNT 		2
+#define BILL_PAY_FIELDS_COUNT 			6
+#define PRNT_DETAIL_RPORT_FIELDS_COUNT 	2
+#define PRNT_SUMMARY_RPORT_FIELDS_COUNT 3
+#define REPEAT_FIELDS_COUNT 			3
+#define CHECK_STATUS_FIELDS_COUNT 		2
+#define PARTIAL_DOWNLOAD_FIELDS_COUNT 	2
+#define SNAPSHOT_TOTAL_FIELDS_COUNT		2
+
+int validateFieldsCount(int tranType, int fieldsCount)
+{
+	int tranTypeFieldsCount = -1;
+	switch(tranType)
+	{
+		case TYPE_PURCHASE:
+			tranTypeFieldsCount = PURCHASE_FIELDS_COUNT;	//Purchase
+			break;
+
+		case TYPE_PURCHASE_CASHBACK:
+			tranTypeFieldsCount = PURCHASE_CASHBACK_FIELDS_COUNT; 	//Purchase cashback
+			break;
+
+		case TYPE_REFUND:
+			tranTypeFieldsCount = REFUND_FIELDS_COUNT;		// Refund
+			break;
+
+		case TYPE_PREAUTH:
+			tranTypeFieldsCount = PREAUTH_FIELDS_COUNT;		//Pre-authorization
+			break;
+
+		case TYPE_REVERSAL:
+			tranTypeFieldsCount = REVERSAL_FIELDS_COUNT;		//Reversal
+			break;
+
+		case TYPE_PRECOMP:
+			tranTypeFieldsCount = PRECOMP_FIELDS_COUNT;		//Pre-Auth Completion
+			break;
+
+		case TYPE_PREAUTH_EXT:
+			tranTypeFieldsCount = PREAUTH_EXT_FIELDS_COUNT; 	//Pre-Auth Extension
+			break;
+
+		case TYPE_PREAUTH_VOID:
+			tranTypeFieldsCount = PREAUTH_VOID_FIELDS_COUNT; 	//Pre-Auth VOID
+			break;
+
+		case TYPE_CASH_ADVANCE:
+			tranTypeFieldsCount = CASH_ADVANCE_FIELDS_COUNT;	//Cash Advance
+			break;
+
+		case TYPE_RECONCILATION:
+			tranTypeFieldsCount = RECONCILATION_FIELDS_COUNT;	//Settlement
+			break;
+
+		case TYPE_PARAM_DOWNLOAD:
+			tranTypeFieldsCount = PARAM_DOWNLOAD_FIELDS_COUNT;	//Parameter Download
+			break;
+
+		case TYPE_SET_PARAM:
+			tranTypeFieldsCount = SET_PARAM_FIELDS_COUNT;	//Get Parameter
+			break;
+
+		case TYPE_GET_PARAM:
+			tranTypeFieldsCount = GET_PARAM_FIELDS_COUNT;	//Get Parameter
+			break;
+
+		case TYPE_REGISTER:
+			tranTypeFieldsCount = REGISTER_FIELDS_COUNT;	//Register
+			break;
+
+		case TYPE_START_SESSION:
+			tranTypeFieldsCount = START_SESSION_FIELDS_COUNT;	//Start Session
+			break;
+
+		case TYPE_END_SESSION:
+			tranTypeFieldsCount = END_SESSION_FIELDS_COUNT;		//End Session
+			break;
+
+		case TYPE_BILL_PAY:
+			tranTypeFieldsCount = BILL_PAY_FIELDS_COUNT;		//Bill Pay
+			break;
+
+		case TYPE_PRNT_DETAIL_RPORT:
+			tranTypeFieldsCount = PRNT_DETAIL_RPORT_FIELDS_COUNT;	//Print detail report
+			break;
+
+		case TYPE_PRNT_SUMMARY_RPORT:
+			tranTypeFieldsCount = PRNT_SUMMARY_RPORT_FIELDS_COUNT;	//Print summary report
+			break;
+
+		case TYPE_REPEAT:
+			tranTypeFieldsCount = REPEAT_FIELDS_COUNT;	//Repeat
+			break;
+
+		case TYPE_CHECK_STATUS:
+			tranTypeFieldsCount = CHECK_STATUS_FIELDS_COUNT;	//Check Status
+			break;
+
+		case TYPE_PARTIAL_DOWNLOAD:
+			tranTypeFieldsCount = PARTIAL_DOWNLOAD_FIELDS_COUNT;	//Partial Download
+			break;
+
+		case TYPE_SNAPSHOT_TOTAL:
+			tranTypeFieldsCount = SNAPSHOT_TOTAL_FIELDS_COUNT;	//Snapshot Total
+			break;
+
+		default:
+			break;
+	}
+	printf("\ntranType = %d, fieldsCount = %d, tranTypeFieldsCount = %d\n", tranType, fieldsCount, tranTypeFieldsCount);
+	if(tranTypeFieldsCount == fieldsCount)
+		return tranTypeFieldsCount;
+	else
+		return -1;
+}

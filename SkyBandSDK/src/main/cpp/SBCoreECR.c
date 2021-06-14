@@ -15,9 +15,9 @@ extern void ascToHexConv(unsigned char *outp, unsigned char *inp, int iLength);
 
 extern char *getCommand(int tranType);
 
-EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer) {
+EXPORT int pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer) {
     long long lnReqFields[REQFIELD_SIZE];
-    int inFieldsCount = 0, inReqPacketIndex = 0, inLCR = 0;
+    int inFieldsCount = 0, inReqPacketIndex = 0, inLCR = 0, retVal = 0;
     char szLCR[LCRBUFFER_SIZE], szLCR_Hex[LCRBUFFER_SIZE];
     char szAmountField[AMT_SIZE + 1];
     char szCashbackAmountField[AMT_SIZE + 1];
@@ -43,6 +43,9 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
     char szReqAttemptNum[REQATTEMPTNUM_SIZE + 1];
 
     vdParseRequestData(inputReqData, lnReqFields, &inFieldsCount);
+    retVal = validateFieldsCount(transactionType, inFieldsCount);
+    if(retVal == -1)
+        return retVal;
 
     //STX ("02" Hex)
     memcpy(szEcrBuffer, STX, STX_SIZE);

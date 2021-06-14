@@ -104,5 +104,6 @@ typedef enum {
 void vdParseRequestData(char *inputReqData, long long reqFields[], int *count);
 
 char *getCommand(int tranType);
+int validateFieldsCount(int tranType, int fieldsCount);
 
 #endif /* ECRSRC_ECRSRC_H_ */

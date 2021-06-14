@@ -291,7 +291,6 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/vendor_id"
-                        android:inputType="number"
                         android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
@@ -311,7 +310,6 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/vendor_terminal_type"
-                        android:inputType="number"
                         android:maxLength="2"
                         android:padding="@dimen/dp10" />
 
@@ -331,7 +329,6 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:background="@drawable/border"
                         android:hint="@string/trsm_id"
-                        android:inputType="number"
                         android:maxLength="6"
                         android:padding="@dimen/dp10" />
 

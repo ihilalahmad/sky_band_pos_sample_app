@@ -18,11 +18,15 @@ Java_com_skyband_ecr_sdk_CLibraryLoad_pack(JNIEnv *env, jobject obj, jstring req
     char *inSignStr = (*env)->GetStringUTFChars(env, szSignature, NULL);
     __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "Before Pack ");
     // create request packet from core
-    pack(inRequestStr, transactionType, inSignStr, inResponseStr);
-
+    int result =  pack(inRequestStr, transactionType, inSignStr, inResponseStr);
+    int n;
     __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "The output is %s", inResponseStr);
 
-    int n = strlen(inResponseStr);
+    if(result == -1) {
+        n = 0;
+    } else {
+        n = strlen(inResponseStr);
+    }
 
     __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "The value of n is %d", n);
 
