@@ -85,6 +85,7 @@ public class PrintReceiptFragment extends Fragment {
         if (replacedHtmlString != null) {
             String encodedHtml = Base64.encodeToString(replacedHtmlString.getBytes(), Base64.NO_PADDING);
             printReceiptFragmentBinding.webview.loadData(encodedHtml, "text/html", "base64");
+            printReceiptFragmentBinding.webview.getSettings().setJavaScriptEnabled(true);
         }
 
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
