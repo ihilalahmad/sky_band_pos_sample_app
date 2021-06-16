@@ -20,10 +20,10 @@
 * @parm char * | szEcrBuffer |
 *       This is output in packed format
 *
-* @rdesc Returns nothing
+* @rdesc Returns number of input request data
 * @end
 **********************************************************************************************/
-EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer);
+EXPORT int pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer);
 
 
 /*********************************************************************************************

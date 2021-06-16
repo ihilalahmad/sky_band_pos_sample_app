@@ -101,8 +101,9 @@ typedef enum {
     TYPE_SNAPSHOT_TOTAL
 } ECR_TRANS_TYPE;
 
-void vdParseRequestData(char *inputReqData, long long reqFields[], int *count);
+void vdParseRequestData(char *inputReqData, char **szReqFields, int *count);
 
 char *getCommand(int tranType);
+int validateFieldsCount(int tranType, int fieldsCount);
 
 #endif /* ECRSRC_ECRSRC_H_ */
