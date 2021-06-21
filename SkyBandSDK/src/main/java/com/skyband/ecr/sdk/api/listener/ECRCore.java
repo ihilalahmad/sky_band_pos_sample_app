@@ -1,5 +1,7 @@
 package com.skyband.ecr.sdk.api.listener;
 
+import android.bluetooth.BluetoothDevice;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
@@ -15,6 +17,8 @@ public interface ECRCore {
     String computeSha256Hash(String combinedValue) throws NoSuchAlgorithmException;
 
     //Bluetooth
-    String doBluetoothTransaction(String requestData, int transactionType, String signature) throws Exception;
+    String doBluetoothTransaction(BluetoothDevice device,String requestData, int transactionType, String signature) throws Exception;
+
+    int doBluetoothConnection(BluetoothDevice device) throws IOException;
 
 }

@@ -6,9 +6,11 @@ import android.bluetooth.BluetoothSocket;
 
 import com.skyband.ecr.sdk.logger.Logger;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class BluetoothConnectionManager {
@@ -18,7 +20,7 @@ public class BluetoothConnectionManager {
     private static final UUID MY_UUID = UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
 
     private final BluetoothAdapter bluetoothAdapter;
-
+    BluetoothDevice device;
     public BluetoothSocket socket;
 
     private InputStream inputStream;
@@ -33,12 +35,16 @@ public class BluetoothConnectionManager {
         return null;
     }
 
-    public static BluetoothConnectionManager instances() throws IOException {
+    public static BluetoothConnectionManager instances(BluetoothDevice device) throws IOException {
 
-        if (bluetoothConnectionManager != null) {
+        if (bluetoothConnectionManager == null) {
+            bluetoothConnectionManager = new BluetoothConnectionManager();
+            bluetoothConnectionManager.connect1(device);
+        } else {
             bluetoothConnectionManager.cleanup();
+            bluetoothConnectionManager = new BluetoothConnectionManager();
+            bluetoothConnectionManager.connect1(device);
         }
-        bluetoothConnectionManager = new BluetoothConnectionManager();
         return bluetoothConnectionManager;
     }
 
@@ -50,7 +56,7 @@ public class BluetoothConnectionManager {
             try {
                 inputStream.close();
             } catch (IOException e) {
-                logger.severe("Exception while closing",e);
+                logger.severe("Exception while closing", e);
             }
         }
 
@@ -64,7 +70,7 @@ public class BluetoothConnectionManager {
             try {
                 socket.close();
             } catch (IOException e) {
-                logger.severe("Exception while closing",e);
+                logger.severe("Exception while closing", e);
             }
         }
 
@@ -95,82 +101,37 @@ public class BluetoothConnectionManager {
         }
     }
 
-    public void write(byte[] buffer) throws IOException {
-        inputStream = socket.getInputStream();
+    public String sendAndRecv(byte[] in) throws IOException, InterruptedException {
+
+        logger.info("ConnectionManager | SedAndRecv | Entering");
         outputStream = socket.getOutputStream();
-        outputStream.write(buffer);
+        inputStream = socket.getInputStream();
+
+        outputStream.write(in);
+
         outputStream.flush();
-        logger.info("SerialConnectionManager | SendData | Exiting");
-    }
 
-    public String receiveData() throws IOException, InterruptedException {
-        logger.info("SerialConnectionManager | Receive | Entering");
-        String returnData = "";
-        StringBuilder response = new StringBuilder();
-        int count = 0;
-        byte[] reSizeTerminalResponse = null;
-        byte[] terminalResponse = new byte[50000];
-        long startTime = System.currentTimeMillis();
-        long totalTime;
-        do {
-            logger.info("Waiting...");
-            Thread.sleep(1L);
-            if (inputStream.available() > 0) {
-                count = inputStream.read(terminalResponse, 0, terminalResponse.length);
-            }
-            logger.info("Count:" + count);
-            if(!socket.isConnected()){
-                throw new InterruptedException();
-            }
-            long endTime = System.currentTimeMillis();
-            totalTime = endTime - startTime;
-            if (totalTime >= 120000) {
-                logger.info("TimedOut");
-            }
-        } while (count < 5);
-        reSizeTerminalResponse = terminalResponse;
-        response.append(byteArrayToHexString(reSizeTerminalResponse));
-        returnData = response.toString();
-        logger.info("Serial Response" + hexToString(returnData));
+        byte[] responseBytes = new byte[50000];
 
-        logger.info("SerialConnectionManager | Receive | Exiting");
+        int noOfBytesRead = inputStream.read(responseBytes, 0, responseBytes.length);
 
-        return hexToString(returnData);
+        System.out.println(noOfBytesRead);
 
-    }
-
-    public static String byteArrayToHexString(byte[] data) {
-        StringBuilder buff = new StringBuilder();
-
-        if (data != null) {
-            for (int i = 0; i < data.length; i++) {
-                byte b = data[i];
-                int j = ((char) b) & 0xFF;
-                buff.append(nibbleToChar[j >>> 4]);
-                buff.append(nibbleToChar[j & 0x0F]);
-            }
+        if (noOfBytesRead <= 0) {
+            throw new IOException();
         }
 
-        return buff.toString();
-    }// byteArrayToHexString
+        byte[] finalResponse = new byte[noOfBytesRead];
 
-    public static String hexToString(String hex) {
+        System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
+        String terminalResponse = new String(finalResponse);
 
-        StringBuilder sb = new StringBuilder();
+        logger.info("ConnectionManager | SedAndRecv | Exiting");
 
-        // 49204c6f7665204a617661 split into two characters 49, 20, 4c...
-        for (int i = 0; i < hex.length() - 1; i += 2) {
+        return terminalResponse;
 
-            // grab the hex in pairs
-            String output = hex.substring(i, (i + 2));
-            // convert hex to decimal
-            int decimal = Integer.parseInt(output, 16);
-            // convert the decimal to character
-            sb.append((char) decimal);
-        }
-
-        return sb.toString();
     }
+
 
     public boolean isConnected() {
 
@@ -184,5 +145,4 @@ public class BluetoothConnectionManager {
         return false;
     }
 
-    static char[] nibbleToChar = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 }

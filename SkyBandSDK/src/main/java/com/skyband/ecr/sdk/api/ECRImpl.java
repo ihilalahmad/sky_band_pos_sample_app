@@ -1,7 +1,6 @@
 package com.skyband.ecr.sdk.api;
 
-import android.os.Handler;
-import android.os.Message;
+import android.bluetooth.BluetoothDevice;
 
 import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.CLibraryLoad;
@@ -18,11 +17,7 @@ public class ECRImpl implements ECRCore {
 
     private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ECRImpl.class.getName());
-    public static final int MESSAGE_READ = 2;
-    private static String readMessage = null;
     private byte[] packData;
-    String response;
-    String terminalResponse = null;
     BluetoothConnectionManager bluetoothConnectionManager;
 
     public static ECRCore getConnectInstance() {
@@ -213,22 +208,29 @@ public class ECRImpl implements ECRCore {
     }
 
     @Override
-    public String doBluetoothTransaction(String requestData, int transactionType, String signature) throws Exception {
+    public String doBluetoothTransaction(BluetoothDevice device,String requestData, int transactionType, String signature) throws Exception {
         String terminalResponse = "";
         packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
 
         bluetoothConnectionManager = BluetoothConnectionManager.instance();
 
-        Objects.requireNonNull(bluetoothConnectionManager).write(packData);
-
-        terminalResponse = bluetoothConnectionManager.receiveData();
+        terminalResponse = bluetoothConnectionManager.sendAndRecv(packData);
 
         terminalResponse = terminalResponse.replace("�", ";");
         logger.debug("After Replace  with ;>>" + terminalResponse);
         terminalResponse = changeToTransactionType(terminalResponse);
 
         return terminalResponse;
+    }
+
+    @Override
+    public int doBluetoothConnection(BluetoothDevice device) throws IOException {
+        if (BluetoothConnectionManager.instances(device).isConnected()) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
 }

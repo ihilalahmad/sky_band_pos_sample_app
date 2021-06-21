@@ -1,6 +1,7 @@
 package com.skyband.ecr.ui.fragment.home;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.View;
 
@@ -374,7 +375,8 @@ public class HomeViewModel extends ViewModel {
         if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
             terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
         } else {
-            terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doBluetoothTransaction(reqData, transactionType, szSignature));
+            BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
+            terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature));
         }
 
         String terminalResponseString = terminalResponse.toString();

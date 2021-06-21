@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.Properties;
 
 public class ConnectionManager {
 
@@ -22,7 +21,6 @@ public class ConnectionManager {
     private int serverPort;
     private static ConnectionManager socketHostConnector;
     private final int SOCKET_TIMEOUT = 120000;
-    private Properties properties = new Properties();
 
     public static ConnectionManager instance(String ip, int port) throws IOException {
 

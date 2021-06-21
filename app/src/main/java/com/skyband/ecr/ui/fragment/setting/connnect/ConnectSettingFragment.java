@@ -93,7 +93,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     @Override
     public void onStart() {
         connectSettingFragmentBinding.connectionTypeSpinner.setSelection(ActiveTxnData.getInstance().getConnectPosition());
-        bluetoothConnectionManager = BluetoothConnectionManager.instances();
         super.onStart();
     }
 
@@ -258,13 +257,13 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         startActivity(discoverableIntent);
     }
 
-    public static void sendMessage(String message) throws IOException {
+  /*  public static void sendMessage(String message) throws IOException {
 
         if (message.length() > 0) {
             byte[] send = message.getBytes();
             bluetoothConnectionManager.write(send);
         }
-    }
+    }*/
 
     private void showPrinterPickDialog() {
         dialog = new Dialog(getActivity());
@@ -411,7 +410,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         /*bluetoothAdapter.cancelDiscovery();*/
         connectingDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
         logger.info("device" + connectingDevice);
-        int connectionStatus = bluetoothConnectionManager.connect1(connectingDevice);
+        int connectionStatus = ecrCore.doBluetoothConnection(connectingDevice);
         ActiveTxnData.getInstance().setDevice(connectingDevice);
         return connectionStatus;
     }
