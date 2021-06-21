@@ -19,8 +19,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,17 +62,9 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     private ConnectSettingViewModel connectSettingViewModel;
     private Dialog dialog;
     private BluetoothAdapter bluetoothAdapter;
-    public static final String DEVICE_OBJECT = "device_name";
     private ArrayAdapter<String> discoveredDevicesAdapter;
     public static BluetoothConnectionManager bluetoothConnectionManager;
     private BluetoothDevice connectingDevice;
-
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_DEVICE_OBJECT = 4;
-    public static final int MESSAGE_TOAST = 5;
-
-    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
-    //
 
     public static ECRCore getEcrCore() {
         return ecrCore;
@@ -99,10 +89,11 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         return connectSettingFragmentBinding.getRoot();
     }
 
+    @SneakyThrows
     @Override
     public void onStart() {
         connectSettingFragmentBinding.connectionTypeSpinner.setSelection(ActiveTxnData.getInstance().getConnectPosition());
-        bluetoothConnectionManager = BluetoothConnectionManager.instance(handler);
+        bluetoothConnectionManager = BluetoothConnectionManager.instances();
         super.onStart();
     }
 
@@ -210,13 +201,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
             }
         });
 
-        connectSettingFragmentBinding.sendButton.setOnClickListener(new View.OnClickListener() {
-            @SneakyThrows
-            @Override
-            public void onClick(View v) {
-                sendMessage("fjhfehfhf");
-            }
-        });
     }
 
     private boolean validateIp(String ipAddress) {
@@ -257,7 +241,11 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                 Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Bluetooth is not available!", Toast.LENGTH_SHORT).show();
             }
 
-            btnEnableDisable_Discoverable();
+            //btnEnableDisable_Discoverable();
+            // Register for broadcasts when a device is discovered
+            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+            Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
+
         }
 
     }
@@ -269,46 +257,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
         startActivity(discoverableIntent);
     }
-
-    private Handler handler = new Handler(new Handler.Callback() {
-
-        @Override
-        public boolean handleMessage(Message msg) {
-            logger.info(">>handler msg:" + msg);
-            switch (msg.what) {
-                case MESSAGE_STATE_CHANGE:
-                    switch (msg.arg1) {
-                        case 3:
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: " + connectingDevice.getName(), Toast.LENGTH_SHORT).show();
-                            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
-                            break;
-                        case 2:
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connecting..." , Toast.LENGTH_SHORT).show();
-                            break;
-                        case 1:
-                        case 0:
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not connected" + connectingDevice.getName(), Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                    break;
-                case MESSAGE_DEVICE_OBJECT:
-                    connectingDevice = msg.getData().getParcelable(DEVICE_OBJECT);
-                    logger.info("Connecting Device" + connectingDevice);
-                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to " + connectingDevice.getName(),
-                            Toast.LENGTH_SHORT).show();
-                    //Added for navigating after connection
-                    navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
-                    break;
-
-                case MESSAGE_TOAST:
-                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), msg.getData().getString("toast"),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-
-            }
-            return false;
-        }
-    });
 
     public static void sendMessage(String message) throws IOException {
 
@@ -326,11 +274,11 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         dialog.setContentView(view);
         dialog.setTitle("Bluetooth Devices");
 
-        if (bluetoothAdapter.isDiscovering()) {
+    /*    if (bluetoothAdapter.isDiscovering()) {
             Log.e("TAG", "doing");
             bluetoothAdapter.cancelDiscovery();
         }
-        bluetoothAdapter.startDiscovery();
+        bluetoothAdapter.startDiscovery();*/
 
         //Initializing bluetooth adapters
         ArrayAdapter<String> pairedDevicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
@@ -342,13 +290,15 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         listView.setAdapter(pairedDevicesAdapter);
         listView2.setAdapter(discoveredDevicesAdapter);
 
+        bluetoothAdapter.startDiscovery();
+
+       // btnEnableDisable_Discoverable();
         // Register for broadcasts when a device is discovered
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
 
-        // Register for broadcasts when discovery has finished
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
+        bluetoothAdapter.cancelDiscovery();
+
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
@@ -367,12 +317,41 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                bluetoothAdapter.cancelDiscovery();
+                /*bluetoothAdapter.cancelDiscovery();*/
                 String info = ((TextView) view).getText().toString();
-                String address = info.substring(info.length() - 17);
+                final String address = info.substring(info.length() - 17);
                 logger.info("address" + address);
-                connectToDevice(address);
-                dialog.dismiss();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final int connectionStatus = connectToDevice(address);
+
+                            requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (connectionStatus == 0) {
+                                        dialog.dismiss();
+                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
+                                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
+                                        navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                                    } else {
+                                        dialog.dismiss();
+                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+
+                        } catch (IOException e) {
+                            dialog.dismiss();
+                            e.printStackTrace();
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }).start();
+
             }
 
         });
@@ -380,12 +359,37 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                bluetoothAdapter.cancelDiscovery();
+                /*bluetoothAdapter.cancelDiscovery();*/
                 String info = ((TextView) view).getText().toString();
-                String address = info.substring(info.length() - 17);
+                final String address = info.substring(info.length() - 17);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final int connectionStatus = connectToDevice(address);
+                            requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (connectionStatus == 0) {
+                                        dialog.dismiss();
+                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
+                                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
+                                        navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                                    } else {
+                                        dialog.dismiss();
+                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
 
-                connectToDevice(address);
-                dialog.dismiss();
+                        } catch (IOException e) {
+                            dialog.dismiss();
+                            e.printStackTrace();
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }).start();
             }
         });
 
@@ -396,17 +400,20 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                 dialog.dismiss();
             }
         });
+
         dialog.setCancelable(false);
         dialog.show();
     }
 
 
-    private void connectToDevice(String deviceAddress) {
+    private int connectToDevice(String deviceAddress) throws IOException {
         ecrCore = ECRImpl.getConnectInstance();
-        bluetoothAdapter.cancelDiscovery();
-        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
-        logger.info("device" + device);
-        bluetoothConnectionManager.connect(device);
+        /*bluetoothAdapter.cancelDiscovery();*/
+        connectingDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
+        logger.info("device" + connectingDevice);
+        int connectionStatus = bluetoothConnectionManager.connect1(connectingDevice);
+        ActiveTxnData.getInstance().setDevice(connectingDevice);
+        return connectionStatus;
     }
 
     @Override
@@ -414,14 +421,14 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
     }
 
-
     private final BroadcastReceiver discoveryFinishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-
+            logger.info("ACtion" + action);
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                logger.info("bond state" + device.getBondState());
                 if (Objects.requireNonNull(device).getBondState() != BluetoothDevice.BOND_BONDED) {
                     discoveredDevicesAdapter.add(device.getName() + "\n" + device.getAddress());
                 }

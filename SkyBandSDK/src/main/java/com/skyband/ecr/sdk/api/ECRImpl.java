@@ -212,29 +212,6 @@ public class ECRImpl implements ECRCore {
         return resultSHA;
     }
 
-    private Handler handler = new Handler(new Handler.Callback() {
-
-        @Override
-        public boolean handleMessage(Message msg) {
-            logger.info(">>handler msg:" + msg);
-            switch (msg.what) {
-                case MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
-
-                    readMessage = new String(readBuf, 0, msg.arg1);
-//                    try {
-//                        getTerminalResponse();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-                    logger.info("Read" + readMessage);
-                    break;
-
-            }
-            return false;
-        }
-    });
-
     @Override
     public String doBluetoothTransaction(String requestData, int transactionType, String signature) throws Exception {
         String terminalResponse = "";
@@ -242,7 +219,8 @@ public class ECRImpl implements ECRCore {
 
 
         bluetoothConnectionManager = BluetoothConnectionManager.instance();
-        bluetoothConnectionManager.write(packData);
+
+        Objects.requireNonNull(bluetoothConnectionManager).write(packData);
 
         terminalResponse = bluetoothConnectionManager.receiveData();
 
@@ -250,44 +228,6 @@ public class ECRImpl implements ECRCore {
         logger.debug("After Replace  with ;>>" + terminalResponse);
         terminalResponse = changeToTransactionType(terminalResponse);
 
-       /* for (int i = 0; i < 10; i++) {
-            if (readMessage == null) {
-                i = 0;
-            }
-            if (bluetoothConnectionManager.getState() == 3) {
-              *//*  new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (readMessage != null) {
-                                terminalResponse = getTerminalResponse();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 1000);
-            }*//*
-
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (readMessage != null) {
-                                terminalResponse = getTerminalResponse();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 1000);
-                if (terminalResponse != null) {
-                    readMessage = null;
-                    bluetoothConnectionManager.stop();
-                    break;
-                }
-            }
-        }*/
         return terminalResponse;
     }
 

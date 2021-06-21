@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             } else {
                 homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
             }
-        } else if(BluetoothConnectionManager.instance() != null && BluetoothConnectionManager.instance().getState() == 3) {
+        } else if(BluetoothConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);

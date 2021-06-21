@@ -1,5 +1,7 @@
 package com.skyband.ecr.model;
 
+import android.bluetooth.BluetoothDevice;
+
 import com.skyband.ecr.transaction.TransactionType;
 
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class ActiveTxnData {
     private int position;
     private int connectPosition;
     private boolean isPartialCapture;
+    private BluetoothDevice device;
 
     private static ActiveTxnData activeTxnData;
 
