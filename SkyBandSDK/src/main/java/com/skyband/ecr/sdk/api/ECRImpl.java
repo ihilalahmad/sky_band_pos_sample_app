@@ -1,11 +1,7 @@
 package com.skyband.ecr.sdk.api;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.CLibraryLoad;
@@ -17,19 +13,12 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ECRImpl implements ECRCore {
 
     private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ECRImpl.class.getName());
-
-    public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_OBJECT = 4;
-    public static final int MESSAGE_TOAST = 5;
     private static String readMessage = null;
     private byte[] packData;
     String response;
@@ -248,20 +237,25 @@ public class ECRImpl implements ECRCore {
 
     @Override
     public String doBluetoothTransaction(String requestData, int transactionType, String signature) throws Exception {
-
+        String terminalResponse = "";
         packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
 
-        bluetoothConnectionManager = BluetoothConnectionManager.instance(handler);
+        bluetoothConnectionManager = BluetoothConnectionManager.instance();
         bluetoothConnectionManager.write(packData);
 
+        terminalResponse = bluetoothConnectionManager.receiveData();
 
-        for (int i = 0; i < 10; i++) {
+        terminalResponse = terminalResponse.replace("�", ";");
+        logger.debug("After Replace  with ;>>" + terminalResponse);
+        terminalResponse = changeToTransactionType(terminalResponse);
+
+       /* for (int i = 0; i < 10; i++) {
             if (readMessage == null) {
                 i = 0;
             }
             if (bluetoothConnectionManager.getState() == 3) {
-              /*  new Timer().schedule(new TimerTask() {
+              *//*  new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         try {
@@ -273,7 +267,7 @@ public class ECRImpl implements ECRCore {
                         }
                     }
                 }, 1000);
-            }*/
+            }*//*
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
@@ -293,18 +287,8 @@ public class ECRImpl implements ECRCore {
                     break;
                 }
             }
-        }
+        }*/
         return terminalResponse;
     }
-
-        private String getTerminalResponse () throws Exception {
-
-            logger.info("Terminal Response" + terminalResponse);
-            terminalResponse = readMessage.replace("�", ";");
-            logger.debug("After Replace  with ;>>" + terminalResponse);
-            terminalResponse = changeToTransactionType(terminalResponse);
-            logger.debug("After Replace with Transactiontype>>" + terminalResponse);
-            return terminalResponse;
-        }
 
 }

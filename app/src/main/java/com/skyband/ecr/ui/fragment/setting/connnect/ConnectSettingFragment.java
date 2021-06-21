@@ -47,6 +47,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.SneakyThrows;
+
 public class ConnectSettingFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private ConnectSettingFragmentBinding connectSettingFragmentBinding;
@@ -68,11 +70,8 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     private BluetoothDevice connectingDevice;
 
     public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_OBJECT = 4;
     public static final int MESSAGE_TOAST = 5;
-    public static String readMessage;
 
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     //
@@ -212,6 +211,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         });
 
         connectSettingFragmentBinding.sendButton.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
             @Override
             public void onClick(View v) {
                 sendMessage("fjhfehfhf");
@@ -299,20 +299,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     //Added for navigating after connection
                     navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                     break;
-                case MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
 
-                    String writeMessage = new String(writeBuf);
-                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Write " + writeMessage, Toast.LENGTH_SHORT).show();
-
-                    break;
-                case MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
-                     readMessage = new String(readBuf, 0, msg.arg1);
-
-                    logger.info("Read" + readMessage);
-
-                    break;
                 case MESSAGE_TOAST:
                     Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), msg.getData().getString("toast"),
                             Toast.LENGTH_SHORT).show();
@@ -323,7 +310,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         }
     });
 
-    public static void sendMessage(String message) {
+    public static void sendMessage(String message) throws IOException {
 
         if (message.length() > 0) {
             byte[] send = message.getBytes();

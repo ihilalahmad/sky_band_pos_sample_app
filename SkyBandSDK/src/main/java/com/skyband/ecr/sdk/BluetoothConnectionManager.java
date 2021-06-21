@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import lombok.SneakyThrows;
+
 public class BluetoothConnectionManager {
 
     private static Logger logger = Logger.getNewLogger(BluetoothConnectionManager.class.getName());
@@ -32,22 +34,16 @@ public class BluetoothConnectionManager {
     private Handler handler;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
-    private ReadWriteThread connectedThread;
     private int state;
 
     static final int STATE_NONE = 0;
     static final int STATE_LISTEN = 1;
     static final int STATE_CONNECTING = 2;
     static final int STATE_CONNECTED = 3;
-
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_OBJECT = 4;
     public static final int MESSAGE_TOAST = 5;
 
     public BluetoothSocket socket;
-    private BluetoothSocket bluetoothSocket;
     private BluetoothDevice device;
 
     private InputStream inputStream;
@@ -99,11 +95,6 @@ public class BluetoothConnectionManager {
             connectThread = null;
         }
 
-        // Cancel any running thresd
-        if (connectedThread != null) {
-            connectedThread.cancel();
-            connectedThread = null;
-        }
 
         setState(STATE_LISTEN);
         if (acceptThread == null) {
@@ -124,11 +115,6 @@ public class BluetoothConnectionManager {
             }
         }
 
-        // Cancel running thread
-        if (connectedThread != null) {
-            connectedThread.cancel();
-            connectedThread = null;
-        }
 
         // Start the thread to connect with the given device
         connectThread = new ConnectThread();
@@ -144,22 +130,12 @@ public class BluetoothConnectionManager {
             connectThread = null;
         }
 
-        // Cancel running thread
-        if (connectedThread != null) {
-            connectedThread.cancel();
-            connectedThread = null;
-        }
-
         if (acceptThread != null) {
             acceptThread.cancel();
             acceptThread = null;
         }
 
         logger.info("connected Thread");
-
-        // Start the thread to manage the connection and perform transmissions
-        connectedThread = new ReadWriteThread();
-        connectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
         Message msg = handler.obtainMessage(MESSAGE_DEVICE_OBJECT);
@@ -168,6 +144,7 @@ public class BluetoothConnectionManager {
         msg.setData(bundle);
         handler.sendMessage(msg);
         setState(STATE_CONNECTED);
+
     }
 
     // stop all threads
@@ -177,11 +154,6 @@ public class BluetoothConnectionManager {
             connectThread = null;
         }
 
-        if (connectedThread != null) {
-            connectedThread.cancel();
-            connectedThread = null;
-        }
-
         if (acceptThread != null) {
             acceptThread.cancel();
             acceptThread = null;
@@ -189,7 +161,7 @@ public class BluetoothConnectionManager {
         setState(STATE_NONE);
     }
 
-    public void write(byte[] out) {
+    /*public void write(byte[] out) {
         ReadWriteThread r;
         synchronized (this) {
             if (state != STATE_CONNECTED)
@@ -197,7 +169,7 @@ public class BluetoothConnectionManager {
             r = connectedThread;
         }
         r.write(out);
-    }
+    }*/
 
     private void connectionFailed() {
         Message msg = handler.obtainMessage(MESSAGE_TOAST);
@@ -326,7 +298,7 @@ public class BluetoothConnectionManager {
         }
     }
 
-    // runs during a connection with a remote device
+  /*  // runs during a connection with a remote device
     private class ReadWriteThread extends Thread {
 
         public ReadWriteThread() {
@@ -344,12 +316,13 @@ public class BluetoothConnectionManager {
             outputStream = tmpOut;
         }
 
+        @SneakyThrows
         public void run() {
             byte[] buffer = new byte[1024];
             int bytes;
 
             // Keep listening to the InputStream
-            while (true) {
+           *//* while (true) {
                 try {
                     // Read from the InputStream
                     bytes = inputStream.read(buffer);
@@ -363,7 +336,26 @@ public class BluetoothConnectionManager {
                     BluetoothConnectionManager.this.start();
                     break;
                 }
-            }
+            }*//*
+            int count = 0;
+            byte[] terminalResponse = new byte[50000];
+            long startTime = System.currentTimeMillis();
+            long totalTime;
+            do {
+                logger.info("Waiting...");
+                Thread.sleep(1l);
+                if (inputStream.available() > 0) {
+                    count = inputStream.read(terminalResponse, 0, terminalResponse.length);
+                }
+                logger.info("Count:" + count);
+                long endTime = System.currentTimeMillis();
+                totalTime = endTime - startTime;
+                if (totalTime >= 120000) {
+
+                }
+            } while (count < 5);
+            handler.obtainMessage(MESSAGE_READ, count, -1,
+                    terminalResponse).sendToTarget();
         }
 
         // write to OutputStream
@@ -383,6 +375,81 @@ public class BluetoothConnectionManager {
                 e.printStackTrace();
             }
         }
+    }*/
+
+    public void write(byte[] buffer) throws IOException {
+        inputStream = socket.getInputStream();
+        outputStream  = socket.getOutputStream();
+            outputStream.write(buffer);
+            outputStream.flush();
+            logger.info("SerialConnectionManager | SendData | Exiting");
     }
 
+    public String receiveData() throws IOException, InterruptedException {
+        logger.info("SerialConnectionManager | Receive | Entering");
+        String returnData = "";
+        StringBuilder response = new StringBuilder();
+        int count = 0;
+        byte[] reSizeTerminalResponse = null;
+        byte[] terminalResponse = new byte[50000];
+        long startTime = System.currentTimeMillis();
+        long totalTime;
+        do {
+            logger.info("Waiting...");
+            Thread.sleep(1l);
+            if (inputStream.available() > 0) {
+                count = inputStream.read(terminalResponse, 0, terminalResponse.length);
+            }
+            logger.info("Count:" + count);
+            long endTime = System.currentTimeMillis();
+            totalTime = endTime - startTime;
+            if (totalTime >= 120000) {
+                logger.info("TimedOut");
+            }
+        } while (count < 5);
+        reSizeTerminalResponse = terminalResponse;
+        response.append(byteArrayToHexString(reSizeTerminalResponse));
+        returnData = response.toString();
+        logger.info("Serial Response" + hexToString(returnData));
+
+        logger.info("SerialConnectionManager | Receive | Exiting");
+
+        return hexToString(returnData);
+
+    }
+
+    public static String byteArrayToHexString(byte[] data) {
+        StringBuilder buff = new StringBuilder();
+
+        if (data != null) {
+            for (int i = 0; i < data.length; i++) {
+                byte b = data[i];
+                int j = ((char) b) & 0xFF;
+                buff.append(nibbleToChar[j >>> 4]);
+                buff.append(nibbleToChar[j & 0x0F]);
+            }
+        }
+
+        return buff.toString();
+    }// byteArrayToHexString
+
+    public static String hexToString(String hex) {
+
+        StringBuilder sb = new StringBuilder();
+
+        // 49204c6f7665204a617661 split into two characters 49, 20, 4c...
+        for (int i = 0; i < hex.length() - 1; i += 2) {
+
+            // grab the hex in pairs
+            String output = hex.substring(i, (i + 2));
+            // convert hex to decimal
+            int decimal = Integer.parseInt(output, 16);
+            // convert the decimal to character
+            sb.append((char) decimal);
+        }
+
+        return sb.toString();
+    }
+
+    static char[] nibbleToChar = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 }
