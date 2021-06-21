@@ -45,6 +45,7 @@ EXPORT int pack(char *inputReqData, int transactionType, char *szSignature, char
 
     for (i = 0; i < 10; ++i) {
         szReqFields[i] = (char *)malloc(REQFIELD_SIZE+1);
+        memset(szReqFields[i], 0x00, REQFIELD_SIZE+1);
     }
 
     vdParseRequestData(inputReqData, szReqFields, &inFieldsCount);
@@ -166,7 +167,7 @@ EXPORT int pack(char *inputReqData, int transactionType, char *szSignature, char
 
         //RRN
         memset(szRRNField, 0x00, sizeof(szRefundAmountField));
-        if ((transactionType == TYPE_PREAUTH_EXT) /*|| (transactionType == TYPE_REVERSAL)*/)
+        if(transactionType == TYPE_PREAUTH_EXT)/* || (transactionType == TYPE_REVERSAL)*/
             sprintf(szRRNField, "%s", szReqFields[1]);
         else
             sprintf(szRRNField, "%s", szReqFields[2]);
@@ -357,9 +358,9 @@ EXPORT int pack(char *inputReqData, int transactionType, char *szSignature, char
     memset(szLCR_Hex, 0x00, sizeof(szLCR_Hex));
     sprintf(szLCR, "%02x", inLCR);
     if (strlen(szLCR) == 1)
-        ascToHexConv(szLCR_Hex, szLCR, 1);
+        ascToHexConv((unsigned char *)szLCR_Hex, (unsigned char *)szLCR, 1);
     else
-        ascToHexConv(szLCR_Hex, szLCR, 2);
+        ascToHexConv((unsigned char *)szLCR_Hex, (unsigned char *)szLCR, 2);
     memcpy(&szEcrBuffer[inReqPacketIndex], szLCR_Hex,
            LCR_SIZE);    //Excusive OR of each character of message including STX and ETX.
     szEcrBuffer[inReqPacketIndex + 1] = '\0'; // This is extra line

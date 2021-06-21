@@ -123,6 +123,7 @@ char *getCommand(int tranType)
 		default:
 			break;
 	}
+	return "";
 }
 
 
