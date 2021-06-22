@@ -17,8 +17,6 @@ public class ECRImpl implements ECRCore {
 
     private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ECRImpl.class.getName());
-    private byte[] packData;
-    BluetoothConnectionManager bluetoothConnectionManager;
 
     public static ECRCore getConnectInstance() {
         if (ecrCore == null) {
@@ -208,25 +206,69 @@ public class ECRImpl implements ECRCore {
     }
 
     @Override
-    public String doBluetoothTransaction(BluetoothDevice device,String requestData, int transactionType, String signature) throws Exception {
+    public String doBluetoothTransaction(BluetoothDevice device, String requestData, int transactionType, String signature) throws Exception {
         String terminalResponse = "";
-        packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
+        try {
+            BluetoothConnectionManager.instances(device);
+        } catch (IOException e) {
+            throw new Exception("3");
+        }
 
-        bluetoothConnectionManager = BluetoothConnectionManager.instance();
+        byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
 
-        terminalResponse = bluetoothConnectionManager.sendAndRecv(packData);
+        if (BluetoothConnectionManager.instance() != null && Objects.requireNonNull(BluetoothConnectionManager.instance()).isConnected()) {
 
-        terminalResponse = terminalResponse.replace("�", ";");
-        logger.debug("After Replace  with ;>>" + terminalResponse);
-        terminalResponse = changeToTransactionType(terminalResponse);
+            try {
+                if (transactionType != 22) {
+                    terminalResponse = Objects.requireNonNull(BluetoothConnectionManager.instance()).sendAndRecv(packData);
+                    terminalResponse = terminalResponse.replace("�", ";");
+                    logger.debug("After Replace  with ;>>" + terminalResponse);
+                    terminalResponse = changeToTransactionType(terminalResponse);
+                    logger.debug("After Replace with Transactiontype>>" + terminalResponse);
 
-        return terminalResponse;
+                    return terminalResponse;
+                } else {
+                    terminalResponse = Objects.requireNonNull(BluetoothConnectionManager.instance()).sendAndRecvSummary(packData);
+                    terminalResponse = terminalResponse.replace("�", ";");
+
+                    return terminalResponse;
+                }
+
+            } catch (IOException e) {
+                try {
+                    ECRImpl.getConnectInstance().doDisconnection();
+                    logger.info("Socket Disconnected");
+                    throw new Exception("0");
+                } catch (IOException ex) {
+                    logger.severe("Exception in Disconnect >>", ex);
+                    throw new Exception("1");
+                }
+            }
+
+        } else {
+            throw new Exception("2");
+        }
+        //Library parsing is not giving correct response
+      /*  String parseData = CLibraryLoad.getInstance().getParseData(terminalResponse);
+        parseData = parseData.replace("�", ";");
+        logger.debug("After Replace  with ;>>"+parseData);
+        return parseData;*/
     }
 
     @Override
     public int doBluetoothConnection(BluetoothDevice device) throws IOException {
         if (BluetoothConnectionManager.instances(device).isConnected()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public int doBluetoothDisconnection() throws IOException {
+        if (BluetoothConnectionManager.instance() != null) {
+            BluetoothConnectionManager.instance().disconnect();
             return 0;
         } else {
             return 1;

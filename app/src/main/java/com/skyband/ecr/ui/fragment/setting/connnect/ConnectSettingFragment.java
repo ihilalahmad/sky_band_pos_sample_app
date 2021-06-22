@@ -289,15 +289,9 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         listView.setAdapter(pairedDevicesAdapter);
         listView2.setAdapter(discoveredDevicesAdapter);
 
-        bluetoothAdapter.startDiscovery();
-
-       // btnEnableDisable_Discoverable();
         // Register for broadcasts when a device is discovered
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
-
-        bluetoothAdapter.cancelDiscovery();
-
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();

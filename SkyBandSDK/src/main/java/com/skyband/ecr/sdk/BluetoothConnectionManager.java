@@ -20,7 +20,6 @@ public class BluetoothConnectionManager {
     private static final UUID MY_UUID = UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
 
     private final BluetoothAdapter bluetoothAdapter;
-    BluetoothDevice device;
     public BluetoothSocket socket;
 
     private InputStream inputStream;
@@ -39,17 +38,17 @@ public class BluetoothConnectionManager {
 
         if (bluetoothConnectionManager == null) {
             bluetoothConnectionManager = new BluetoothConnectionManager();
-            bluetoothConnectionManager.connect1(device);
+            bluetoothConnectionManager.createConnection(device);
         } else {
             bluetoothConnectionManager.cleanup();
             bluetoothConnectionManager = new BluetoothConnectionManager();
-            bluetoothConnectionManager.connect1(device);
+            bluetoothConnectionManager.createConnection(device);
         }
         return bluetoothConnectionManager;
     }
 
     private void cleanup() throws IOException {
-        logger.info("ConnectionManager | Cleanup | Entering");
+        logger.info("BluetoothConnectionManager | Cleanup | Entering");
 
         if (inputStream != null) {
 
@@ -78,32 +77,29 @@ public class BluetoothConnectionManager {
         outputStream = null;
         socket = null;
 
-        logger.info("ConnectionManager | Cleanup | Exiting");
+        logger.info("BluetoothConnectionManager | Cleanup | Exiting");
     }
 
     public BluetoothConnectionManager() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
-    public int connect1(BluetoothDevice device) throws IOException {
+    public void createConnection(BluetoothDevice device) throws IOException {
         socket = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
-        bluetoothAdapter.cancelDiscovery();
 
         try {
             socket.connect();
-            return 0;
         } catch (IOException e) {
             try {
                 socket.close();
             } catch (IOException e2) {
             }
-            return 1;
         }
     }
 
     public String sendAndRecv(byte[] in) throws IOException, InterruptedException {
 
-        logger.info("ConnectionManager | SedAndRecv | Entering");
+        logger.info("BluetoothConnectionManager | SedAndRecv | Entering");
         outputStream = socket.getOutputStream();
         inputStream = socket.getInputStream();
 
@@ -126,7 +122,7 @@ public class BluetoothConnectionManager {
         System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
         String terminalResponse = new String(finalResponse);
 
-        logger.info("ConnectionManager | SedAndRecv | Exiting");
+        logger.info("BluetoothConnectionManager | SedAndRecv | Exiting");
 
         return terminalResponse;
 
@@ -145,4 +141,59 @@ public class BluetoothConnectionManager {
         return false;
     }
 
+    public void disconnect() throws IOException {
+
+        logger.info("BluetoothConnectionManager | Disconnect | Entering");
+
+        if (socket != null && socket.isConnected()) {
+            cleanup();
+        }
+
+        logger.info("BluetoothConnectionManager | Disconnect | Exiting");
+
+    }
+
+    public String sendAndRecvSummary(byte[] packData) throws Exception {
+        logger.info("BluetoothConnectionManager | SedAndRecv | Entering");
+        outputStream = socket.getOutputStream();
+        inputStream = socket.getInputStream();
+
+        outputStream.write(packData);
+
+        outputStream.flush();
+
+        byte[] responseBytes = new byte[50000];
+        byte[] messageByte = new byte[25000];
+
+        DataInputStream in1 = new DataInputStream(socket.getInputStream());
+        int bytesRead = 0;
+
+        messageByte[0] = in1.readByte();
+        messageByte[1] = in1.readByte();
+        ByteBuffer byteBuffer = ByteBuffer.wrap(messageByte, 0, 2);
+
+        int bytesToRead = byteBuffer.getShort();
+
+        Thread.sleep(1000);
+
+        int noOfBytesRead = inputStream.read(responseBytes, 0, responseBytes.length);
+
+        System.out.println(noOfBytesRead);
+
+        if (noOfBytesRead <= 0) {
+            throw new IOException();
+        }
+
+        byte[] finalResponse = new byte[noOfBytesRead];
+
+        System.arraycopy(responseBytes, 0, finalResponse, 0, noOfBytesRead);
+        String terminalResponse = new String(finalResponse);
+
+        logger.info("BluetoothConnectionManager | SedAndRecv | Exiting");
+
+        logger.info("SocketResponse"+terminalResponse);
+
+        return terminalResponse;
+
+    }
 }

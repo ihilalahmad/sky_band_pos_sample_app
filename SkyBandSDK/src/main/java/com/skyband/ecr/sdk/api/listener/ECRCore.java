@@ -21,4 +21,6 @@ public interface ECRCore {
 
     int doBluetoothConnection(BluetoothDevice device) throws IOException;
 
+    int doBluetoothDisconnection() throws IOException;
+
 }

@@ -393,14 +393,20 @@ public class HomeViewModel extends ViewModel {
                 splittedResponse = terminalResponseString.split(";");
                 splittedResponse[0] = "22";
                 ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+
             } else {
 
                 for (int i = 1; i <= count; i++) {
+
                     String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                    //      String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
                     String resp = "";
-                    //
-                    //response using bluetooth connection
+
+                    if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
+                        resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                    } else {
+                        BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
+                        resp = ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature);
+                    }
 
                     String[] secondResponse = resp.split(";");
                     System.out.println(secondResponse.length);

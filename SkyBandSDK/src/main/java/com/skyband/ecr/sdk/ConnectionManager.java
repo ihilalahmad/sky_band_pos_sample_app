@@ -211,19 +211,4 @@ public class ConnectionManager {
         return false;
     }
 
-    public byte[] TrimTrailingBytes(byte[] buffer, byte trimValue) {
-        int i = buffer.length;
-        while (i > 0 && buffer[--i] == trimValue) {
-            ; // no-op by design
-        }
-        byte[] resized = new byte[i + 1];
-        // Arrays.copy(buffer, resized, resized.length);
-        // System.arraycopy(buffer, 0, resized, 0, buffer.length);
-        for (int j = 0; i < buffer.length; j++)
-            resized[j] = buffer[j];
-        // Arrays.copyOf(buffer, resized.length);
-        System.out.println("ResizedLength:" + resized.length);
-        return resized;
-    }
-
 }
