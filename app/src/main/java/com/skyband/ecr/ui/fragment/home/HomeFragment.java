@@ -205,6 +205,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                     } else if (Objects.equals(errorMessage.getMessage(), "2")) {
                                         Toast.makeText(activity, "Socket not Connected", Toast.LENGTH_LONG).show();
                                         logger.debug(getClass() + "Exception>>" + errorMessage);
+                                    } else if (Objects.equals(errorMessage.getMessage(), "4")) {
+                                        Toast.makeText(activity, "Sending incorrect parameter", Toast.LENGTH_LONG).show();
+                                        logger.debug(getClass() + "Exception>>" + errorMessage);
                                     } else {
                                         Toast.makeText(activity, errorMessage.getMessage(), Toast.LENGTH_LONG).show();
                                         logger.debug(getClass() + "Exception>>" + errorMessage);

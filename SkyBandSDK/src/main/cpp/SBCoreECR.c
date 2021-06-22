@@ -7,7 +7,7 @@
 
 extern void hexDataPrint(char *pchHeaderString, unsigned char *pucInPutBuffer, int inNumBytes);
 
-extern void vdParseRequestData(char *inputReqData, long long reqFields[], int *count);
+extern void vdParseRequestData(char *inputReqData,  char **szReqFields, int *count);
 
 extern void xorOpBtwnChars(unsigned char *pbt_Data1, int i_DataLen, int *output);
 
@@ -15,9 +15,8 @@ extern void ascToHexConv(unsigned char *outp, unsigned char *inp, int iLength);
 
 extern char *getCommand(int tranType);
 
-EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer) {
-    long long lnReqFields[REQFIELD_SIZE];
-    int inFieldsCount = 0, inReqPacketIndex = 0, inLCR = 0;
+EXPORT int pack(char *inputReqData, int transactionType, char *szSignature, char *szEcrBuffer) {
+    int inFieldsCount = 0, inReqPacketIndex = 0, inLCR = 0, retVal = 0, i = 0;
     char szLCR[LCRBUFFER_SIZE], szLCR_Hex[LCRBUFFER_SIZE];
     char szAmountField[AMT_SIZE + 1];
     char szCashbackAmountField[AMT_SIZE + 1];
@@ -42,7 +41,24 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
     char szPrevECRNum[ECRNUM_SIZE + 1];
     char szReqAttemptNum[REQATTEMPTNUM_SIZE + 1];
 
-    vdParseRequestData(inputReqData, lnReqFields, &inFieldsCount);
+    char **szReqFields = malloc(10 * sizeof(char *));
+
+    for (i = 0; i < 10; ++i) {
+        szReqFields[i] = (char *)malloc(REQFIELD_SIZE+1);
+        memset(szReqFields[i], 0x00, REQFIELD_SIZE+1);
+    }
+
+    vdParseRequestData(inputReqData, szReqFields, &inFieldsCount);
+
+    printf("\nszReqFields count = %d\n", inFieldsCount);
+    for(i = 0; i < inFieldsCount; i++)
+    {
+        printf("\nszReqFields [%d] : %s\n", i, szReqFields[i]);
+        fflush(stdout);
+    }
+    retVal = validateFieldsCount(transactionType, inFieldsCount);
+    if(retVal == -1)
+        return retVal;
 
     //STX ("02" Hex)
     memcpy(szEcrBuffer, STX, STX_SIZE);
@@ -71,7 +87,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         && (transactionType != TYPE_SNAPSHOT_TOTAL)) {
         if (transactionType == TYPE_BILL_PAY) {
             memset(szBillerID, 0x00, sizeof(szBillerID));
-            sprintf(szBillerID, "%06lld", lnReqFields[2]);
+            sprintf(szBillerID, "%06lld", atoll(szReqFields[2]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szBillerID, BILLERID_SIZE); // Biller Id
             inReqPacketIndex += BILLERID_SIZE;
             memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR,
@@ -79,7 +95,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
             inReqPacketIndex++;
 
             memset(szBillNum, 0x00, sizeof(szBillNum));
-            sprintf(szBillNum, "%06lld", lnReqFields[3]);
+            sprintf(szBillNum, "%06lld", atoll(szReqFields[3]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szBillNum, BILLNUM_SIZE); // Bill Number
             inReqPacketIndex += BILLNUM_SIZE;
             memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR,
@@ -88,7 +104,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         }
 
         memset(szAmountField, 0x00, sizeof(szAmountField));
-        sprintf(szAmountField, "%012lld", lnReqFields[1]);
+        sprintf(szAmountField, "%012lld", atoll(szReqFields[1]));
         memcpy(&szEcrBuffer[inReqPacketIndex], szAmountField, AMT_SIZE); // Transaction Amount
         inReqPacketIndex += AMT_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -96,7 +112,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         if (transactionType == TYPE_PURCHASE_CASHBACK) {
             memset(szCashbackAmountField, 0x00, sizeof(szCashbackAmountField));
-            sprintf(szCashbackAmountField, "%012lld", lnReqFields[2]);
+            sprintf(szCashbackAmountField, "%012lld", atoll(szReqFields[2]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szCashbackAmountField,
                    AMT_SIZE); // Cash Back Amount
             inReqPacketIndex += AMT_SIZE;
@@ -108,7 +124,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
     //Date Time Stamp
     memset(szDateTimeStamp, 0x00, sizeof(szDateTimeStamp));
-    sprintf(szDateTimeStamp, "%012lld", lnReqFields[0]);
+    sprintf(szDateTimeStamp, "%012lld", atoll(szReqFields[0]));
     memcpy(&szEcrBuffer[inReqPacketIndex], szDateTimeStamp, DATETIME_SIZE);
     inReqPacketIndex += DATETIME_SIZE;
     memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -117,7 +133,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
     if (transactionType == TYPE_PRNT_SUMMARY_RPORT) {
         //Request Attempted Number
         memset(szReqAttemptNum, 0x00, sizeof(szReqAttemptNum));
-        sprintf(szReqAttemptNum, "%03lld", lnReqFields[1]);
+        sprintf(szReqAttemptNum, "%03lld", atoll(szReqFields[1]));
         memcpy(&szEcrBuffer[inReqPacketIndex], szReqAttemptNum, REQATTEMPTNUM_SIZE);
         inReqPacketIndex += REQATTEMPTNUM_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -128,7 +144,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         (transactionType == TYPE_END_SESSION)) {
         //Cash Register Number
         memset(szCashRegNum, 0x00, sizeof(szCashRegNum));
-        sprintf(szCashRegNum, "%08lld", lnReqFields[1]);
+        sprintf(szCashRegNum, "%s", szReqFields[1]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szCashRegNum, CASHREGNUM_SIZE);
         inReqPacketIndex += CASHREGNUM_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -141,7 +157,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         if ((transactionType != TYPE_PREAUTH_EXT) && (transactionType != TYPE_REVERSAL)) {
             //Refund Amount
             memset(szRefundAmountField, 0x00, sizeof(szRefundAmountField));
-            sprintf(szRefundAmountField, "%012lld", lnReqFields[1]);
+            sprintf(szRefundAmountField, "%012lld", atoll(szReqFields[1]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szRefundAmountField, AMT_SIZE);
             inReqPacketIndex += AMT_SIZE;
             memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR,
@@ -151,10 +167,10 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         //RRN
         memset(szRRNField, 0x00, sizeof(szRefundAmountField));
-        if ((transactionType == TYPE_PREAUTH_EXT) /*|| (transactionType == TYPE_REVERSAL)*/)
-            sprintf(szRRNField, "%012lld", lnReqFields[1]);
+        if(transactionType == TYPE_PREAUTH_EXT)/* || (transactionType == TYPE_REVERSAL)*/
+            sprintf(szRRNField, "%s", szReqFields[1]);
         else
-            sprintf(szRRNField, "%012lld", lnReqFields[2]);
+            sprintf(szRRNField, "%s", szReqFields[2]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szRRNField, RRN_SIZE);
         inReqPacketIndex += RRN_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -166,9 +182,9 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         //Original Tran Date
         memset(szOrigTranDate, 0x00, sizeof(szOrigTranDate));
         if (transactionType == TYPE_PREAUTH_EXT)
-            sprintf(szOrigTranDate, "%06lld", lnReqFields[2]);
+            sprintf(szOrigTranDate, "%06lld", atoll(szReqFields[2]));
         else
-            sprintf(szOrigTranDate, "%06lld", lnReqFields[3]);
+            sprintf(szOrigTranDate, "%06lld", atoll(szReqFields[3]));
         memcpy(&szEcrBuffer[inReqPacketIndex], szOrigTranDate, DATE_SIZE);
         inReqPacketIndex += DATE_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -177,9 +193,9 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         //Original Approval Code
         memset(szOrigApprCode, 0x00, sizeof(szOrigApprCode));
         if (transactionType == TYPE_PREAUTH_EXT)
-            sprintf(szOrigApprCode, "%06lld", lnReqFields[3]);
+            sprintf(szOrigApprCode, "%s", szReqFields[3]);
         else
-            sprintf(szOrigApprCode, "%06lld", lnReqFields[4]);
+            sprintf(szOrigApprCode, "%s", szReqFields[4]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szOrigApprCode, APPRCODE_SIZE);
         inReqPacketIndex += APPRCODE_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -187,7 +203,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         if ((transactionType != TYPE_PREAUTH_EXT) && (transactionType != TYPE_PREAUTH_VOID)) {
             //Partial Completion
-            sprintf(szPartialComp, "%lld", lnReqFields[5]);
+            sprintf(szPartialComp, "%lld", atoll(szReqFields[5]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szPartialComp, PARTIALCOMP_SIZE);
             inReqPacketIndex++;
             memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR,
@@ -199,7 +215,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
     if (transactionType == TYPE_SET_PARAM) {
         //Vendor ID
         memset(szVendorID, 0x00, sizeof(szVendorID));
-        sprintf(szVendorID, "%02lld", lnReqFields[1]);
+        sprintf(szVendorID, "%s", szReqFields[1]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szVendorID, VENDORID_SIZE);
         inReqPacketIndex += VENDORID_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -207,7 +223,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         //Vendor Terminal type
         memset(szVendorTermType, 0x00, sizeof(szVendorTermType));
-        sprintf(szVendorTermType, "%02lld", lnReqFields[2]);
+        sprintf(szVendorTermType, "%s", szReqFields[2]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szVendorTermType, TERMTYPE_SIZE);
         inReqPacketIndex += TERMTYPE_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -215,7 +231,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         //TRSM ID
         memset(szTRSMID, 0x00, sizeof(szTRSMID));
-        sprintf(szTRSMID, "%06lld", lnReqFields[3]);
+        sprintf(szTRSMID, "%s", szReqFields[3]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szTRSMID, TRSMID_SIZE);
         inReqPacketIndex += TRSMID_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -223,7 +239,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         //Vendor Key Index
         memset(szVendorKeyIndex, 0x00, sizeof(szVendorKeyIndex));
-        sprintf(szVendorKeyIndex, "%02lld", lnReqFields[4]);
+        sprintf(szVendorKeyIndex, "%02lld", atoll(szReqFields[4]));
         memcpy(&szEcrBuffer[inReqPacketIndex], szVendorKeyIndex, KEYINDEX_SIZE);
         inReqPacketIndex += KEYINDEX_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -231,7 +247,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
 
         //SAMA Key Index
         memset(szSAMAKeyIndex, 0x00, sizeof(szSAMAKeyIndex));
-        sprintf(szSAMAKeyIndex, "%02lld", lnReqFields[5]);
+        sprintf(szSAMAKeyIndex, "%02lld", atoll(szReqFields[5]));
         memcpy(&szEcrBuffer[inReqPacketIndex], szSAMAKeyIndex, KEYINDEX_SIZE);
         inReqPacketIndex += KEYINDEX_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -241,7 +257,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
     if (transactionType == TYPE_REPEAT) {
         //Previous ECR Number
         memset(szPrevECRNum, 0x00, sizeof(szPrevECRNum));
-        sprintf(szPrevECRNum, "%06lld", lnReqFields[1]);
+        sprintf(szPrevECRNum, "%06lld", atoll(szReqFields[1]));
         memcpy(&szEcrBuffer[inReqPacketIndex], szPrevECRNum, ECRNUM_SIZE);
         inReqPacketIndex += ECRNUM_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, ECRNUM_SIZE); // Field separator
@@ -254,26 +270,26 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         memset(szECRRefNum, 0x00, sizeof(szECRRefNum));
         if (transactionType == TYPE_PURCHASE || transactionType == TYPE_PREAUTH ||
             transactionType == TYPE_CASH_ADVANCE /*|| transactionType == TYPE_REVERSAL*/)
-            sprintf(szECRRefNum, "%14lld", lnReqFields[3]);
+            sprintf(szECRRefNum, "%s", szReqFields[3]);
         else if (transactionType == TYPE_PURCHASE_CASHBACK)
-            sprintf(szECRRefNum, "%14lld", lnReqFields[4]);
+            sprintf(szECRRefNum, "%s", szReqFields[4]);
         else if (transactionType == TYPE_RECONCILATION || transactionType == TYPE_SET_TERM_LANG ||
                  transactionType == TYPE_REPEAT
                  || (transactionType == TYPE_PRNT_SUMMARY_RPORT) || transactionType == TYPE_REVERSAL)
-            sprintf(szECRRefNum, "%14lld", lnReqFields[2]);
+            sprintf(szECRRefNum, "%s", szReqFields[2]);
         else if ((transactionType == TYPE_REFUND) || (transactionType == TYPE_PREAUTH_EXT) ||
                  (transactionType == TYPE_BILL_PAY))
-            sprintf(szECRRefNum, "%14lld", lnReqFields[5]);
+            sprintf(szECRRefNum, "%s", szReqFields[5]);
         else if (transactionType == TYPE_PRECOMP)
-            sprintf(szECRRefNum, "%14lld", lnReqFields[7]);
+            sprintf(szECRRefNum, "%s", szReqFields[7]);
         else if ((transactionType == TYPE_PREAUTH_VOID) || (transactionType == TYPE_SET_PARAM))
-            sprintf(szECRRefNum, "%14lld", lnReqFields[6]);
+            sprintf(szECRRefNum, "%s", szReqFields[6]);
         else if ((transactionType == TYPE_PARAM_DOWNLOAD) || (transactionType == TYPE_GET_PARAM) ||
                  (transactionType == TYPE_PRNT_DETAIL_RPORT)
                  || (transactionType == TYPE_CHECK_STATUS) ||
                  (transactionType == TYPE_PARTIAL_DOWNLOAD) ||
                  (transactionType == TYPE_SNAPSHOT_TOTAL))
-            sprintf(szECRRefNum, "%14lld", lnReqFields[1]);
+            sprintf(szECRRefNum, "%s", szReqFields[1]);
         memcpy(&szEcrBuffer[inReqPacketIndex], szECRRefNum, REFNUM_SIZE);
         inReqPacketIndex += REFNUM_SIZE;
         memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR, FIELDSEP_SIZE); // Field separator
@@ -282,7 +298,7 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
         if (transactionType == TYPE_SET_TERM_LANG) {
             //Language
             memset(szLanguage, 0x00, sizeof(szLanguage));
-            sprintf(szLanguage, "%lld", lnReqFields[1]);
+            sprintf(szLanguage, "%lld", atoll(szReqFields[1]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szLanguage, LANG_SIZE);
             inReqPacketIndex++;
             memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR,
@@ -300,18 +316,18 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
             //Receipt print Flag
             if (transactionType == TYPE_PURCHASE || transactionType == TYPE_PREAUTH ||
                 transactionType == TYPE_CASH_ADVANCE /*|| transactionType == TYPE_REVERSAL*/)
-                sprintf(szRcptPrntFlag, "%lld", lnReqFields[2]);
+                sprintf(szRcptPrntFlag, "%lld", atoll(szReqFields[2]));
             else if ((transactionType == TYPE_PURCHASE_CASHBACK) ||
                      (transactionType == TYPE_REFUND))
-                sprintf(szRcptPrntFlag, "%lld", lnReqFields[3]);
+                sprintf(szRcptPrntFlag, "%lld",atoll( szReqFields[3]));
             else if (transactionType == TYPE_RECONCILATION || transactionType == TYPE_REVERSAL)
-                sprintf(szRcptPrntFlag, "%lld", lnReqFields[1]);
+                sprintf(szRcptPrntFlag, "%lld", atoll(szReqFields[1]));
             else if (transactionType == TYPE_PRECOMP)
-                sprintf(szRcptPrntFlag, "%lld", lnReqFields[6]);
+                sprintf(szRcptPrntFlag, "%lld", atoll(szReqFields[6]));
             else if (transactionType == TYPE_PREAUTH_VOID)
-                sprintf(szRcptPrntFlag, "%lld", lnReqFields[5]);
+                sprintf(szRcptPrntFlag, "%lld", atoll(szReqFields[5]));
             else if ((transactionType == TYPE_PREAUTH_EXT) || (transactionType == TYPE_BILL_PAY))
-                sprintf(szRcptPrntFlag, "%lld", lnReqFields[4]);
+                sprintf(szRcptPrntFlag, "%lld", atoll(szReqFields[4]));
             memcpy(&szEcrBuffer[inReqPacketIndex], szRcptPrntFlag, PRNTFLAG_SIZE);
             inReqPacketIndex++;
             memcpy(&szEcrBuffer[inReqPacketIndex], FIELD_SEPERATOR,
@@ -342,12 +358,18 @@ EXPORT void pack(char *inputReqData, int transactionType, char *szSignature, cha
     memset(szLCR_Hex, 0x00, sizeof(szLCR_Hex));
     sprintf(szLCR, "%02x", inLCR);
     if (strlen(szLCR) == 1)
-        ascToHexConv(szLCR_Hex, szLCR, 1);
+        ascToHexConv((unsigned char *)szLCR_Hex, (unsigned char *)szLCR, 1);
     else
-        ascToHexConv(szLCR_Hex, szLCR, 2);
+        ascToHexConv((unsigned char *)szLCR_Hex, (unsigned char *)szLCR, 2);
     memcpy(&szEcrBuffer[inReqPacketIndex], szLCR_Hex,
            LCR_SIZE);    //Excusive OR of each character of message including STX and ETX.
-    szEcrBuffer[inReqPacketIndex + 1] = '\0';
+    szEcrBuffer[inReqPacketIndex + 1] = '\0'; // This is extra line
+
+    for(i=0; i<10; i++)
+        free(szReqFields[i]);
+    free(szReqFields);
+
+    return retVal;
 }
 
 EXPORT void parse(char *respData, char *respOutData) {

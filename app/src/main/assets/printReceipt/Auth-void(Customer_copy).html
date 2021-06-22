@@ -89,17 +89,38 @@
 	  text-align: left;
 	}
 
-         .border {
-        border:none;
-        border-top:2px dashed;
-        height:2px;
-        width:100%;
-        }
+  .RetailerCopyClass {
+         width: 100%;
+         text-align: center;
+         margin-top: 5%;
+         }
+         .btnRetailerClass {
+         padding: 8px;
+         background-color: #03a9f4;
+         color: black;
+         font-weight: bold;
+         border: none;
+         border-radius: 5px;
+         }
     </style>
+    <script>
+         var retCopy = "retailer_copy";
+         var custCopy = "customer_copy";
+         function toggleReceipt(receiptType) {
+             if (receiptType == "showCustCopy") {
+                 document.getElementById(retCopy).style.display = "none";
+                 document.getElementById(custCopy).style.display = "block";
+             }
+             else {
+                 document.getElementById(retCopy).style.display = "block";
+                 document.getElementById(custCopy).style.display = "none";
+             }
+         }
+      </script>
 </head>
 
 <body>
-<div class="container">
+<div id="retailer_copy" class="container">
     <div class="header">
         <h3>MerchantNameArabic</h3>
         <h3>Merchant Name</h3>
@@ -182,12 +203,12 @@
             <div class ="float-left"><small>PAR &nbsp&nbsp&nbsp&nbsp PANSUFFIX</small></div>
         </div>
     </div>
+    <div class="RetailerCopyClass">
+        <button onclick="toggleReceipt('showCustCopy')" class="btnRetailerClass">Customer Copy</button>
+    </div>
 </div>
-
-<br><br>
-<hr class="border">
-
-<div class="container">
+<!--div><br>-------------------------------------------------------------------</div-->
+<div id="customer_copy" class="container" style="display:none;">
     <div class="header">
         <h3>MerchantNameArabic</h3>
         <h3>Merchant Name</h3>
@@ -269,6 +290,9 @@
             <div class ="float-left"><small>CVR &nbsp &nbsp &nbsp CID &nbsp applicationCryptogram &nbsp&nbsp&nbsp&nbsp KID </small></div>
             <div class ="float-left"><small>PAR &nbsp&nbsp&nbsp&nbsp PANSUFFIX</small></div>
         </div>
+    </div>
+    <div class="RetailerCopyClass">
+        <button onclick="toggleReceipt('showRetCopy')" class="btnRetailerClass">Retailer Copy</button>
     </div>
 </div>
 </body>
