@@ -46,6 +46,7 @@ import java.util.Objects;
 
 import static android.content.Context.WIFI_SERVICE;
 import static com.skyband.ecr.transaction.TransactionType.CHECK_STATUS;
+import static com.skyband.ecr.transaction.TransactionType.DUPLICATE;
 import static com.skyband.ecr.transaction.TransactionType.END_SESSION;
 import static com.skyband.ecr.transaction.TransactionType.GET_SETTINGS;
 import static com.skyband.ecr.transaction.TransactionType.PRINT_SUMMARY_REPORT;
@@ -168,17 +169,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     WifiManager wm = (WifiManager) requireActivity().getApplicationContext().getSystemService(WIFI_SERVICE);
                     String deviceIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-                    String connectedDeviceIp =  generalParamCache.getString(Constant.IP_ADDRESS);
-                    logger.info("ip >>"+deviceIp + "connectIp"+connectedDeviceIp);
+                    String connectedDeviceIp = generalParamCache.getString(Constant.IP_ADDRESS);
+                    logger.info("ip >>" + deviceIp + "connectIp" + connectedDeviceIp);
 
                     int appToAppCommunication = TransactionSettingViewModel.getAppToAPPCommunication();
 
-                    if((appToAppCommunication == 1) && appInstalledOrNot() && deviceIp.equals(connectedDeviceIp) && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
+                    if ((appToAppCommunication == 1) && appInstalledOrNot() && deviceIp.equals(connectedDeviceIp) && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(START_SESSION) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(END_SESSION) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(CHECK_STATUS) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(SET_SETTINGS) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(GET_SETTINGS) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(DUPLICATE) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(PRINT_SUMMARY_REPORT)) {
                         Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
                         intent.putExtra("message", "exr-txn-event");
