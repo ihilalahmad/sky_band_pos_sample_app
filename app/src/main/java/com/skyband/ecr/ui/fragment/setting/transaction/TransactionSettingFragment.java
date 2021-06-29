@@ -60,6 +60,12 @@ public class TransactionSettingFragment extends Fragment {
             transactionSettingFragmentBinding.terminalPrinter.setChecked(false);
         }
 
+        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            transactionSettingFragmentBinding.appAppCommunication.setChecked(true);
+        } else {
+            transactionSettingFragmentBinding.appAppCommunication.setChecked(false);
+        }
+
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
 

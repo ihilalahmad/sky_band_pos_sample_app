@@ -4,9 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +39,20 @@ import com.skyband.ecr.transaction.TransactionType;
 import com.skyband.ecr.transaction.listener.TransactionListener;
 import com.skyband.ecr.sdk.ThreadPoolExecutorService;
 import com.skyband.ecr.sdk.logger.Logger;
+import com.skyband.ecr.ui.fragment.setting.transaction.TransactionSettingViewModel;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import static android.content.Context.WIFI_SERVICE;
+import static android.graphics.Shader.TileMode.REPEAT;
+import static com.skyband.ecr.transaction.TransactionType.CHECK_STATUS;
+import static com.skyband.ecr.transaction.TransactionType.END_SESSION;
+import static com.skyband.ecr.transaction.TransactionType.GET_SETTINGS;
+import static com.skyband.ecr.transaction.TransactionType.PRINT_SUMMARY_REPORT;
+import static com.skyband.ecr.transaction.TransactionType.REGISTER;
+import static com.skyband.ecr.transaction.TransactionType.SET_SETTINGS;
+import static com.skyband.ecr.transaction.TransactionType.START_SESSION;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -151,6 +166,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
                     dialog.setCancelable(false);
                     final StartTransaction startTransaction = new StartTransaction(homeViewModel);
+
+                    WifiManager wm = (WifiManager) requireActivity().getApplicationContext().getSystemService(WIFI_SERVICE);
+                    String deviceIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+                    String connectedDeviceIp =  generalParamCache.getString(Constant.IP_ADDRESS);
+                    logger.info("ip >>"+deviceIp + "connectIp"+connectedDeviceIp);
+
+                    int appToAppCommunication = TransactionSettingViewModel.getAppToAPPCommunication();
+
+                    if((appToAppCommunication == 1) && appInstalledOrNot() && deviceIp.equals(connectedDeviceIp) && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(START_SESSION) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(END_SESSION) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(CHECK_STATUS) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(SET_SETTINGS) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(GET_SETTINGS) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(REPEAT) &&
+                            !ActiveTxnData.getInstance().getTransactionType().equals(PRINT_SUMMARY_REPORT)) {
+                        Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
+                        intent.putExtra("message", "exr-txn-event");
+                        startActivity(intent);
+                    }
 
                     startTransaction.setTransactionListener(new TransactionListener() {
 
@@ -329,4 +364,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             return String.format(amountFormat, amount).replace(",", ".");
         }
     }
+
+    private boolean appInstalledOrNot() {
+        PackageManager pm = requireActivity().getPackageManager();
+        try {
+            pm.getPackageInfo("com.skyband.pos.app", PackageManager.GET_ACTIVITIES);
+            logger.info("App Installed");
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

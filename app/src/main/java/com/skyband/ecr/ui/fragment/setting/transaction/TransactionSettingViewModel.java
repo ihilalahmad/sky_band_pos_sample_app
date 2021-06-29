@@ -15,6 +15,10 @@ public class TransactionSettingViewModel extends ViewModel {
         return GeneralParamCache.getInstance().getInt(Constant.ENABLE_ECR);
     }
 
+    public static int getAppToAPPCommunication() {
+        return GeneralParamCache.getInstance().getInt(Constant.ENABLE_APP_APP_COMMUNICATION);
+    }
+
     public void setData(TransactionSettingFragmentBinding transactionSettingFragmentBinding) {
 
         if (transactionSettingFragmentBinding.ecrNo.isChecked()) {
@@ -27,6 +31,12 @@ public class TransactionSettingViewModel extends ViewModel {
             GeneralParamCache.getInstance().putInt(Constant.ENABLE_PRINT, 1);
         } else {
             GeneralParamCache.getInstance().putInt(Constant.ENABLE_PRINT, 0);
+        }
+
+        if (transactionSettingFragmentBinding.appAppCommunication.isChecked()) {
+            GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 1);
+        } else {
+            GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 0);
         }
 
     }

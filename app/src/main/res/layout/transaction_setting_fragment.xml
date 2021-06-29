@@ -11,10 +11,20 @@
         android:layout_height="match_parent">
 
         <CheckBox
-            android:id="@+id/terminal_printer"
+            android:id="@+id/app_app_communication"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
+            android:text="App to App Communication"
+            android:textSize="@dimen/dp25"
+            />
+
+        <CheckBox
+            android:id="@+id/terminal_printer"
+            android:layout_below="@id/app_app_communication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp25"
             android:text="Enable Terminal Printer"
             android:textSize="@dimen/dp25"
             />

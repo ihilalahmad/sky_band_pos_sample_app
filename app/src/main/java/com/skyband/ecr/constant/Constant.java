@@ -11,6 +11,7 @@ public class Constant {
     public static final String CASH_REGISTER_NO = "CashRegNo";
     public static final String ENABLE_PRINT = "EnablePrint";
     public static final String ENABLE_ECR = "EnableECR";
+    public static final String ENABLE_APP_APP_COMMUNICATION = "EnableAppAppCommunication";
     public static final String ECR_NUMBER = "EcrNumber";
     public static final String CONNECTION_STATUS = "ConnectionStatus";
     public static final String CONNECTED = "Connected";
