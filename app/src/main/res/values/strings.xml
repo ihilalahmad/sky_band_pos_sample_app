@@ -108,7 +108,7 @@
         <!--<item>Set Terminal Language</item>-->
         <!-- <item>Terminal Status</item>
          <item>Previous Transaction Details</item>-->
-        <item>Bill Payment</item>
+       <!-- <item>Bill Payment</item>-->
         <item>Running Total</item>
         <item>Snapshot Total</item>
         <item>Print Summary Report</item>
