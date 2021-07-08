@@ -177,10 +177,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View v) {
 
-                if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                    sendAndReceiveBroadcast();
-                }
-
                 boolean validated = false;
 
                 try {
@@ -437,7 +433,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private void unRegisterBroadcast() {
         if (getPortBroadcastReceiver != null) {
             getContext().unregisterReceiver(getPortBroadcastReceiver);
-            getPortBroadcastReceiver = null;
         }
 
     }
