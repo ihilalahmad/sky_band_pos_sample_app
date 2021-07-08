@@ -42,6 +42,10 @@ public class ConnectSettingFragment extends Fragment {
         return ecrCore;
     }
 
+    public static void setEcrCore() {
+        ecrCore = ECRImpl.getConnectInstance();
+    }
+
     private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ConnectSettingFragment.class.getName());
 

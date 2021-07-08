@@ -341,9 +341,11 @@ public class HomeViewModel extends ViewModel {
     public String getTerminalResponse() throws Exception {
 
         String ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
-        int portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
+
+        int portNumber = 8000;
         int transactionType = transactionTypeString.ordinal();
          logger.debug(">>>TransactionType:-" + transactionType);
+         logger.debug("portNumber" + portNumber);
 
         String combinedValue = "";
         transactionTypeString = ActiveTxnData.getInstance().getTransactionType();

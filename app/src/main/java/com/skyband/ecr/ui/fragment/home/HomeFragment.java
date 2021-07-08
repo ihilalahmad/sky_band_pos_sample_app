@@ -3,8 +3,12 @@ package com.skyband.ecr.ui.fragment.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -25,10 +29,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.skyband.ecr.R;
+import com.skyband.ecr.YourBroadcastReceiver;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.model.ActiveTxnData;
@@ -39,6 +45,7 @@ import com.skyband.ecr.transaction.TransactionType;
 import com.skyband.ecr.transaction.listener.TransactionListener;
 import com.skyband.ecr.sdk.ThreadPoolExecutorService;
 import com.skyband.ecr.sdk.logger.Logger;
+import com.skyband.ecr.ui.fragment.setting.connnect.ConnectSettingFragment;
 import com.skyband.ecr.ui.fragment.setting.transaction.TransactionSettingViewModel;
 
 import java.math.BigDecimal;
@@ -67,6 +74,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private String currencySymbol = "$";
     private int divider = 100;
     private String amountFormat = "%.2f";
+    private YourBroadcastReceiver receiver;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -118,7 +126,50 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
         }
+
+        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
+            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
+            if (ConnectSettingFragment.getEcrCore() == null) {
+                ConnectSettingFragment.setEcrCore();
+            }
+            WifiManager wm = (WifiManager) requireActivity().getApplicationContext().getSystemService(WIFI_SERVICE);
+            String deviceIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+            generalParamCache.putString(Constant.IP_ADDRESS, deviceIp);
+
+        }
+
         super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+       /* if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            Intent intent = new Intent();
+            intent.setAction("com.example.perform.ecr");
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            intent.setComponent(
+                    new ComponentName("com.example.appb","com.example.appb.MyBroadcastReceiver"));
+            getContext().sendBroadcast(intent);
+            receiver = new YourBroadcastReceiver();
+            IntentFilter intentFilter = new IntentFilter("com.example.perform.raj");
+            if(intentFilter != null)
+            {
+                getContext().registerReceiver(receiver, intentFilter);
+            }
+        }*/
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            if(receiver != null){
+                getContext().unregisterReceiver(receiver);
+            }
+        }
     }
 
     private void setupListeners() {
@@ -141,6 +192,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
             @Override
             public void onClick(View v) {
+
+                if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+                    Intent intent = new Intent();
+                    intent.setAction("com.example.perform.ecr");
+                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    intent.setComponent(
+                            new ComponentName("com.example.appb","com.example.appb.MyBroadcastReceiver"));
+                    getContext().sendBroadcast(intent);
+                    receiver = new YourBroadcastReceiver();
+                    IntentFilter intentFilter = new IntentFilter("com.example.perform.raj");
+                    if(intentFilter != null)
+                    {
+                        getContext().registerReceiver(receiver, intentFilter);
+                    }
+                }
 
                 boolean validated = false;
 
@@ -174,7 +240,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                     int appToAppCommunication = TransactionSettingViewModel.getAppToAPPCommunication();
 
-                    if ((appToAppCommunication == 1) && appInstalledOrNot() && deviceIp.equals(connectedDeviceIp) && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
+                   /* if ((appToAppCommunication == 1) && appInstalledOrNot() && deviceIp.equals(connectedDeviceIp) && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(START_SESSION) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(END_SESSION) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(CHECK_STATUS) &&
@@ -185,7 +251,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
                         intent.putExtra("message", "exr-txn-event");
                         startActivity(intent);
-                    }
+                    }*/
 
                     startTransaction.setTransactionListener(new TransactionListener() {
 
@@ -195,6 +261,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
+
+                                    if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+                                        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+                                    }
+
                                     if (selectedItem.equals(getString(R.string.register))) {
                                         if (ActiveTxnData.getInstance().getTerminalID() == null) {
                                             Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
@@ -219,6 +290,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
+
+                                    /*if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+                                        getContext().unregisterReceiver(receiver);
+                                    }*/
 
                                     if (Objects.equals(errorMessage.getMessage(), "0")) {
                                         Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
@@ -368,7 +443,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private boolean appInstalledOrNot() {
         PackageManager pm = requireActivity().getPackageManager();
         try {
-            pm.getPackageInfo("com.skyband.pos.app", PackageManager.GET_ACTIVITIES);
+            pm.getPackageInfo("com.example.appb", PackageManager.GET_ACTIVITIES);
             logger.info("App Installed");
             return true;
         } catch (PackageManager.NameNotFoundException e) {
