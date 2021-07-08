@@ -425,7 +425,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         intent.setAction("com.example.perform.ecr");
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.setComponent(
-                new ComponentName("com.skyband.ecr","com.skyband.ecr.GetPortBroadcastReceiver"));
+                new ComponentName("com.skyband.pos.app","com.skyband.pos.app.ECRPortBroadcastReceiver"));
         getContext().sendBroadcast(intent);
         getPortBroadcastReceiver = new GetPortBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter("com.skyband.pos.perform.port");
