@@ -3,9 +3,7 @@ package com.skyband.ecr.ui.fragment.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,12 +27,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.skyband.ecr.R;
-import com.skyband.ecr.YourBroadcastReceiver;
+import com.skyband.ecr.GetPortBroadcastReceiver;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.model.ActiveTxnData;
@@ -74,7 +71,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private String currencySymbol = "$";
     private int divider = 100;
     private String amountFormat = "%.2f";
-    private YourBroadcastReceiver receiver;
+    private GetPortBroadcastReceiver getPortBroadcastReceiver;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -146,29 +143,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onResume() {
         super.onResume();
 
-       /* if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-            Intent intent = new Intent();
-            intent.setAction("com.example.perform.ecr");
-            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            intent.setComponent(
-                    new ComponentName("com.example.appb","com.example.appb.MyBroadcastReceiver"));
-            getContext().sendBroadcast(intent);
-            receiver = new YourBroadcastReceiver();
-            IntentFilter intentFilter = new IntentFilter("com.example.perform.raj");
-            if(intentFilter != null)
-            {
-                getContext().registerReceiver(receiver, intentFilter);
-            }
-        }*/
+        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            sendAndReceiveBroadcast();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-            if(receiver != null){
-                getContext().unregisterReceiver(receiver);
-            }
+            unRegisterBroadcast();
         }
     }
 
@@ -194,18 +178,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             public void onClick(View v) {
 
                 if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                    Intent intent = new Intent();
-                    intent.setAction("com.example.perform.ecr");
-                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    intent.setComponent(
-                            new ComponentName("com.example.appb","com.example.appb.MyBroadcastReceiver"));
-                    getContext().sendBroadcast(intent);
-                    receiver = new YourBroadcastReceiver();
-                    IntentFilter intentFilter = new IntentFilter("com.example.perform.raj");
-                    if(intentFilter != null)
-                    {
-                        getContext().registerReceiver(receiver, intentFilter);
-                    }
+                    sendAndReceiveBroadcast();
                 }
 
                 boolean validated = false;
@@ -233,14 +206,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     dialog.setCancelable(false);
                     final StartTransaction startTransaction = new StartTransaction(homeViewModel);
 
-                    WifiManager wm = (WifiManager) requireActivity().getApplicationContext().getSystemService(WIFI_SERVICE);
-                    String deviceIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-                    String connectedDeviceIp = generalParamCache.getString(Constant.IP_ADDRESS);
-                    logger.info("ip >>" + deviceIp + "connectIp" + connectedDeviceIp);
-
                     int appToAppCommunication = TransactionSettingViewModel.getAppToAPPCommunication();
 
-                   /* if ((appToAppCommunication == 1) && appInstalledOrNot() && deviceIp.equals(connectedDeviceIp) && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
+                    if ((appToAppCommunication == 1) && appInstalledOrNot() && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(START_SESSION) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(END_SESSION) &&
                             !ActiveTxnData.getInstance().getTransactionType().equals(CHECK_STATUS) &&
@@ -251,7 +219,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
                         intent.putExtra("message", "exr-txn-event");
                         startActivity(intent);
-                    }*/
+                    }
 
                     startTransaction.setTransactionListener(new TransactionListener() {
 
@@ -263,7 +231,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                     dialog.dismiss();
 
                                     if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                                        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+                                        Objects.requireNonNull(getActivity()).unregisterReceiver(getPortBroadcastReceiver);
                                     }
 
                                     if (selectedItem.equals(getString(R.string.register))) {
@@ -291,9 +259,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
 
-                                    /*if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                                        getContext().unregisterReceiver(receiver);
-                                    }*/
+                                    if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+                                        getContext().unregisterReceiver(getPortBroadcastReceiver);
+                                    }
 
                                     if (Objects.equals(errorMessage.getMessage(), "0")) {
                                         Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
@@ -443,7 +411,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private boolean appInstalledOrNot() {
         PackageManager pm = requireActivity().getPackageManager();
         try {
-            pm.getPackageInfo("com.example.appb", PackageManager.GET_ACTIVITIES);
+            pm.getPackageInfo("com.skyband.pos.app", PackageManager.GET_ACTIVITIES);
             logger.info("App Installed");
             return true;
         } catch (PackageManager.NameNotFoundException e) {
@@ -452,4 +420,25 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         return false;
     }
 
+    private void sendAndReceiveBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction("com.example.perform.ecr");
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setComponent(
+                new ComponentName("com.skyband.ecr","com.skyband.ecr.GetPortBroadcastReceiver"));
+        getContext().sendBroadcast(intent);
+        getPortBroadcastReceiver = new GetPortBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter("com.skyband.pos.perform.port");
+        if (intentFilter != null) {
+            getContext().registerReceiver(getPortBroadcastReceiver, intentFilter);
+        }
+    }
+
+    private void unRegisterBroadcast() {
+        if (getPortBroadcastReceiver != null) {
+            getContext().unregisterReceiver(getPortBroadcastReceiver);
+            getPortBroadcastReceiver = null;
+        }
+
+    }
 }

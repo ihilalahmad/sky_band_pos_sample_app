@@ -16,11 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
 
-        <receiver android:name=".YourBroadcastReceiver"
+        <receiver android:name=".GetPortBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.perform.raj" />
+                <action android:name="com.skyband.pos.perform.port" />
             </intent-filter>
         </receiver>
 
