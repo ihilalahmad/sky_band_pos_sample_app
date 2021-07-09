@@ -226,10 +226,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 public void run() {
                                     dialog.dismiss();
 
-                                    if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                                        Objects.requireNonNull(getActivity()).unregisterReceiver(getPortBroadcastReceiver);
-                                    }
-
                                     if (selectedItem.equals(getString(R.string.register))) {
                                         if (ActiveTxnData.getInstance().getTerminalID() == null) {
                                             Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
@@ -254,10 +250,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-
-                                    if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                                        getContext().unregisterReceiver(getPortBroadcastReceiver);
-                                    }
 
                                     if (Objects.equals(errorMessage.getMessage(), "0")) {
                                         Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
