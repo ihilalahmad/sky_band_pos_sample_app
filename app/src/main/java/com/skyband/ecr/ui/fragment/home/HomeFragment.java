@@ -35,6 +35,7 @@ import com.skyband.ecr.GetPortBroadcastReceiver;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.model.ActiveTxnData;
+import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.ConnectionManager;
 import com.skyband.ecr.transaction.StartTransaction;
 import com.skyband.ecr.databinding.HomeFragmentBinding;
@@ -118,7 +119,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, getEcrNumberString());
         }
 
-        if (ConnectionManager.instance() != null && ConnectionManager.instance().isConnected()) {
+       // checking connection type
+        if(ActiveTxnData.getInstance().getConnectPosition() == 0) {
+            if (ConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
+                homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
+            } else {
+                homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+            }
+        } else if(BluetoothConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);

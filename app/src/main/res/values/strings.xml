@@ -34,8 +34,10 @@
 
     <string-array name="connection_type">
         <item>TC/IP</item>
+        <item>Bluetooth</item>
     </string-array>
 
+    <string name="connection_type_prompt">Connection Type</string>
     <string name="transaction_type_prompt">Transaction type</string>
     <string name="request_data_set">Request data is set</string>
     <string name="req_data_validated">Request Data validated</string>
@@ -85,6 +87,11 @@
     <string name="ip_or_port_empty">IP or Port should not be empty</string>
     <string name="ip_and_port_empty">IP and Port should not be empty</string>
     <string name="port_invalid">Port is not valid</string>
+    <string name="none_paired">No devices have been paired</string>
+
+    //Bluetooth
+    <string name="none_found">No devices found</string>
+
     <string-array name="transaction_type">
 
         <item>Register</item>

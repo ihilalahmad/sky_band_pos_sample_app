@@ -1,5 +1,8 @@
 package com.skyband.ecr.sdk.api;
 
+import android.bluetooth.BluetoothDevice;
+
+import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.CLibraryLoad;
 import com.skyband.ecr.sdk.ConnectionManager;
 import com.skyband.ecr.sdk.api.listener.ECRCore;
@@ -201,4 +204,75 @@ public class ECRImpl implements ECRCore {
 
         return resultSHA;
     }
+
+    @Override
+    public String doBluetoothTransaction(BluetoothDevice device, String requestData, int transactionType, String signature) throws Exception {
+        String terminalResponse = "";
+
+        try {
+            BluetoothConnectionManager.instances(device);
+        } catch (IOException e) {
+            throw new Exception("3");
+        }
+
+        byte[] packData = CLibraryLoad.getInstance().getPackData(requestData, transactionType, signature);
+
+        if (BluetoothConnectionManager.instance() != null && Objects.requireNonNull(BluetoothConnectionManager.instance()).isConnected()) {
+
+            try {
+                if (transactionType != 22) {
+                    terminalResponse = Objects.requireNonNull(BluetoothConnectionManager.instance()).sendAndRecv(packData);
+                    terminalResponse = terminalResponse.replace("�", ";");
+                    logger.debug("After Replace  with ;>>" + terminalResponse);
+                    terminalResponse = changeToTransactionType(terminalResponse);
+                    logger.debug("After Replace with Transactiontype>>" + terminalResponse);
+
+                    return terminalResponse;
+                } else {
+                    terminalResponse = Objects.requireNonNull(BluetoothConnectionManager.instance()).sendAndRecvSummary(packData);
+                    terminalResponse = terminalResponse.replace("�", ";");
+
+                    return terminalResponse;
+                }
+
+            } catch (IOException e) {
+                try {
+                    ECRImpl.getConnectInstance().doDisconnection();
+                    logger.info("Socket Disconnected");
+                    throw new Exception("0");
+                } catch (IOException ex) {
+                    logger.severe("Exception in Disconnect >>", ex);
+                    throw new Exception("1");
+                }
+            }
+
+        } else {
+            throw new Exception("2");
+        }
+        //Library parsing is not giving correct response
+      /*  String parseData = CLibraryLoad.getInstance().getParseData(terminalResponse);
+        parseData = parseData.replace("�", ";");
+        logger.debug("After Replace  with ;>>"+parseData);
+        return parseData;*/
+    }
+
+    @Override
+    public int doBluetoothConnection(BluetoothDevice device) throws IOException {
+        if (BluetoothConnectionManager.instances(device).isConnected()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public int doBluetoothDisconnection() throws IOException {
+        if (BluetoothConnectionManager.instance() != null) {
+            BluetoothConnectionManager.instance().disconnect();
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
 }

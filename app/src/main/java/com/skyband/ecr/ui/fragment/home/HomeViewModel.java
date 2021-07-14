@@ -1,6 +1,7 @@
 package com.skyband.ecr.ui.fragment.home;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.View;
 
@@ -259,7 +260,7 @@ public class HomeViewModel extends ViewModel {
         }
 
         String capture;
-        if(ActiveTxnData.getInstance().isPartialCapture()) {
+        if (ActiveTxnData.getInstance().isPartialCapture()) {
             capture = "0";
         } else {
             capture = "1";
@@ -292,7 +293,7 @@ public class HomeViewModel extends ViewModel {
                 break;
             case REVERSAL:
             case RECONCILIATION:
-                reqData = date + ";"+ print + ";" + ecrReferenceNo + "!";
+                reqData = date + ";" + print + ";" + ecrReferenceNo + "!";
                 break;
             case SET_SETTINGS:
                 reqData = date + ";" + homeFragmentBinding.vendorId.getText() + ";" + homeFragmentBinding.vendorTerminalType.getText() + ";" + homeFragmentBinding.trsmId.getText() + ";" + homeFragmentBinding.vendorKeyIndex.getText() + ";" + homeFragmentBinding.samaKeyIndex.getText() + ";" + ecrReferenceNo + "!";
@@ -339,13 +340,17 @@ public class HomeViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String getTerminalResponse() throws Exception {
+        String ipAddress = null;
+        int portNumber = 0;
 
-        String ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
-        int portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
+            portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
+        }
 
         int transactionType = transactionTypeString.ordinal();
-         logger.debug(">>>TransactionType:-" + transactionType);
-         logger.debug("portNumber" + portNumber);
+        logger.debug(">>>TransactionType:-" + transactionType);
+        logger.debug("portNumber" + portNumber);
 
         String combinedValue = "";
         transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
@@ -366,7 +371,16 @@ public class HomeViewModel extends ViewModel {
             GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, String.format("%06d", ecrNumber));
         }
 
-        StringBuilder terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
+        StringBuilder terminalResponse;
+
+        //  terminalResponse using Bluetooth Connection
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+            terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
+        } else {
+            BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
+            terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature));
+        }
+
         String terminalResponseString = terminalResponse.toString();
         String[] responseArray = terminalResponseString.split(";");
         String[] splittedResponse;
@@ -377,15 +391,25 @@ public class HomeViewModel extends ViewModel {
 
             int count = Integer.parseInt(responseArray[4]);
 
-            if(count == 0) {
+            if (count == 0) {
                 splittedResponse = terminalResponseString.split(";");
                 splittedResponse[0] = "22";
                 ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+
             } else {
 
                 for (int i = 1; i <= count; i++) {
+
                     String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                    String resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                    String resp = "";
+
+                    if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+                        resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                    } else {
+                        BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
+                        resp = ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature);
+                    }
+
                     String[] secondResponse = resp.split(";");
                     System.out.println(secondResponse.length);
                     String[] respTemp = new String[secondResponse.length - 2];
