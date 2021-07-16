@@ -155,6 +155,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                                 navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                             } else {
                                 logger.info("Socket Connection failed");
+                                generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                             }
                         } catch (final IOException e) {
                             getActivity().runOnUiThread(new Runnable() {
@@ -162,6 +163,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                                 public void run() {
                                     dialog.dismiss();
                                     logger.severe("Exception on Connecting", e);
+                                    generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                                     Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -177,14 +179,13 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
             public void onClick(View v) {
                 GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, null);
                 GeneralParamCache.getInstance().putString(Constant.PORT, null);
-
+                generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                 try {
                     connectSettingFragmentBinding.ipAddress.getText().clear();
                     connectSettingFragmentBinding.portNo.getText().clear();
                     if (ecrCore != null && ecrCore.doDisconnection() != 1) {
                         logger.info("Socket Disconnected");
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
-                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                     } else {
                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();
                         logger.info("Socket is Already Disconnected");
@@ -334,6 +335,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                                         navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                                     } else {
                                         dialog.dismiss();
+                                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                                         Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
                                     }
                                 }

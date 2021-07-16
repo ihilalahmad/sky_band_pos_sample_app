@@ -133,7 +133,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
 
         if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
             if (ConnectSettingFragment.getEcrCore() == null) {
                 ConnectSettingFragment.setEcrCore();
@@ -168,11 +167,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         addTextChanged();
 
-        if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
-            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
-        } else {
-            homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-        }
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
@@ -204,7 +198,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 homeViewModel.setReqData(selectedItem, getContext());
                 logger.info(getClass() + getString(R.string.request_data_set));
 
-                if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
+                if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED) || (TransactionSettingViewModel.getAppToAPPCommunication() == 1)) {
 
                     final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
                     dialog.setCancelable(false);
