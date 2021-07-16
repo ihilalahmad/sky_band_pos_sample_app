@@ -24,7 +24,6 @@ public class ConnectSettingViewModel extends ViewModel {
         connectSettingFragmentBinding.disconnectButton.setVisibility(View.INVISIBLE);
         connectSettingFragmentBinding.btnConnect.setVisibility(View.INVISIBLE);
         connectSettingFragmentBinding.list.setVisibility(View.INVISIBLE);
-        connectSettingFragmentBinding.sendButton.setVisibility(View.INVISIBLE);
 
     }
 
@@ -42,7 +41,6 @@ public class ConnectSettingViewModel extends ViewModel {
             case "Bluetooth":
                 connectSettingFragmentBinding.list.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.btnConnect.setVisibility(View.VISIBLE);
-                connectSettingFragmentBinding.sendButton.setVisibility(View.VISIBLE);
                 break;
             default:
                 //For other connection Type

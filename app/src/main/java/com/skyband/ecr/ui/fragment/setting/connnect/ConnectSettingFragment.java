@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,7 +158,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                                 generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                             }
                         } catch (final IOException e) {
-                            getActivity().runOnUiThread(new Runnable() {
+                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
@@ -201,7 +201,13 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         connectSettingFragmentBinding.btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPrinterPickDialog();
+                final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.connecting), getString(R.string.please_wait), true);
+                dialog.setCancelable(false);
+                new Handler().postDelayed(() -> {
+                    showPrinterPickDialog();
+                    dialog.dismiss();
+                }, 5000);
+
             }
         });
 
@@ -254,21 +260,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
     }
 
-    private void btnEnableDisable_Discoverable() {
-        Log.d("TAG", "btnEnableDisable_Discoverable: Making device discoverable for 300 seconds.");
-
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-        startActivity(discoverableIntent);
-    }
-
-  /*  public static void sendMessage(String message) throws IOException {
-
-        if (message.length() > 0) {
-            byte[] send = message.getBytes();
-            bluetoothConnectionManager.write(send);
-        }
-    }*/
 
     private void showPrinterPickDialog() {
         dialog = new Dialog(getActivity());
@@ -277,12 +268,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.layout_bluetooth, null);
         dialog.setContentView(view);
         dialog.setTitle("Bluetooth Devices");
-
-    /*    if (bluetoothAdapter.isDiscovering()) {
-            Log.e("TAG", "doing");
-            bluetoothAdapter.cancelDiscovery();
-        }
-        bluetoothAdapter.startDiscovery();*/
 
         //Initializing bluetooth adapters
         ArrayAdapter<String> pairedDevicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
