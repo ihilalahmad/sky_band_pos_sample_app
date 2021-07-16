@@ -34,7 +34,6 @@ import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.databinding.ConnectSettingFragmentBinding;
 import com.skyband.ecr.model.ActiveTxnData;
-import com.skyband.ecr.sdk.BluetoothConnectionManager;
 import com.skyband.ecr.sdk.api.ECRImpl;
 import com.skyband.ecr.sdk.api.listener.ECRCore;
 import com.skyband.ecr.sdk.logger.Logger;
@@ -63,7 +62,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     private Dialog dialog;
     private BluetoothAdapter bluetoothAdapter;
     private ArrayAdapter<String> discoveredDevicesAdapter;
-    public static BluetoothConnectionManager bluetoothConnectionManager;
     private BluetoothDevice connectingDevice;
 
     public static ECRCore getEcrCore() {
@@ -117,98 +115,83 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
         connectSettingFragmentBinding.connectionTypeSpinner.setOnItemSelectedListener(this);
 
-        connectSettingFragmentBinding.connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        connectSettingFragmentBinding.connectButton.setOnClickListener(v -> {
 
-                ipAddress = connectSettingFragmentBinding.ipAddress.getText().toString();
-                portNo = connectSettingFragmentBinding.portNo.getText().toString();
+            ipAddress = connectSettingFragmentBinding.ipAddress.getText().toString();
+            portNo = connectSettingFragmentBinding.portNo.getText().toString();
 
-                if (ipAddress.equals("") && portNo.equals("")) {
-                    Toast.makeText(getContext(), R.string.ip_and_port_empty, Toast.LENGTH_LONG).show();
-                    return;
-                } else if (ipAddress.equals("") || portNo.equals("")) {
-                    Toast.makeText(getContext(), R.string.ip_or_port_empty, Toast.LENGTH_LONG).show();
-                    return;
-                } else if (!validateIp(ipAddress)) {
-                    Toast.makeText(getContext(), R.string.ip_invalid, Toast.LENGTH_LONG).show();
-                    return;
-                } else if (!validatePort(portNo)) {
-                    Toast.makeText(getContext(), R.string.port_invalid, Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                final ProgressDialog dialog = ProgressDialog.show(getActivity(), getString(R.string.connecting), getString(R.string.please_wait), true);
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        generalParamCache.putString(Constant.IP_ADDRESS, ipAddress);
-                        generalParamCache.putString(Constant.PORT, portNo);
-                        ecrCore = ECRImpl.getConnectInstance();
-                        try {
-                            int connectionStatus = ecrCore.doTCPIPConnection(ipAddress, Integer.parseInt(portNo));
-                            if (connectionStatus == 0) {
-                                logger.info("Socket Connected");
-                                dialog.dismiss();
-                                generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
-                                navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
-                            } else {
-                                logger.info("Socket Connection failed");
-                                generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
-                            }
-                        } catch (final IOException e) {
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.dismiss();
-                                    logger.severe("Exception on Connecting", e);
-                                    generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
-                                    Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    }
-                }).start();
-
+            if (ipAddress.equals("") && portNo.equals("")) {
+                Toast.makeText(getContext(), R.string.ip_and_port_empty, Toast.LENGTH_LONG).show();
+                return;
+            } else if (ipAddress.equals("") || portNo.equals("")) {
+                Toast.makeText(getContext(), R.string.ip_or_port_empty, Toast.LENGTH_LONG).show();
+                return;
+            } else if (!validateIp(ipAddress)) {
+                Toast.makeText(getContext(), R.string.ip_invalid, Toast.LENGTH_LONG).show();
+                return;
+            } else if (!validatePort(portNo)) {
+                Toast.makeText(getContext(), R.string.port_invalid, Toast.LENGTH_LONG).show();
+                return;
             }
-        });
 
-        connectSettingFragmentBinding.disconnectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, null);
-                GeneralParamCache.getInstance().putString(Constant.PORT, null);
-                generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
+            final ProgressDialog dialog = ProgressDialog.show(getActivity(), getString(R.string.connecting), getString(R.string.please_wait), true);
+
+            new Thread(() -> {
+                generalParamCache.putString(Constant.IP_ADDRESS, ipAddress);
+                generalParamCache.putString(Constant.PORT, portNo);
+                ecrCore = ECRImpl.getConnectInstance();
                 try {
-                    connectSettingFragmentBinding.ipAddress.getText().clear();
-                    connectSettingFragmentBinding.portNo.getText().clear();
-                    if (ecrCore != null && ecrCore.doDisconnection() != 1) {
-                        logger.info("Socket Disconnected");
-                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+                    int connectionStatus = ecrCore.doTCPIPConnection(ipAddress, Integer.parseInt(portNo));
+                    if (connectionStatus == 0) {
+                        logger.info("Socket Connected");
+                        dialog.dismiss();
+                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
+                        navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                     } else {
-                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();
-                        logger.info("Socket is Already Disconnected");
+                        logger.info("Socket Connection failed");
+                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                     }
                 } catch (final IOException e) {
-                    logger.severe("Exception on disconnecting", e);
-                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                        dialog.dismiss();
+                        logger.severe("Exception on Connecting", e);
+                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
+                        Toast.makeText(getContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
+                    });
                 }
+            }).start();
+
+        });
+
+        connectSettingFragmentBinding.disconnectButton.setOnClickListener(v -> {
+            GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, null);
+            GeneralParamCache.getInstance().putString(Constant.PORT, null);
+            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
+            try {
+                connectSettingFragmentBinding.ipAddress.getText().clear();
+                connectSettingFragmentBinding.portNo.getText().clear();
+                if (ecrCore != null && ecrCore.doDisconnection() != 1) {
+                    logger.info("Socket Disconnected");
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), R.string.socket_disconnected, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), " Not Connected", Toast.LENGTH_LONG).show();
+                    logger.info("Socket is Already Disconnected");
+                }
+            } catch (final IOException e) {
+                logger.severe("Exception on disconnecting", e);
+                Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "" + e.toString(), Toast.LENGTH_LONG).show();
             }
         });
 
         //bluetooth connect button
-        connectSettingFragmentBinding.btnConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.connecting), getString(R.string.please_wait), true);
-                dialog.setCancelable(false);
-                new Handler().postDelayed(() -> {
-                    showPrinterPickDialog();
-                    dialog.dismiss();
-                }, 5000);
+        connectSettingFragmentBinding.btnConnect.setOnClickListener(v -> {
+            final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.connecting), getString(R.string.please_wait), true);
+            dialog.setCancelable(false);
+            new Handler().postDelayed(() -> {
+                showPrinterPickDialog();
+                dialog.dismiss();
+            }, 5000);
 
-            }
         });
 
     }
@@ -296,94 +279,68 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         }
 
         //Handling listview item click event
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            /*bluetoothAdapter.cancelDiscovery();*/
+            String info = ((TextView) view1).getText().toString();
+            final String address = info.substring(info.length() - 17);
+            logger.info("address" + address);
+            new Thread(() -> {
+                try {
+                    final int connectionStatus = connectToDevice(address);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*bluetoothAdapter.cancelDiscovery();*/
-                String info = ((TextView) view).getText().toString();
-                final String address = info.substring(info.length() - 17);
-                logger.info("address" + address);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            final int connectionStatus = connectToDevice(address);
-
-                            requireActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (connectionStatus == 0) {
-                                        dialog.dismiss();
-                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
-                                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
-                                        navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
-                                    } else {
-                                        dialog.dismiss();
-                                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
-                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-
-
-                        } catch (IOException e) {
+                    requireActivity().runOnUiThread(() -> {
+                        if (connectionStatus == 0) {
                             dialog.dismiss();
-                            e.printStackTrace();
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }).start();
-
-            }
-
-        });
-
-        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /*bluetoothAdapter.cancelDiscovery();*/
-                String info = ((TextView) view).getText().toString();
-                final String address = info.substring(info.length() - 17);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            final int connectionStatus = connectToDevice(address);
-                            requireActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (connectionStatus == 0) {
-                                        dialog.dismiss();
-                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
-                                        generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
-                                        navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
-                                    } else {
-                                        dialog.dismiss();
-                                        Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-
-                        } catch (IOException e) {
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
+                            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
+                            navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                        } else {
                             dialog.dismiss();
-                            e.printStackTrace();
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
                         }
+                    });
 
-                    }
-                }).start();
-            }
+
+                } catch (IOException e) {
+                    dialog.dismiss();
+                    e.printStackTrace();
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            }).start();
+
         });
 
-        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+        listView2.setOnItemClickListener((adapterView, view12, i, l) -> {
+            /*bluetoothAdapter.cancelDiscovery();*/
+            String info = ((TextView) view12).getText().toString();
+            final String address = info.substring(info.length() - 17);
+            new Thread(() -> {
+                try {
+                    final int connectionStatus = connectToDevice(address);
+                    requireActivity().runOnUiThread(() -> {
+                        if (connectionStatus == 0) {
+                            dialog.dismiss();
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
+                            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
+                            navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+                } catch (IOException e) {
+                    dialog.dismiss();
+                    e.printStackTrace();
+                    Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            }).start();
         });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(v -> dialog.dismiss());
 
         dialog.setCancelable(false);
         dialog.show();

@@ -38,21 +38,9 @@ public class SettingFragment extends Fragment {
 
     private void setupListeners() {
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        settingFragmentBinding.connectionSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        settingFragmentBinding.connectionSetting.setOnClickListener(v -> navController.navigate(R.id.action_settingFragment_to_navigation_connect_setting));
 
-                navController.navigate(R.id.action_settingFragment_to_navigation_connect_setting);
-            }
-        });
-
-        settingFragmentBinding.ecrTransactionSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                navController.navigate(R.id.action_settingFragment_to_transactionSettingFragment);
-            }
-        });
+        settingFragmentBinding.ecrTransactionSetting.setOnClickListener(v -> navController.navigate(R.id.action_settingFragment_to_transactionSettingFragment));
     }
 }
 

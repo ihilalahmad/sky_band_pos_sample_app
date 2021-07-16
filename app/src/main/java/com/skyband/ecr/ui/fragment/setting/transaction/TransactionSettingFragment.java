@@ -69,13 +69,10 @@ public class TransactionSettingFragment extends Fragment {
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
 
-        transactionSettingFragmentBinding.okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        transactionSettingFragmentBinding.okButton.setOnClickListener(v -> {
 
-                transactionSettingViewModel.setData(transactionSettingFragmentBinding);
-                    navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment, null, options);
-            }
+            transactionSettingViewModel.setData(transactionSettingFragmentBinding);
+                navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment, null, options);
         });
     }
 }

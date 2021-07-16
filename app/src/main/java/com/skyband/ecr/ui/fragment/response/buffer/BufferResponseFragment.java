@@ -128,20 +128,14 @@ public class BufferResponseFragment extends Fragment {
             bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
         }
 
-        bufferResponseFragmentBinding.okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
-                navController.navigate(R.id.action_bufferResponseFragment_to_homeFragment, null, options);
-            }
+        bufferResponseFragmentBinding.okButton.setOnClickListener(v -> {
+            NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
+            navController.navigate(R.id.action_bufferResponseFragment_to_homeFragment, null, options);
         });
 
-        bufferResponseFragmentBinding.printReceipt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.printReceiptFragment, true).build();
-                navController.navigate(R.id.action_bufferResponseFragment_to_printReceiptFragment, null, options);
-            }
+        bufferResponseFragmentBinding.printReceipt.setOnClickListener(v -> {
+            NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.printReceiptFragment, true).build();
+            navController.navigate(R.id.action_bufferResponseFragment_to_printReceiptFragment, null, options);
         });
     }
 
