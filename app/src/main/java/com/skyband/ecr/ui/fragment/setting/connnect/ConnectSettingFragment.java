@@ -187,7 +187,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
         //bluetooth connect button
         connectSettingFragmentBinding.btnConnect.setOnClickListener(v -> {
-            final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.connecting), getString(R.string.please_wait), true);
+            final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.searching), getString(R.string.please_wait), true);
             dialog.setCancelable(false);
             new Handler().postDelayed(() -> {
                 showPrinterPickDialog();

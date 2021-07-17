@@ -56,6 +56,7 @@
     <string name="unable_to_connect">Unable to Connect</string>
     <string name="Exception_during_connection">Exception during connection</string>
     <string name="connecting">connecting</string>
+    <string name="searching">searching</string>
     <string name="please_wait">Please wait...</string>
     <string name="ip_invalid">IP is not valid</string>
     <string name="cash_back_amount">Cash Back Amount</string>
