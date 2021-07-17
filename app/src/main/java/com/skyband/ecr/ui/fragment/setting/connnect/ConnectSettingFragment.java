@@ -64,6 +64,8 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
     private ArrayAdapter<String> discoveredDevicesAdapter;
     private BluetoothDevice connectingDevice;
 
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+
     public static ECRCore getEcrCore() {
         return ecrCore;
     }
@@ -234,10 +236,10 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                 Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Bluetooth is not available!", Toast.LENGTH_SHORT).show();
             }
 
-            //btnEnableDisable_Discoverable();
-            // Register for broadcasts when a device is discovered
-            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
+            if (!bluetoothAdapter.isEnabled()) {
+                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableIntent, REQUEST_ENABLE_BLUETOOTH);
+            }
 
         }
 
@@ -266,6 +268,10 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
 
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        Objects.requireNonNull(getActivity()).registerReceiver(discoveryFinishReceiver, filter);
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
@@ -291,7 +297,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     requireActivity().runOnUiThread(() -> {
                         if (connectionStatus == 0) {
                             dialog.dismiss();
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected...", Toast.LENGTH_SHORT).show();
                             generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
                             navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                         } else {
@@ -322,11 +328,12 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     requireActivity().runOnUiThread(() -> {
                         if (connectionStatus == 0) {
                             dialog.dismiss();
-                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected to: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Connected... ", Toast.LENGTH_SHORT).show();
                             generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.CONNECTED);
                             navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
                         } else {
                             dialog.dismiss();
+                            generalParamCache.putString(Constant.CONNECTION_STATUS, Constant.DISCONNECTED);
                             Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Not able to connect", Toast.LENGTH_SHORT).show();
                         }
                     });
