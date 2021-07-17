@@ -20,6 +20,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -254,6 +255,12 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         dialog.setContentView(view);
         dialog.setTitle("Bluetooth Devices");
 
+        if (bluetoothAdapter.isDiscovering()) {
+            Log.e("TAG","doing");
+            bluetoothAdapter.cancelDiscovery();
+        }
+        bluetoothAdapter.startDiscovery();
+
         //Initializing bluetooth adapters
         ArrayAdapter<String> pairedDevicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         discoveredDevicesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
@@ -356,7 +363,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
     private int connectToDevice(String deviceAddress) throws IOException {
         ecrCore = ECRImpl.getConnectInstance();
-        /*bluetoothAdapter.cancelDiscovery();*/
+        bluetoothAdapter.cancelDiscovery();
         connectingDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
         logger.info("device" + connectingDevice);
         int connectionStatus = ecrCore.doBluetoothConnection(connectingDevice);
