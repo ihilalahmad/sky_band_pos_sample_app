@@ -492,6 +492,7 @@ public class BufferResponseViewModel extends ViewModel {
             htmlString.append(resp[i]);
             htmlString.append(htmlSeperator3);
         }
+
         for (int j = 1; j <= transactionsLength; j++) {
             htmlString.append(htmlSeperator1);
             htmlString.append("Transaction");
@@ -507,6 +508,12 @@ public class BufferResponseViewModel extends ViewModel {
             }
             k = k + 10;
         }
+
+        htmlString.append("Topic");
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k]);
+        htmlString.append(htmlSeperator3);
+
         htmlString.append(htmlSeperator1);
         htmlString.append("DB Count");
         htmlString.append(htmlSeperator2);
@@ -516,7 +523,7 @@ public class BufferResponseViewModel extends ViewModel {
         htmlString.append(htmlSeperator1);
         htmlString.append("DB Amount");
         htmlString.append(htmlSeperator2);
-        htmlString.append(String.format("%.2f", (Double.parseDouble(resp[k + 2]))));
+        htmlString.append(resp[k + 2]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
@@ -528,13 +535,13 @@ public class BufferResponseViewModel extends ViewModel {
         htmlString.append(htmlSeperator1);
         htmlString.append("CR Amount");
         htmlString.append(htmlSeperator2);
-        htmlString.append(String.format("%.2f", (Double.parseDouble(resp[k + 4]))));
+        htmlString.append(resp[k + 4]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
         htmlString.append("Total Amount");
         htmlString.append(htmlSeperator2);
-        htmlString.append(String.format("%.2f", (Double.parseDouble(resp[k + 5]))));
+        htmlString.append(resp[k + 5]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
