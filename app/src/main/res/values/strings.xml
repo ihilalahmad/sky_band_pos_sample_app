@@ -102,8 +102,8 @@
         <item>Purchase with Naqd</item>
         <item>Refund</item>
         <item>Authorization</item>
-        <item>Purchase Advice(Full)</item>
-        <item>Purchase Advice(Partial)</item>
+        <item>Purchase Advice(Full Capture)</item>
+        <item>Purchase Advice(Partial Capture)</item>
         <item>Authorization Extension</item>
         <item>Authorization Void</item>
         <item>Cash advance</item>
@@ -115,8 +115,8 @@
         <item>GET Settings</item>
         <!--<item>Set Terminal Language</item>-->
         <!-- <item>Terminal Status</item>
-         <item>Previous Transaction Details</item>-->
-       <!-- <item>Bill Payment</item>-->
+        <item>Previous Transaction Details</item>-->
+        <item>Bill Payment</item>
         <item>Running Total</item>
         <item>Snapshot Total</item>
         <item>Print Summary Report</item>
