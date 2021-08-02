@@ -959,6 +959,7 @@ public class PrintReceiptViewModel extends ViewModel {
             htmlString = htmlString.replace("PosTable", summaryFinalReport.toString());
             htmlString = htmlString.replace("currentTime", currentTime);
             htmlString = htmlString.replace("currentDate", currentDate);
+            htmlString = htmlString.replace("retailerId", receiveDataArray[5]);
             htmlString = htmlString.replace(Constant.BUZZ_CODE, receiveDataArray[6]);
             htmlString = htmlString.replace("AppVersion", receiveDataArray[7]);
             htmlString = htmlString.replace("TerminalId", ActiveTxnData.getInstance().getTerminalID());
