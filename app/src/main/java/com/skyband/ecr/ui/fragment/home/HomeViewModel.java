@@ -387,6 +387,22 @@ public class HomeViewModel extends ViewModel {
         String thirdResponse;
         logger.debug("FirstApicall length>> " + responseArray.length);
 
+        if( responseArray.length>4 && responseArray[4].equals("C1")) {
+
+            ActiveTxnData.getInstance().setTransactionType(TransactionType.PRINT_SUMMARY_REPORT);
+            if (responseArray[0].equals("C2")) {
+                String[] separateResponse = new String[responseArray.length-4];
+                int j = 0;
+                for (int i = 4; i < responseArray.length - 4; i++) {
+                    separateResponse[j] = responseArray[i];
+                    j = j + 1;
+                }
+
+                terminalResponseString = arrayIntoString(separateResponse);
+                responseArray = terminalResponseString.split(";");
+            }
+        }
+
         if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
 
             int count = Integer.parseInt(responseArray[4]);
