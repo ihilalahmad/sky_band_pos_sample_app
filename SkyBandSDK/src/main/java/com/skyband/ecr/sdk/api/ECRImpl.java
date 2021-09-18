@@ -17,6 +17,7 @@ public class ECRImpl implements ECRCore {
 
     private static ECRCore ecrCore;
     private Logger logger = Logger.getNewLogger(ECRImpl.class.getName());
+    private static boolean isLastTxnSummary;
 
     public static ECRCore getConnectInstance() {
         if (ecrCore == null) {
@@ -42,6 +43,10 @@ public class ECRImpl implements ECRCore {
 
         if (ConnectionManager.instance() != null && Objects.requireNonNull(ConnectionManager.instance()).isConnected()) {
 
+            if (transactionType == 23 && isLastTxnSummary) {
+                transactionType = 22;
+            }
+
             try {
                 if (transactionType != 22) {
                     terminalResponse = Objects.requireNonNull(ConnectionManager.instance()).sendAndRecv(packData);
@@ -49,12 +54,12 @@ public class ECRImpl implements ECRCore {
                     logger.debug("After Replace  with ;>>" + terminalResponse);
                     terminalResponse = changeToTransactionType(terminalResponse);
                     logger.debug("After Replace with Transactiontype>>" + terminalResponse);
-
+                    isLastTxnSummary = false;
                     return terminalResponse;
                 } else {
                     terminalResponse = Objects.requireNonNull(ConnectionManager.instance()).sendAndRecvSummary(packData);
                     terminalResponse = terminalResponse.replace("�", ";");
-
+                    isLastTxnSummary = true;
                     return terminalResponse;
                 }
 

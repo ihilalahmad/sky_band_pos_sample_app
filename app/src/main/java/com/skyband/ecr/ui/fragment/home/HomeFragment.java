@@ -137,9 +137,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             if (ConnectSettingFragment.getEcrCore() == null) {
                 ConnectSettingFragment.setEcrCore();
             }
-            WifiManager wm = (WifiManager) requireActivity().getApplicationContext().getSystemService(WIFI_SERVICE);
-            String deviceIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-            generalParamCache.putString(Constant.IP_ADDRESS, deviceIp);
+              generalParamCache.putString(Constant.IP_ADDRESS, "localhost");
 
         }
 
@@ -412,10 +410,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private void sendAndReceiveBroadcast() {
         Intent intent = new Intent();
-        intent.setAction("com.example.perform.ecr");
+        intent.setAction("com.skyband.pos.app.send.ecr.port");
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.setComponent(
-                new ComponentName("com.skyband.pos.app","com.skyband.pos.app.ECRPortBroadcastReceiver"));
+                new ComponentName("com.skyband.pos.app","com.skyband.pos.app.ui.ecr.ECRPortBroadcastReceiver"));
         getContext().sendBroadcast(intent);
         getPortBroadcastReceiver = new GetPortBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter("com.skyband.pos.perform.port");
