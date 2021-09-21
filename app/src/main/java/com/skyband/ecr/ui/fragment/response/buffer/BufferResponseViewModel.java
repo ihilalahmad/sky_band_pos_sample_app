@@ -492,6 +492,7 @@ public class BufferResponseViewModel extends ViewModel {
             htmlString.append(resp[i]);
             htmlString.append(htmlSeperator3);
         }
+
         for (int j = 1; j <= transactionsLength; j++) {
             htmlString.append(htmlSeperator1);
             htmlString.append("Transaction");
@@ -507,40 +508,76 @@ public class BufferResponseViewModel extends ViewModel {
             }
             k = k + 10;
         }
-        htmlString.append(htmlSeperator1);
-        htmlString.append(Constant.MERCHANT_NAME);
+
+        htmlString.append("Topic");
         htmlString.append(htmlSeperator2);
         htmlString.append(resp[k]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
-        htmlString.append(Constant.MERCHANT_ADDRESS);
+        htmlString.append("DB Count");
         htmlString.append(htmlSeperator2);
         htmlString.append(resp[k + 1]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
-        htmlString.append(Constant.MERCHANT_NAME_ARABIC);
+        htmlString.append("DB Amount");
         htmlString.append(htmlSeperator2);
         htmlString.append(resp[k + 2]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
-        htmlString.append(Constant.MERCHANT_ADDRESS_ARABIC);
+        htmlString.append("CR Count");
         htmlString.append(htmlSeperator2);
         htmlString.append(resp[k + 3]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
-        htmlString.append(Constant.ECR_TRANSACTION_REFERENCE_NUMBER);
+        htmlString.append("CR Amount");
         htmlString.append(htmlSeperator2);
         htmlString.append(resp[k + 4]);
         htmlString.append(htmlSeperator3);
 
         htmlString.append(htmlSeperator1);
-        htmlString.append(Constant.SIGNATURE);
+        htmlString.append("Total Amount");
         htmlString.append(htmlSeperator2);
         htmlString.append(resp[k + 5]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_NAME);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 6]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_ADDRESS);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 7]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_NAME_ARABIC);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 8]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.MERCHANT_ADDRESS_ARABIC);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 9]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.ECR_TRANSACTION_REFERENCE_NUMBER);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 10]);
+        htmlString.append(htmlSeperator3);
+
+        htmlString.append(htmlSeperator1);
+        htmlString.append(Constant.SIGNATURE);
+        htmlString.append(htmlSeperator2);
+        htmlString.append(resp[k + 11]);
         htmlString.append(htmlSeperator3);
 
         logger.info("PrintResponse | PrintResponseSummary | Exited");
