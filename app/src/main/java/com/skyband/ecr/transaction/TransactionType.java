@@ -9,7 +9,7 @@ public enum TransactionType {
     PURCHASE_WITH_NAQD("Purchase with Naqd"),
     REFUND("Refund"),
     AUTHORIZATION("Authorization"),
-    PURCHASE_ADVICE_FULL("Purchase Advice(Full)"),
+    PURCHASE_ADVICE_FULL("Purchase Advice(Full Capture)"),
     AUTHORIZATION_EXTENSION("Authorization Extension"),
     AUTHORIZATION_VOID("Authorization Void"),
     ADVICE("Advice"),

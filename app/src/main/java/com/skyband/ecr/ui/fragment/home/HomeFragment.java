@@ -305,7 +305,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (selectedItem.equals(TransactionType.PURCHASE_ADVICE_FULL.getTransactionType())) {
             ActiveTxnData.getInstance().setPartialCapture(false);
             selectedItem = "Purchase Advice Full";
-        } else if (selectedItem.equals("Purchase Advice(Partial)")) {
+        } else if (selectedItem.equals("Purchase Advice(Partial Capture)")) {
             ActiveTxnData.getInstance().setPartialCapture(true);
             selectedItem = "Purchase Advice Full";
         }
