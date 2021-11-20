@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
@@ -123,6 +124,9 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
             ipAddress = connectSettingFragmentBinding.ipAddress.getText().toString();
             portNo = connectSettingFragmentBinding.portNo.getText().toString();
 
+            //Disable App To App
+            GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 0);
+
             if (ipAddress.equals("") && portNo.equals("")) {
                 Toast.makeText(getContext(), R.string.ip_and_port_empty, Toast.LENGTH_LONG).show();
                 return;
@@ -197,6 +201,14 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
         });
 
+        //App To App Connect Button
+        connectSettingFragmentBinding.btnAppToAppConnect.setOnClickListener(v -> {
+            //Enable App To App
+            GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 1);
+
+            navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+        });
+
     }
 
     private boolean validateIp(String ipAddress) {
@@ -246,7 +258,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
     }
 
-
     private void showPrinterPickDialog() {
         dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
@@ -256,7 +267,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         dialog.setTitle("Bluetooth Devices");
 
         if (bluetoothAdapter.isDiscovering()) {
-            Log.e("TAG","doing");
+            Log.e("TAG", "doing");
             bluetoothAdapter.cancelDiscovery();
         }
         bluetoothAdapter.startDiscovery();

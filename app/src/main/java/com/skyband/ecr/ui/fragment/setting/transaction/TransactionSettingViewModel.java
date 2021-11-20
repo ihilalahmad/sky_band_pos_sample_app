@@ -33,11 +33,5 @@ public class TransactionSettingViewModel extends ViewModel {
             GeneralParamCache.getInstance().putInt(Constant.ENABLE_PRINT, 0);
         }
 
-        if (transactionSettingFragmentBinding.appAppCommunication.isChecked()) {
-            GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 1);
-        } else {
-            GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 0);
-        }
-
     }
 }

@@ -135,5 +135,24 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/bot_AppToApp_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_AppToApp_connect"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp60"
+                android:background="@color/blue"
+                android:text="Connect"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp15" />
+
+
+        </LinearLayout>
+
     </RelativeLayout>
 </layout>

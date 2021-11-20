@@ -15,12 +15,12 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.skyband.ecr.R;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.databinding.TransactionSettingFragmentBinding;
-import com.skyband.ecr.model.ActiveTxnData;
 
 import java.util.Objects;
 
@@ -44,8 +44,8 @@ public class TransactionSettingFragment extends Fragment {
 
     private void setupListeners() {
 
-        if(ActiveTxnData.getInstance().isRegistered()) {
-            transactionSettingFragmentBinding.cashRegisterNo2.setText(GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
+        if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) != null) {
+            transactionSettingFragmentBinding.cashRegisterNoEt.setText(GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
         }
 
         if (TransactionSettingViewModel.getEcr() == 1) {
@@ -60,19 +60,23 @@ public class TransactionSettingFragment extends Fragment {
             transactionSettingFragmentBinding.terminalPrinter.setChecked(false);
         }
 
-        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-            transactionSettingFragmentBinding.appAppCommunication.setChecked(true);
-        } else {
-            transactionSettingFragmentBinding.appAppCommunication.setChecked(false);
-        }
-
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
 
         transactionSettingFragmentBinding.okButton.setOnClickListener(v -> {
 
             transactionSettingViewModel.setData(transactionSettingFragmentBinding);
+            GeneralParamCache.getInstance().putString(Constant.CASH_REGISTER_NO,transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString());
+
+            if (!(transactionSettingFragmentBinding.cashRegisterNoEt.length() > Constant.ZERO)) {
+                Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Cash Register No. should not be empty", Toast.LENGTH_LONG).show();
+            }
+            if (!(transactionSettingFragmentBinding.cashRegisterNoEt.length() >= Constant.EIGHT)) {
+                Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Cash Register No. length should be 8 digits", Toast.LENGTH_LONG).show();
+            } else {
                 navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment, null, options);
+            }
+
         });
     }
 }
