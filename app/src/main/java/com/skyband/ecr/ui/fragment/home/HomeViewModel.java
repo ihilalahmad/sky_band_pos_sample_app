@@ -481,7 +481,7 @@ public class HomeViewModel extends ViewModel {
         }
 
         if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) == null) {
-            GeneralParamCache.getInstance().putString(Constant.CASH_REGISTER_NO, context.getString(R.string.cash_register_no));
+            throw new Exception("Please Enter Cash Register No. in Transaction Setting");
         }
 
         if (ecrSelected == Constant.ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {

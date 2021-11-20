@@ -8,11 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +47,6 @@ import com.skyband.ecr.ui.fragment.setting.transaction.TransactionSettingViewMod
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static android.content.Context.WIFI_SERVICE;
 import static com.skyband.ecr.transaction.TransactionType.CHECK_STATUS;
 import static com.skyband.ecr.transaction.TransactionType.DUPLICATE;
 import static com.skyband.ecr.transaction.TransactionType.END_SESSION;

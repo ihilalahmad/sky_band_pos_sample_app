@@ -1,79 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.setting.transaction.TransactionSettingFragment">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.setting.transaction.TransactionSettingFragment">
 
-        <CheckBox
-            android:id="@+id/app_app_communication"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            android:text="App to App Communication"
-            android:textSize="@dimen/dp25"
-            />
-
-        <CheckBox
-            android:id="@+id/terminal_printer"
-            android:layout_below="@id/app_app_communication"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp25"
-            android:text="Enable Terminal Printer"
-            android:textSize="@dimen/dp25"
-            />
-
-        <CheckBox
-            android:id="@+id/ecr_no"
-            android:layout_below="@id/terminal_printer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dp25"
-            android:layout_marginTop="@dimen/dp25"
-            android:text="ECR Ref"
-            />
-
-        <TextView
-            android:id="@+id/cash_register_no_tv"
-            android:layout_below="@id/ecr_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp25"
-            android:layout_marginTop="@dimen/dp35"
-            android:textSize="@dimen/dp25"
-            android:textStyle="bold"
-            android:text="@string/cash_register_number" />
-
-
-        <TextView
-            android:id="@+id/cash_register_no2"
-            android:layout_below="@+id/cash_register_no_tv"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp25"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="@drawable/border"
-            android:hint="@string/cash_register_number"
-            android:padding="@dimen/dp10"
-            />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/ok_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:layout_alignParentBottom="true"
-            android:text="OK"
-            android:textSize="@dimen/dp25"
-            android:textColor="@color/white"
-            android:background="@color/blue"
-            />
+            <CheckBox
+                android:id="@+id/terminal_printer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:text="Enable Terminal Printer"
+                android:textSize="@dimen/dp25" />
 
-    </RelativeLayout>
-</FrameLayout>
+            <CheckBox
+                android:id="@+id/ecr_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/terminal_printer"
+                android:layout_marginTop="@dimen/dp25"
+                android:text="ECR Ref"
+                android:textSize="@dimen/dp25" />
+
+            <TextView
+                android:id="@+id/cash_register_no_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ecr_no"
+                android:layout_marginHorizontal="@dimen/dp25"
+                android:layout_marginTop="@dimen/dp35"
+                android:text="@string/cash_register_number"
+                android:textSize="@dimen/dp25"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:id="@+id/cash_register_no_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cash_register_no_tv"
+                android:layout_marginHorizontal="@dimen/dp25"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="@drawable/border"
+                android:hint="@string/cash_register_number"
+                android:inputType="number"
+                android:maxLength="8"
+                android:padding="@dimen/dp10" />
+
+            <Button
+                android:id="@+id/ok_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp60"
+                android:layout_alignParentBottom="true"
+                android:background="@color/blue"
+                android:text="OK"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp25" />
+
+        </RelativeLayout>
+    </FrameLayout>
 </layout>
