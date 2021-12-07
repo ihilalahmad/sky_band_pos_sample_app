@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        generalParamCache.clear();
+
         try {
             if(ConnectionManager.instance() != null){
                 Objects.requireNonNull(ConnectionManager.instance()).disconnect();
