@@ -21,6 +21,7 @@ import com.skyband.ecr.R;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.databinding.TransactionSettingFragmentBinding;
+import com.skyband.ecr.model.ActiveTxnData;
 
 import java.util.Objects;
 
@@ -44,21 +45,13 @@ public class TransactionSettingFragment extends Fragment {
 
     private void setupListeners() {
 
-        if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) != null) {
-            transactionSettingFragmentBinding.cashRegisterNoEt.setText(GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
+        if (ActiveTxnData.getInstance().getCashRegisterNo() != null) {
+            transactionSettingFragmentBinding.cashRegisterNoEt.setText(ActiveTxnData.getInstance().getCashRegisterNo());
         }
 
-        if (TransactionSettingViewModel.getEcr() == 1) {
-            transactionSettingFragmentBinding.ecrNo.setChecked(true);
-        } else {
-            transactionSettingFragmentBinding.ecrNo.setChecked(false);
-        }
+        transactionSettingFragmentBinding.ecrNo.setChecked(TransactionSettingViewModel.getEcr() == 1);
 
-        if (TransactionSettingViewModel.getPrint() == 1) {
-            transactionSettingFragmentBinding.terminalPrinter.setChecked(true);
-        } else {
-            transactionSettingFragmentBinding.terminalPrinter.setChecked(false);
-        }
+        transactionSettingFragmentBinding.terminalPrinter.setChecked(TransactionSettingViewModel.getPrint() == 1);
 
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
         final NavOptions options = new NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build();
@@ -66,7 +59,8 @@ public class TransactionSettingFragment extends Fragment {
         transactionSettingFragmentBinding.okButton.setOnClickListener(v -> {
 
             transactionSettingViewModel.setData(transactionSettingFragmentBinding);
-            GeneralParamCache.getInstance().putString(Constant.CASH_REGISTER_NO,transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString());
+
+            ActiveTxnData.getInstance().setCashRegisterNo(transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString());
 
             if (!(transactionSettingFragmentBinding.cashRegisterNoEt.length() > Constant.ZERO)) {
                 Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Cash Register No. should not be empty", Toast.LENGTH_LONG).show();

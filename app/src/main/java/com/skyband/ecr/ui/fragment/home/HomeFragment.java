@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -47,15 +48,6 @@ import com.skyband.ecr.ui.fragment.setting.transaction.TransactionSettingViewMod
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.skyband.ecr.transaction.TransactionType.CHECK_STATUS;
-import static com.skyband.ecr.transaction.TransactionType.DUPLICATE;
-import static com.skyband.ecr.transaction.TransactionType.END_SESSION;
-import static com.skyband.ecr.transaction.TransactionType.GET_SETTINGS;
-import static com.skyband.ecr.transaction.TransactionType.PRINT_SUMMARY_REPORT;
-import static com.skyband.ecr.transaction.TransactionType.REGISTER;
-import static com.skyband.ecr.transaction.TransactionType.SET_SETTINGS;
-import static com.skyband.ecr.transaction.TransactionType.START_SESSION;
-
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private GeneralParamCache generalParamCache = GeneralParamCache.getInstance();
@@ -89,14 +81,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(Objects.requireNonNull(getContext()))
                         .setMessage("Are you sure.. you want to exit?")
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Objects.requireNonNull(getActivity()).finish();
-                            }
-                        })
+                        .setPositiveButton("Yes", (dialog, id) -> Objects.requireNonNull(getActivity()).finish())
                         .setNegativeButton("No", null)
                         .show();
             }
@@ -112,18 +100,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         homeFragmentBinding.transactionSpinner.setSelection(ActiveTxnData.getInstance().getPosition());
 
+        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
+
         if (GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER) == null) {
             GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, getEcrNumberString());
         }
 
-       // checking connection type
-        if(ActiveTxnData.getInstance().getConnectPosition() == 0) {
+        // checking connection type
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
             if (ConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
                 homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
             } else {
                 homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
             }
-        } else if(BluetoothConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
+        } else if (BluetoothConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
@@ -134,7 +124,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             if (ConnectSettingFragment.getEcrCore() == null) {
                 ConnectSettingFragment.setEcrCore();
             }
-              generalParamCache.putString(Constant.IP_ADDRESS, "localhost");
+            generalParamCache.putString(Constant.IP_ADDRESS, "localhost");
 
         }
 
@@ -145,9 +135,40 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onResume() {
         super.onResume();
 
+        if (ActiveTxnData.getInstance().getReceivedIntentData() != null) {
+
+            String terminalResponse;
+
+            try {
+                terminalResponse = homeViewModel.changeToTransactionType(ActiveTxnData.getInstance().getReceivedIntentData());
+                homeViewModel.handleTerminalResponse(terminalResponse);
+                ActiveTxnData.getInstance().setResData(terminalResponse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.REGISTER) {
+                if (ActiveTxnData.getInstance().getTerminalID() == null) {
+                    Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
+                    return;
+                } else
+                    ActiveTxnData.getInstance().setRegistered(true);
+            } else if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.START_SESSION) {
+                ActiveTxnData.getInstance().setSessionStarted(true);
+
+            } else if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.END_SESSION) {
+                ActiveTxnData.getInstance().setSessionStarted(false);
+            }
+
+            ActiveTxnData.getInstance().setReceivedIntentData(null);
+            navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
+        }
+
         if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
             sendAndReceiveBroadcast();
         }
+
+        logger.info("Inside onResume Home");
     }
 
     @Override
@@ -162,8 +183,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         addTextChanged();
 
-        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getContext()),
                 R.array.transaction_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -174,7 +193,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View v) {
 
-                boolean validated = false;
+                boolean validated;
 
                 try {
                     validated = homeViewModel.validateData(selectedItem, getContext());
@@ -193,34 +212,37 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 homeViewModel.setReqData(selectedItem, getContext());
                 logger.info(getClass() + getString(R.string.request_data_set));
 
-                if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED) || (TransactionSettingViewModel.getAppToAPPCommunication() == 1)) {
+                int appToAppCommunication = TransactionSettingViewModel.getAppToAPPCommunication();
 
-                    final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
-                    dialog.setCancelable(false);
-                    final StartTransaction startTransaction = new StartTransaction(homeViewModel);
+                if (appToAppCommunication == 1) {
 
-                    int appToAppCommunication = TransactionSettingViewModel.getAppToAPPCommunication();
+                    if (!appInstalledOrNot()) {
+                        Toast.makeText(activity, "Mada App  is not installed...please install and try again", Toast.LENGTH_LONG).show();
+                    } else {
 
-                    if ((appToAppCommunication == 1) && appInstalledOrNot() && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(START_SESSION) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(END_SESSION) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(CHECK_STATUS) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(SET_SETTINGS) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(GET_SETTINGS) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(DUPLICATE) &&
-                            !ActiveTxnData.getInstance().getTransactionType().equals(PRINT_SUMMARY_REPORT)) {
-                        Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
-                        intent.putExtra("message", "exr-txn-event");
-                        startActivity(intent);
+                        try {
+                            byte[] packData = homeViewModel.getPackData();
+                            Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
+                            intent.putExtra("message", "exr-txn-event");
+                            intent.putExtra("request", packData);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+                } else {
 
-                    startTransaction.setTransactionListener(new TransactionListener() {
+                    if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
 
-                        @Override
-                        public void onSuccess() {
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                        final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
+                        dialog.setCancelable(false);
+                        final StartTransaction startTransaction = new StartTransaction(homeViewModel);
+
+                        startTransaction.setTransactionListener(new TransactionListener() {
+
+                            @Override
+                            public void onSuccess() {
+                                activity.runOnUiThread(() -> {
                                     dialog.dismiss();
 
                                     if (selectedItem.equals(getString(R.string.register))) {
@@ -236,46 +258,46 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                         ActiveTxnData.getInstance().setSessionStarted(false);
                                     }
                                     navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
-                                }
-                            });
-                            threadPoolExecutorService.remove(startTransaction);
-                        }
+                                });
+                                threadPoolExecutorService.remove(startTransaction);
+                            }
 
-                        @Override
-                        public void onError(final Exception errorMessage) {
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.dismiss();
+                            @Override
+                            public void onError(final Exception errorMessage) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
 
-                                    if (Objects.equals(errorMessage.getMessage(), "0")) {
-                                        Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
-                                        logger.debug(getClass() + "Exception>>" + errorMessage);
-                                    } else if (Objects.equals(errorMessage.getMessage(), "1")) {
-                                        Toast.makeText(activity, "Exception in disconnection", Toast.LENGTH_LONG).show();
-                                        logger.debug(getClass() + "Exception>>" + errorMessage);
-                                    } else if (Objects.equals(errorMessage.getMessage(), "3")) {
-                                        Toast.makeText(activity, "Network Problem..Try Again", Toast.LENGTH_LONG).show();
-                                        logger.debug(getClass() + "Exception>>" + errorMessage);
-                                    } else if (Objects.equals(errorMessage.getMessage(), "2")) {
-                                        Toast.makeText(activity, "Socket not Connected", Toast.LENGTH_LONG).show();
-                                        logger.debug(getClass() + "Exception>>" + errorMessage);
-                                    } else if (Objects.equals(errorMessage.getMessage(), "4")) {
-                                        Toast.makeText(activity, "Sending incorrect parameter", Toast.LENGTH_LONG).show();
-                                        logger.debug(getClass() + "Exception>>" + errorMessage);
-                                    } else {
-                                        Toast.makeText(activity, errorMessage.getMessage(), Toast.LENGTH_LONG).show();
-                                        logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        if (Objects.equals(errorMessage.getMessage(), "0")) {
+                                            Toast.makeText(activity, "Time Out..Try Again", Toast.LENGTH_LONG).show();
+                                            logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        } else if (Objects.equals(errorMessage.getMessage(), "1")) {
+                                            Toast.makeText(activity, "Exception in disconnection", Toast.LENGTH_LONG).show();
+                                            logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        } else if (Objects.equals(errorMessage.getMessage(), "3")) {
+                                            Toast.makeText(activity, "Network Problem..Try Again", Toast.LENGTH_LONG).show();
+                                            logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        } else if (Objects.equals(errorMessage.getMessage(), "2")) {
+                                            Toast.makeText(activity, "Socket not Connected", Toast.LENGTH_LONG).show();
+                                            logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        } else if (Objects.equals(errorMessage.getMessage(), "4")) {
+                                            Toast.makeText(activity, "Sending incorrect parameter", Toast.LENGTH_LONG).show();
+                                            logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        } else {
+                                            Toast.makeText(activity, errorMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                            logger.debug(getClass() + "Exception>>" + errorMessage);
+                                        }
                                     }
-                                }
-                            });
-                            threadPoolExecutorService.remove(startTransaction);
-                        }
-                    });
-                    threadPoolExecutorService.execute(startTransaction);
-                } else {
-                    homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
-                    Toast.makeText(getActivity(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
+                                });
+                                threadPoolExecutorService.remove(startTransaction);
+                            }
+                        });
+                        threadPoolExecutorService.execute(startTransaction);
+                    } else {
+                        homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
+                        Toast.makeText(getActivity(), R.string.soccet_not_connected, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -410,13 +432,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         intent.setAction("com.skyband.pos.app.send.ecr.port");
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.setComponent(
-                new ComponentName("com.skyband.pos.app","com.skyband.pos.app.ui.ecr.ECRPortBroadcastReceiver"));
+                new ComponentName("com.skyband.pos.app", "com.skyband.pos.app.ui.ecr.ECRPortBroadcastReceiver"));
         getContext().sendBroadcast(intent);
         getPortBroadcastReceiver = new GetPortBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter("com.skyband.pos.perform.port");
-        if (intentFilter != null) {
-            getContext().registerReceiver(getPortBroadcastReceiver, intentFilter);
-        }
+        getContext().registerReceiver(getPortBroadcastReceiver, intentFilter);
     }
 
     private void unRegisterBroadcast() {
