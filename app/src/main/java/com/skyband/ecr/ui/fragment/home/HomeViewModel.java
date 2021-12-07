@@ -12,11 +12,13 @@ import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.databinding.HomeFragmentBinding;
 import com.skyband.ecr.model.ActiveTxnData;
+import com.skyband.ecr.sdk.CLibraryLoad;
 import com.skyband.ecr.transaction.TransactionType;
 import com.skyband.ecr.ui.fragment.setting.connnect.ConnectSettingFragment;
 import com.skyband.ecr.ui.fragment.setting.transaction.TransactionSettingViewModel;
 import com.skyband.ecr.sdk.logger.Logger;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,6 +35,10 @@ public class HomeViewModel extends ViewModel {
     private String ecrReferenceNo = "";
     private String prevEcrNo = "";
     private String date = "";
+    private int transactionType = 0;
+    private String terminalResponseString = "";
+    private String ipAddress = null;
+    private int portNumber = 0;
 
     @SuppressLint("DefaultLocale")
     public void resetVisibilityOfViews(HomeFragmentBinding homeFragmentBinding) {
@@ -308,7 +314,7 @@ public class HomeViewModel extends ViewModel {
             case START_SESSION:
             case END_SESSION:
                 szSignature = "0000000000000000000000000000000000000000000000000000000000000000";
-                reqData = date + ";" + GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + "!";
+                reqData = date + ";" + ActiveTxnData.getInstance().getCashRegisterNo() + "!";
                 break;
             case DUPLICATE:
                 reqData = date + ";" + prevEcrNo + ";" + ecrReferenceNo + "!";
@@ -340,58 +346,43 @@ public class HomeViewModel extends ViewModel {
 
     @SuppressLint("DefaultLocale")
     public String getTerminalResponse() throws Exception {
-        String ipAddress = null;
-        int portNumber = 0;
 
-        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
             ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
             portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
         }
 
-        int transactionType = transactionTypeString.ordinal();
-        logger.debug(">>>TransactionType:-" + transactionType);
-        logger.debug("portNumber" + portNumber);
-
-        String combinedValue = "";
-        transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
-
-        GeneralParamCache.getInstance().putString(Constant.PREV_ECR_NO, ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX));
-
-        if (transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && transactionTypeString != TransactionType.REGISTER) {
-            combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX) + ActiveTxnData.getInstance().getTerminalID();
-            logger.debug(getClass() + "::Combined value>>" + combinedValue);
-            logger.debug(getClass() + "::ECR Ref No. Length>>" + ecrReferenceNo.length());
-            szSignature = ConnectSettingFragment.getEcrCore().computeSha256Hash(combinedValue);
-        }
-
-        logger.debug(getClass() + ":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
-
-        if (ecrSelected != Constant.ONE && transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION) {
-            int ecrNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER)) + 1;
-            GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, String.format("%06d", ecrNumber));
-        }
+        // initialising all required variables
+        initialiseData();
 
         StringBuilder terminalResponse;
 
         //  terminalResponse using Bluetooth Connection
-        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
             terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
         } else {
             BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
             terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature));
         }
 
-        String terminalResponseString = terminalResponse.toString();
+        handleTerminalResponse(terminalResponse.toString());
+
+        return terminalResponseString;
+    }
+
+    private void handleTerminalResponse(String terminalResponse) throws Exception {
+
+        terminalResponseString = terminalResponse;
         String[] responseArray = terminalResponseString.split(";");
         String[] splittedResponse;
         String thirdResponse;
         logger.debug("FirstApicall length>> " + responseArray.length);
 
-        if( responseArray.length>4 && responseArray[4].equals("C1")) {
+        if (responseArray.length > 4 && responseArray[4].equals("C1")) {
 
             ActiveTxnData.getInstance().setTransactionType(TransactionType.PRINT_SUMMARY_REPORT);
             if (responseArray[0].equals("C2")) {
-                String[] separateResponse = new String[responseArray.length-4];
+                String[] separateResponse = new String[responseArray.length - 4];
                 int j = 0;
                 for (int i = 4; i < responseArray.length - 4; i++) {
                     separateResponse[j] = responseArray[i];
@@ -417,7 +408,7 @@ public class HomeViewModel extends ViewModel {
                 for (int i = 1; i <= count; i++) {
 
                     String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                    String resp = "";
+                    String resp;
 
                     if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
                         resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
@@ -459,7 +450,29 @@ public class HomeViewModel extends ViewModel {
 
         logger.debug(getClass() + "::Terminal ID>>" + terminalID);
 
-        return terminalResponseString;
+    }
+
+    private void initialiseData() throws NoSuchAlgorithmException {
+
+        transactionType = transactionTypeString.ordinal();
+        String combinedValue;
+        transactionTypeString = ActiveTxnData.getInstance().getTransactionType();
+
+        GeneralParamCache.getInstance().putString(Constant.PREV_ECR_NO, ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX));
+
+        if (transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION && transactionTypeString != TransactionType.REGISTER) {
+            combinedValue = ecrReferenceNo.substring(ecrReferenceNo.length() - Constant.SIX) + ActiveTxnData.getInstance().getTerminalID();
+            logger.debug(getClass() + "::Combined value>>" + combinedValue);
+            logger.debug(getClass() + "::ECR Ref No. Length>>" + ecrReferenceNo.length());
+            szSignature = ConnectSettingFragment.getEcrCore().computeSha256Hash(combinedValue);
+        }
+
+        logger.debug(getClass() + ":: Request data: " + reqData + ":: TransactionType: " + transactionType + ":: Szsignature: " + szSignature);
+
+        if (ecrSelected != Constant.ONE && transactionTypeString != TransactionType.REGISTER && transactionTypeString != TransactionType.START_SESSION && transactionTypeString != TransactionType.END_SESSION) {
+            int ecrNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER)) + 1;
+            GeneralParamCache.getInstance().putString(Constant.ECR_NUMBER, String.format("%06d", ecrNumber));
+        }
     }
 
 
@@ -480,18 +493,18 @@ public class HomeViewModel extends ViewModel {
             throw new Exception("Please Start Session");
         }
 
-        if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) == null) {
+        if (ActiveTxnData.getInstance().getCashRegisterNo() == null) {
             throw new Exception("Please Enter Cash Register No. in Transaction Setting");
         }
 
         if (ecrSelected == Constant.ONE && !(selectedItem.equals(TransactionType.REGISTER.getTransactionType()) || selectedItem.equals(TransactionType.START_SESSION.getTransactionType()) || selectedItem.equals(TransactionType.END_SESSION.getTransactionType()))) {
-            ecrReferenceNo = GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + homeFragmentBinding.ecrNo.getText().toString();
+            ecrReferenceNo = ActiveTxnData.getInstance().getCashRegisterNo() + homeFragmentBinding.ecrNo.getText().toString();
         } else {
-            ecrReferenceNo = GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO) + GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER);
+            ecrReferenceNo = ActiveTxnData.getInstance().getCashRegisterNo() + GeneralParamCache.getInstance().getString(Constant.ECR_NUMBER);
         }
 
         logger.debug(getClass() + ":: Ecr reference no>>" + ecrReferenceNo);
-        logger.debug(getClass() + ":: Cash Register no>>" + GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO));
+        logger.debug(getClass() + ":: Cash Register no>>" + ActiveTxnData.getInstance().getCashRegisterNo());
 
 
         switch (transactionTypeString) {
@@ -761,7 +774,7 @@ public class HomeViewModel extends ViewModel {
 
     private boolean validateRegister() throws Exception {
 
-        if (GeneralParamCache.getInstance().getString(Constant.CASH_REGISTER_NO).length() != Constant.EIGHT) {
+        if (ActiveTxnData.getInstance().getCashRegisterNo().length() != Constant.EIGHT) {
             throw new Exception("Please Enter CashRegister Number in ECR Transaction Settings");
         } else if (ecrReferenceNo.length() == Constant.EIGHT) {
             throw new Exception("Ecr no. should not be empty");
@@ -821,5 +834,100 @@ public class HomeViewModel extends ViewModel {
 
     public void setParseResponse(String terminalResponse) {
         ActiveTxnData.getInstance().setResData(terminalResponse);
+    }
+
+    public byte[] getPackData() throws Exception {
+
+        initialiseData();
+        return CLibraryLoad.getInstance().getPackData(reqData, transactionType, szSignature);
+    }
+
+    public String changeToTransactionType(String terminalResponse) throws Exception {
+        String[] response = terminalResponse.split(";");
+        if (response.length < 2) {
+            throw new Exception("3");
+        }
+        String index1 = response[1];
+        switch (response[1]) {
+            case "A0":
+                terminalResponse = terminalResponse.replaceFirst("A0", String.valueOf(17));
+                break;
+            case "B6":
+                terminalResponse = terminalResponse.replaceFirst("B6", String.valueOf(18));
+                break;
+            case "B7":
+                terminalResponse = terminalResponse.replaceFirst("B7", String.valueOf(19));
+                break;
+            case "A1":
+                terminalResponse = terminalResponse.replaceFirst("A1", String.valueOf(0));
+                break;
+            case "A2":
+                terminalResponse = terminalResponse.replaceFirst("A2", String.valueOf(1));
+                break;
+            case "A3":
+                terminalResponse = terminalResponse.replaceFirst("A3", String.valueOf(8));
+                break;
+            case "A4":
+                terminalResponse = terminalResponse.replaceFirst("A4", String.valueOf(3));
+                break;
+            case "A5":
+                terminalResponse = terminalResponse.replaceFirst("A5", String.valueOf(9));
+                break;
+            case "A6":
+                terminalResponse = terminalResponse.replaceFirst("A6", String.valueOf(2));
+                break;
+            case "A7":
+                terminalResponse = terminalResponse.replaceFirst("A7", String.valueOf(4));
+                break;
+            case "A8":
+                terminalResponse = terminalResponse.replaceFirst("A8", String.valueOf(5));
+                break;
+            case "A9":
+                terminalResponse = terminalResponse.replaceFirst("A9", String.valueOf(6));
+                break;
+            case "B1":
+                terminalResponse = terminalResponse.replaceFirst("B1", String.valueOf(10));
+                break;
+            case "B2":
+                terminalResponse = terminalResponse.replaceFirst("B2", String.valueOf(11));
+                break;
+            case "B3":
+                terminalResponse = terminalResponse.replaceFirst("B3", String.valueOf(12));
+                break;
+            case "B4":
+                terminalResponse = terminalResponse.replaceFirst("B4", String.valueOf(13));
+                break;
+            case "B5":
+                terminalResponse = terminalResponse.replaceFirst("B5", String.valueOf(14));
+                break;
+            case "B8":
+                terminalResponse = terminalResponse.replaceFirst("B8", String.valueOf(20));
+                break;
+            case "B9":
+                terminalResponse = terminalResponse.replaceFirst("B9", String.valueOf(21));
+                break;
+            case "C1":
+                terminalResponse = terminalResponse.replaceFirst("C1", String.valueOf(22));
+                break;
+            case "C2":
+                terminalResponse = terminalResponse.replaceFirst("C2", String.valueOf(23));
+                break;
+            case "C3":
+                terminalResponse = terminalResponse.replaceFirst("C3", String.valueOf(24));
+                break;
+            case "C4":
+                terminalResponse = terminalResponse.replaceFirst("C4", String.valueOf(25));
+                break;
+            case "C5":
+                terminalResponse = terminalResponse.replaceFirst("C5", String.valueOf(26));
+                break;
+            case "D1":
+                terminalResponse = terminalResponse.replaceFirst("D1", String.valueOf(30));
+                break;
+            default:
+                terminalResponse = terminalResponse.replaceFirst(index1, String.valueOf(40));
+                break;
+        }
+        return terminalResponse;
     }
 }

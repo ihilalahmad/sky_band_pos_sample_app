@@ -25,6 +25,8 @@ public class ActiveTxnData {
     private int connectPosition;
     private boolean isPartialCapture;
     private BluetoothDevice device;
+    private String receivedIntentData;
+    private String cashRegisterNo;
 
     private static ActiveTxnData activeTxnData;
 
