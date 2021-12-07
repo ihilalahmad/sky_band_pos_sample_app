@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
 
-        byte[] receivedDataByte = getIntent().getByteArrayExtra("ecr-response");
+        byte[] receivedDataByte = getIntent().getByteArrayExtra("app-to-app-response");
 
         if (receivedDataByte != null && receivedDataByte.length > 0) {
             String receivedIntentData = new String(receivedDataByte);

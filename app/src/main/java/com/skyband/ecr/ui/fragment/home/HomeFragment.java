@@ -141,10 +141,25 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
             try {
                 terminalResponse = homeViewModel.changeToTransactionType(ActiveTxnData.getInstance().getReceivedIntentData());
+                homeViewModel.handleTerminalResponse(terminalResponse);
                 ActiveTxnData.getInstance().setResData(terminalResponse);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.REGISTER) {
+                if (ActiveTxnData.getInstance().getTerminalID() == null) {
+                    Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
+                    return;
+                } else
+                    ActiveTxnData.getInstance().setRegistered(true);
+            } else if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.START_SESSION) {
+                ActiveTxnData.getInstance().setSessionStarted(true);
+
+            } else if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.END_SESSION) {
+                ActiveTxnData.getInstance().setSessionStarted(false);
+            }
+
             ActiveTxnData.getInstance().setReceivedIntentData(null);
             navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
         }
@@ -403,7 +418,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private boolean appInstalledOrNot() {
         PackageManager pm = requireActivity().getPackageManager();
         try {
-            pm.getPackageInfo("com.example.mada", PackageManager.GET_ACTIVITIES);
+            pm.getPackageInfo("com.skyband.pos.app", PackageManager.GET_ACTIVITIES);
             logger.info("App Installed");
             return true;
         } catch (PackageManager.NameNotFoundException e) {

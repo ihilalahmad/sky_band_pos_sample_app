@@ -370,7 +370,7 @@ public class HomeViewModel extends ViewModel {
         return terminalResponseString;
     }
 
-    private void handleTerminalResponse(String terminalResponse) throws Exception {
+    public void handleTerminalResponse(String terminalResponse) throws Exception {
 
         terminalResponseString = terminalResponse;
         String[] responseArray = terminalResponseString.split(";");
@@ -437,7 +437,7 @@ public class HomeViewModel extends ViewModel {
             }
         }
 
-        if (transactionTypeString == TransactionType.REGISTER) {
+        if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.REGISTER) {
             String[] splittedArray = terminalResponseString.split(";");
 
             for (int i = 0; i < splittedArray.length; i++) {
