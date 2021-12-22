@@ -378,7 +378,11 @@ public class HomeViewModel extends ViewModel {
         String thirdResponse;
         logger.debug("FirstApicall length>> " + responseArray.length);
 
-        if (responseArray.length > 4 && responseArray[4].equals("C1")) {
+        String resp1 = arrayIntoString(responseArray);
+        logger.info("Response ArrayTo String" + resp1);
+
+
+        if (TransactionSettingViewModel.getAppToAPPCommunication() != 1 && responseArray.length > 4 && responseArray[1].equals("C1")) {
 
             ActiveTxnData.getInstance().setTransactionType(TransactionType.PRINT_SUMMARY_REPORT);
             if (responseArray[0].equals("C2")) {
@@ -394,7 +398,7 @@ public class HomeViewModel extends ViewModel {
             }
         }
 
-        if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
+        if (TransactionSettingViewModel.getAppToAPPCommunication() != 1 && ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
 
             int count = Integer.parseInt(responseArray[4]);
 
@@ -435,6 +439,26 @@ public class HomeViewModel extends ViewModel {
                     ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
                 }
             }
+        }
+
+        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1 && ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
+
+            splittedResponse = terminalResponseString.split(";");
+
+            if (splittedResponse[1].equals("C1")) {
+                splittedResponse[1] = "22";
+            }
+
+            String[] separateResponse = new String[splittedResponse.length - 1];
+            int j = 0;
+            for (int i = 1; i < responseArray.length - 1; i++) {
+                separateResponse[j] = responseArray[i];
+                j = j + 1;
+            }
+
+            terminalResponseString = arrayIntoString(separateResponse);
+            splittedResponse = terminalResponseString.split(";");
+            ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
         }
 
         if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.REGISTER) {
