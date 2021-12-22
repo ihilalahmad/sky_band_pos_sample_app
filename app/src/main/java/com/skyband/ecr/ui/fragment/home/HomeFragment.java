@@ -137,10 +137,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         if (ActiveTxnData.getInstance().getReceivedIntentData() != null) {
 
-            String terminalResponse;
+            String terminalResponse = null;
 
             try {
-                terminalResponse = homeViewModel.changeToTransactionType(ActiveTxnData.getInstance().getReceivedIntentData());
+                if(ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT){
+                    terminalResponse = homeViewModel.changeToTransactionType(ActiveTxnData.getInstance().getReceivedIntentData());
+                }
+                else {
+                    terminalResponse = ActiveTxnData.getInstance().getReceivedIntentData();
+                }
                 homeViewModel.handleTerminalResponse(terminalResponse);
                 ActiveTxnData.getInstance().setResData(terminalResponse);
             } catch (Exception e) {
@@ -220,10 +225,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Toast.makeText(activity, "Mada App  is not installed...please install and try again", Toast.LENGTH_LONG).show();
                     } else {
 
+                        final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
+
                         try {
                             byte[] packData = homeViewModel.getPackData();
                             Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
-                            intent.putExtra("message", "exr-txn-event");
+                            intent.putExtra("message", "ecr-txn-event");
                             intent.putExtra("request", packData);
                             startActivity(intent);
                         } catch (Exception e) {
