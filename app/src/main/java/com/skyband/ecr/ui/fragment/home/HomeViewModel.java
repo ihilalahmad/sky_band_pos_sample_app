@@ -400,44 +400,51 @@ public class HomeViewModel extends ViewModel {
 
         if (TransactionSettingViewModel.getAppToAPPCommunication() != 1 && ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
 
-            int count = Integer.parseInt(responseArray[4]);
+            if(Integer.parseInt(responseArray[1]) == 0) {
 
-            if (count == 0) {
+                int count = Integer.parseInt(responseArray[4]);
+
+                if (count == 0) {
+                    splittedResponse = terminalResponseString.split(";");
+                    splittedResponse[0] = "22";
+                    ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+
+                } else {
+
+                    for (int i = 1; i <= count; i++) {
+
+                        String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
+                        String resp;
+
+                        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+                            resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
+                        } else {
+                            BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
+                            resp = ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature);
+                        }
+
+                        String[] secondResponse = resp.split(";");
+                        System.out.println(secondResponse.length);
+                        String[] respTemp = new String[secondResponse.length - 2];
+                        System.out.println(respTemp.length);
+                        int j = 0;
+                        for (int k = 3; k < secondResponse.length; k++) {
+                            respTemp[j] = secondResponse[k];
+                            j = j + 1;
+                        }
+                        thirdResponse = terminalResponseString + arrayIntoString(respTemp);
+                        System.out.println("ThirdResponse" + thirdResponse);
+
+                        splittedResponse = thirdResponse.split(";");
+                        splittedResponse[0] = "22";
+                        terminalResponseString = thirdResponse;
+                        ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
+                    }
+                }
+            } else {
                 splittedResponse = terminalResponseString.split(";");
                 splittedResponse[0] = "22";
                 ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
-
-            } else {
-
-                for (int i = 1; i <= count; i++) {
-
-                    String reqData = date + ";" + i + ";" + ecrReferenceNo + "!";
-                    String resp;
-
-                    if (ActiveTxnData.getInstance().getConnectPosition() == 0 || TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-                        resp = ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature);
-                    } else {
-                        BluetoothDevice device = ActiveTxnData.getInstance().getDevice();
-                        resp = ConnectSettingFragment.getEcrCore().doBluetoothTransaction(device, reqData, transactionType, szSignature);
-                    }
-
-                    String[] secondResponse = resp.split(";");
-                    System.out.println(secondResponse.length);
-                    String[] respTemp = new String[secondResponse.length - 2];
-                    System.out.println(respTemp.length);
-                    int j = 0;
-                    for (int k = 3; k < secondResponse.length; k++) {
-                        respTemp[j] = secondResponse[k];
-                        j = j + 1;
-                    }
-                    thirdResponse = terminalResponseString + arrayIntoString(respTemp);
-                    System.out.println("ThirdResponse" + thirdResponse);
-
-                    splittedResponse = thirdResponse.split(";");
-                    splittedResponse[0] = "22";
-                    terminalResponseString = thirdResponse;
-                    ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
-                }
             }
         }
 
@@ -455,15 +462,15 @@ public class HomeViewModel extends ViewModel {
                 splittedResponse = separateResponse;
             }
 
-            if (splittedResponse[1].equals("C1")) {
-                splittedResponse[1] = "22";
-            }
-
             String[] separateResponse = new String[splittedResponse.length - 1];
             int j = 0;
             for (int i = 1; i < responseArray.length - 1; i++) {
                 separateResponse[j] = responseArray[i];
                 j = j + 1;
+            }
+
+            if (splittedResponse[0].equals("C1")) {
+                splittedResponse[0] = "22";
             }
 
             terminalResponseString = arrayIntoString(separateResponse);

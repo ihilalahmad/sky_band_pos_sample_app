@@ -57,7 +57,18 @@ public class BufferResponseFragment extends Fragment {
         if (ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT) {
             bufferData = setResponse(receiveDataArray);
         } else {
-            if (Integer.parseInt(receiveDataArray[2]) == 0) {
+
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < ActiveTxnData.getInstance().getSummaryReportArray().length; i++) {
+                sb.append(ActiveTxnData.getInstance().getSummaryReportArray()[i]);
+                sb.append(";");
+            }
+
+            String summaryReportArray = sb.toString();
+
+            logger.info("summary Report STring " + summaryReportArray);
+
+            if (Integer.parseInt(ActiveTxnData.getInstance().getSummaryReportArray()[1]) == 0) {
                 bufferData = bufferResponseViewModel.printResponseSummaryReport(ActiveTxnData.getInstance().getSummaryReportArray());
                 bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
             } else {
