@@ -601,4 +601,19 @@ public class BufferResponseViewModel extends ViewModel {
     private String maskPAn(String s) {
         return s.substring(0, 5) + "******" + s.substring(s.length() - 4);
     }
+
+    public String printResponseEmptySummary(String[] summaryReportArray) {
+        StringBuilder htmlString = new StringBuilder();
+
+        String[] otherResponse = {"", Constant.TRANSACTION_TYPE, Constant.RESPONSE_CODE, Constant.RESPONSE_MESSAGE};
+
+        for (int i = 1; i < otherResponse.length; i++) {
+            htmlString.append(htmlSeperator1);
+            htmlString.append(otherResponse[i]);
+            htmlString.append(htmlSeperator2);
+            htmlString.append(summaryReportArray[i-1]);
+            htmlString.append(htmlSeperator3);
+        }
+        return responseToHtml(htmlString);
+    }
 }

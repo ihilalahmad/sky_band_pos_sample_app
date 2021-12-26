@@ -57,7 +57,13 @@ public class BufferResponseFragment extends Fragment {
         if (ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT) {
             bufferData = setResponse(receiveDataArray);
         } else {
-            bufferData = bufferResponseViewModel.printResponseSummaryReport(ActiveTxnData.getInstance().getSummaryReportArray());
+            if (Integer.parseInt(receiveDataArray[2]) == 0) {
+                bufferData = bufferResponseViewModel.printResponseSummaryReport(ActiveTxnData.getInstance().getSummaryReportArray());
+                bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
+            } else {
+                bufferData = bufferResponseViewModel.printResponseEmptySummary(ActiveTxnData.getInstance().getSummaryReportArray());
+                bufferResponseFragmentBinding.printReceipt.setVisibility(View.INVISIBLE);
+            }
         }
         String encodedHtml = Base64.encodeToString(bufferData.getBytes(), Base64.NO_PADDING);
         bufferResponseFragmentBinding.bufferReceive.loadData(encodedHtml, "text/html", "base64");
@@ -124,8 +130,6 @@ public class BufferResponseFragment extends Fragment {
                         bufferResponseFragmentBinding.printReceipt.setVisibility(View.GONE);
                     }
             }
-        } else {
-            bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
         }
 
         bufferResponseFragmentBinding.okButton.setOnClickListener(v -> {
