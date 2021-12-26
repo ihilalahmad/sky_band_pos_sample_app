@@ -382,7 +382,7 @@ public class HomeViewModel extends ViewModel {
         logger.info("Response ArrayTo String" + resp1);
 
 
-        if (TransactionSettingViewModel.getAppToAPPCommunication() != 1 && responseArray.length > 4 && responseArray[1].equals("C1")) {
+        if (TransactionSettingViewModel.getAppToAPPCommunication() != 1 && responseArray.length > 4 && responseArray[4].equals("C1")) {
 
             ActiveTxnData.getInstance().setTransactionType(TransactionType.PRINT_SUMMARY_REPORT);
             if (responseArray[0].equals("C2")) {
@@ -444,6 +444,16 @@ public class HomeViewModel extends ViewModel {
         if (TransactionSettingViewModel.getAppToAPPCommunication() == 1 && ActiveTxnData.getInstance().getTransactionType() == TransactionType.PRINT_SUMMARY_REPORT) {
 
             splittedResponse = terminalResponseString.split(";");
+
+            if (splittedResponse[1].equals("C2")) {
+                String[] separateResponse = new String[responseArray.length - 4];
+                int j = 0;
+                for (int i = 4; i < responseArray.length - 4; i++) {
+                    separateResponse[j] = responseArray[i];
+                    j = j + 1;
+                }
+                splittedResponse = separateResponse;
+            }
 
             if (splittedResponse[1].equals("C1")) {
                 splittedResponse[1] = "22";

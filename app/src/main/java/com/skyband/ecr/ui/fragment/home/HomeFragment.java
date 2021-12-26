@@ -140,11 +140,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             String terminalResponse = null;
 
             try {
-                if(ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT){
-                    terminalResponse = homeViewModel.changeToTransactionType(ActiveTxnData.getInstance().getReceivedIntentData());
+                if(ActiveTxnData.getInstance().getTransactionType() == TransactionType.DUPLICATE && ActiveTxnData.getInstance().isLastTxnSummary()) {
+                    ActiveTxnData.getInstance().setTransactionType(TransactionType.PRINT_SUMMARY_REPORT);
                 }
-                else {
+
+                if (ActiveTxnData.getInstance().getTransactionType() != TransactionType.PRINT_SUMMARY_REPORT) {
+                    terminalResponse = homeViewModel.changeToTransactionType(ActiveTxnData.getInstance().getReceivedIntentData());
+                    ActiveTxnData.getInstance().setLastTxnSummary(false);
+                } else {
                     terminalResponse = ActiveTxnData.getInstance().getReceivedIntentData();
+                    ActiveTxnData.getInstance().setLastTxnSummary(true);
                 }
                 homeViewModel.handleTerminalResponse(terminalResponse);
                 ActiveTxnData.getInstance().setResData(terminalResponse);
