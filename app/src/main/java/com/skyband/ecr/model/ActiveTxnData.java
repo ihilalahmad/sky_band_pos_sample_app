@@ -27,6 +27,7 @@ public class ActiveTxnData {
     private BluetoothDevice device;
     private String receivedIntentData;
     private String cashRegisterNo;
+    private boolean isLastTxnSummary;
 
     private static ActiveTxnData activeTxnData;
 
