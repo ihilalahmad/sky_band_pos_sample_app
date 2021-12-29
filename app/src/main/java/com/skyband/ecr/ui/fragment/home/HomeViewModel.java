@@ -469,12 +469,13 @@ public class HomeViewModel extends ViewModel {
                 j = j + 1;
             }
 
+            terminalResponseString = arrayIntoString(separateResponse);
+            splittedResponse = terminalResponseString.split(";");
+
             if (splittedResponse[0].equals("C1")) {
                 splittedResponse[0] = "22";
             }
 
-            terminalResponseString = arrayIntoString(separateResponse);
-            splittedResponse = terminalResponseString.split(";");
             ActiveTxnData.getInstance().setSummaryReportArray(splittedResponse);
         }
 
