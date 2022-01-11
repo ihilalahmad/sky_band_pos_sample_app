@@ -259,6 +259,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
 
             if (GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS) != null && GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS).equals("localhost")) {
                 GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, null);
+                GeneralParamCache.getInstance().putString(Constant.PORT, null);
                 connectSettingFragmentBinding.ipAddress.getText().clear();
                 connectSettingFragmentBinding.portNo.getText().clear();
             }
