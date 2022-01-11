@@ -3,11 +3,8 @@ package com.skyband.ecr.ui.fragment.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,7 +27,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.skyband.ecr.R;
-import com.skyband.ecr.GetPortBroadcastReceiver;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.model.ActiveTxnData;
@@ -61,7 +57,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private String currencySymbol = "$";
     private int divider = 100;
     private String amountFormat = "%.2f";
-    private GetPortBroadcastReceiver getPortBroadcastReceiver;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -124,7 +119,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             if (ConnectSettingFragment.getEcrCore() == null) {
                 ConnectSettingFragment.setEcrCore();
             }
-            generalParamCache.putString(Constant.IP_ADDRESS, "localhost");
 
         }
 
@@ -174,9 +168,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
         }
 
-        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+      /*  if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
             sendAndReceiveBroadcast();
-        }
+        }*/
 
         logger.info("Inside onResume Home");
     }
@@ -184,9 +178,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onPause() {
         super.onPause();
-        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
-            unRegisterBroadcast();
-        }
     }
 
     private void setupListeners() {
@@ -439,22 +430,4 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         return false;
     }
 
-    private void sendAndReceiveBroadcast() {
-        Intent intent = new Intent();
-        intent.setAction("com.skyband.pos.app.send.ecr.port");
-        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        intent.setComponent(
-                new ComponentName("com.skyband.pos.app", "com.skyband.pos.app.ui.ecr.ECRPortBroadcastReceiver"));
-        getContext().sendBroadcast(intent);
-        getPortBroadcastReceiver = new GetPortBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter("com.skyband.pos.perform.port");
-        getContext().registerReceiver(getPortBroadcastReceiver, intentFilter);
-    }
-
-    private void unRegisterBroadcast() {
-        if (getPortBroadcastReceiver != null) {
-            getContext().unregisterReceiver(getPortBroadcastReceiver);
-        }
-
-    }
 }

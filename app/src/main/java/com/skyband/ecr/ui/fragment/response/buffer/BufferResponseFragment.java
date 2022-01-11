@@ -58,17 +58,7 @@ public class BufferResponseFragment extends Fragment {
             bufferData = setResponse(receiveDataArray);
         } else {
 
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < ActiveTxnData.getInstance().getSummaryReportArray().length; i++) {
-                sb.append(ActiveTxnData.getInstance().getSummaryReportArray()[i]);
-                sb.append(";");
-            }
-
-            String summaryReportArray = sb.toString();
-
-            logger.info("summary Report STring " + summaryReportArray);
-
-            if (Integer.parseInt(ActiveTxnData.getInstance().getSummaryReportArray()[1]) == 0) {
+            if (ActiveTxnData.getInstance().getSummaryReportArray().length > 10) {
                 bufferData = bufferResponseViewModel.printResponseSummaryReport(ActiveTxnData.getInstance().getSummaryReportArray());
                 bufferResponseFragmentBinding.printReceipt.setVisibility(View.VISIBLE);
             } else {
@@ -76,6 +66,7 @@ public class BufferResponseFragment extends Fragment {
                 bufferResponseFragmentBinding.printReceipt.setVisibility(View.INVISIBLE);
             }
         }
+
         String encodedHtml = Base64.encodeToString(bufferData.getBytes(), Base64.NO_PADDING);
         bufferResponseFragmentBinding.bufferReceive.loadData(encodedHtml, "text/html", "base64");
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment);

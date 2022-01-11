@@ -19,14 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
 
-        <receiver android:name=".GetPortBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.skyband.pos.perform.port" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
