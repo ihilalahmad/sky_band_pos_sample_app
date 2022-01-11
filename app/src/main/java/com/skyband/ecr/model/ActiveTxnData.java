@@ -23,6 +23,7 @@ public class ActiveTxnData {
     private String[] summaryReportArray;
     private int position;
     private int connectPosition;
+    private boolean isLocalHostConnectionType;
     private boolean isPartialCapture;
     private BluetoothDevice device;
     private String receivedIntentData;

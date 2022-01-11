@@ -1,10 +1,14 @@
 package com.skyband.ecr.ui.fragment.home;
 
+import static com.skyband.ecr.transaction.TransactionType.REGISTER;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,6 +30,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.skyband.ecr.GetPortBroadcastReceiver;
 import com.skyband.ecr.R;
 import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
@@ -57,6 +62,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private String currencySymbol = "$";
     private int divider = 100;
     private String amountFormat = "%.2f";
+    private GetPortBroadcastReceiver getPortBroadcastReceiver;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -108,18 +114,19 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             } else {
                 homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
             }
+
         } else if (BluetoothConnectionManager.instance() != null && Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
+
         } else {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_782);
         }
 
-        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+        if (TransactionSettingViewModel.getAppToAPPCommunication() == 1 || ActiveTxnData.getInstance().isLocalHostConnectionType()) {
             homeFragmentBinding.connectionStatus.setImageResource(R.drawable.ic_group_780);
             if (ConnectSettingFragment.getEcrCore() == null) {
                 ConnectSettingFragment.setEcrCore();
             }
-
         }
 
         super.onStart();
@@ -134,7 +141,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             String terminalResponse = null;
 
             try {
-                if(ActiveTxnData.getInstance().getTransactionType() == TransactionType.DUPLICATE && ActiveTxnData.getInstance().isLastTxnSummary()) {
+                if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.DUPLICATE && ActiveTxnData.getInstance().isLastTxnSummary()) {
                     ActiveTxnData.getInstance().setTransactionType(TransactionType.PRINT_SUMMARY_REPORT);
                 }
 
@@ -151,7 +158,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 e.printStackTrace();
             }
 
-            if (ActiveTxnData.getInstance().getTransactionType() == TransactionType.REGISTER) {
+            if (ActiveTxnData.getInstance().getTransactionType() == REGISTER) {
                 if (ActiveTxnData.getInstance().getTerminalID() == null) {
                     Toast.makeText(activity, R.string.id_not_received, Toast.LENGTH_LONG).show();
                     return;
@@ -168,9 +175,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
         }
 
-      /*  if (TransactionSettingViewModel.getAppToAPPCommunication() == 1) {
+        if (ActiveTxnData.getInstance().isLocalHostConnectionType()) {
             sendAndReceiveBroadcast();
-        }*/
+        }
 
         logger.info("Inside onResume Home");
     }
@@ -178,6 +185,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onPause() {
         super.onPause();
+
+        if (ActiveTxnData.getInstance().isLocalHostConnectionType()) {
+            unRegisterBroadcast();
+        }
     }
 
     private void setupListeners() {
@@ -233,13 +244,30 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             e.printStackTrace();
                         }
                     }
+                } else if (ActiveTxnData.getInstance().isLocalHostConnectionType() && !appInstalledOrNot()) {
+
+                    Toast.makeText(activity, "Mada App  is not installed...please install and try again", Toast.LENGTH_LONG).show();
+
                 } else {
 
-                    if (Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
+                    if (ActiveTxnData.getInstance().isLocalHostConnectionType() || Objects.equals(generalParamCache.getString(Constant.CONNECTION_STATUS), Constant.CONNECTED)) {
 
                         final ProgressDialog dialog = ProgressDialog.show(getContext(), getString(R.string.loading), getString(R.string.please_wait), true);
                         dialog.setCancelable(false);
                         final StartTransaction startTransaction = new StartTransaction(homeViewModel);
+
+                        if (ActiveTxnData.getInstance().isLocalHostConnectionType() && appInstalledOrNot() && !ActiveTxnData.getInstance().getTransactionType().equals(REGISTER) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.START_SESSION) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.END_SESSION) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.CHECK_STATUS) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.SET_SETTINGS) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.GET_SETTINGS) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.DUPLICATE) &&
+                                !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.PRINT_SUMMARY_REPORT)) {
+                            Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
+                            intent.putExtra("message", "exr-txn-event");
+                            startActivity(intent);
+                        }
 
                         startTransaction.setTransactionListener(new TransactionListener() {
 
@@ -428,6 +456,25 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void sendAndReceiveBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction("com.skyband.pos.app.send.ecr.port");
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setComponent(
+                new ComponentName("com.skyband.pos.app", "com.skyband.pos.app.ui.ecr.ECRPortBroadcastReceiver"));
+        getContext().sendBroadcast(intent);
+        getPortBroadcastReceiver = new GetPortBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter("com.skyband.pos.perform.port");
+        getContext().registerReceiver(getPortBroadcastReceiver, intentFilter);
+    }
+
+    private void unRegisterBroadcast() {
+        if (getPortBroadcastReceiver != null) {
+            getContext().unregisterReceiver(getPortBroadcastReceiver);
+        }
+
     }
 
 }

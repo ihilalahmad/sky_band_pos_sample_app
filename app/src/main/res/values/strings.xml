@@ -36,6 +36,7 @@
         <item>TC/IP</item>
         <item>Bluetooth</item>
         <item>AppToApp</item>
+        <item>LocalHost</item>
     </string-array>
 
     <string name="connection_type_prompt">Connection Type</string>

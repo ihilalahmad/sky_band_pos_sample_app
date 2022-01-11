@@ -38,6 +38,8 @@ public class ConnectSettingViewModel extends ViewModel {
                 connectSettingFragmentBinding.portNo.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.connectButton.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.disconnectButton.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.ipAddress.setEnabled(true);
+                connectSettingFragmentBinding.portNo.setEnabled(true);
                 break;
             case "Bluetooth":
                 connectSettingFragmentBinding.list.setVisibility(View.VISIBLE);
@@ -46,6 +48,15 @@ public class ConnectSettingViewModel extends ViewModel {
             case "AppToApp":
                 connectSettingFragmentBinding.btnAppToAppConnect.setVisibility(View.VISIBLE);
                 break;
+            case "LocalHost":
+                connectSettingFragmentBinding.ipAddress.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.portNo.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.ipLabel.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.portNo.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.connectButton.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.disconnectButton.setVisibility(View.VISIBLE);
+                connectSettingFragmentBinding.ipAddress.setEnabled(false);
+                connectSettingFragmentBinding.portNo.setEnabled(false);
             default:
                 //For other connection Type
                 break;
