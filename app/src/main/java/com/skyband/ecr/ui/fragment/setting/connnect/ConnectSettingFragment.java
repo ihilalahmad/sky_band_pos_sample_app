@@ -248,7 +248,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         connectSettingViewModel.getVisibilityOfViews(selectedItem);
 
         //Enable/Disable Local Host
-        if (selectedItem.equals("LocalHost")) {
+        if (selectedItem.equals("AppToApp(LocalHost)")) {
             ActiveTxnData.getInstance().setLocalHostConnectionType(true);
             GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, "localhost");
             GeneralParamCache.getInstance().putString(Constant.PORT, "8888");

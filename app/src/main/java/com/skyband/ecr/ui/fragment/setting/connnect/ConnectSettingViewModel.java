@@ -45,10 +45,10 @@ public class ConnectSettingViewModel extends ViewModel {
                 connectSettingFragmentBinding.list.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.btnConnect.setVisibility(View.VISIBLE);
                 break;
-            case "AppToApp":
+            case "AppToApp(Intent)":
                 connectSettingFragmentBinding.btnAppToAppConnect.setVisibility(View.VISIBLE);
                 break;
-            case "LocalHost":
+            case "AppToApp(LocalHost)":
                 connectSettingFragmentBinding.ipAddress.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.portNo.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.ipLabel.setVisibility(View.VISIBLE);

@@ -35,8 +35,8 @@
     <string-array name="connection_type">
         <item>TC/IP</item>
         <item>Bluetooth</item>
-        <item>AppToApp</item>
-        <item>LocalHost</item>
+        <item>AppToApp(Intent)</item>
+        <item>AppToApp(LocalHost)</item>
     </string-array>
 
     <string name="connection_type_prompt">Connection Type</string>
