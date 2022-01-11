@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.skyband.ecr.R;
-import com.skyband.ecr.cache.GeneralParamCache;
 import com.skyband.ecr.constant.Constant;
 import com.skyband.ecr.databinding.TransactionSettingFragmentBinding;
 import com.skyband.ecr.model.ActiveTxnData;
@@ -60,14 +59,19 @@ public class TransactionSettingFragment extends Fragment {
 
             transactionSettingViewModel.setData(transactionSettingFragmentBinding);
 
-            ActiveTxnData.getInstance().setCashRegisterNo(transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString());
-
             if (!(transactionSettingFragmentBinding.cashRegisterNoEt.length() > Constant.ZERO)) {
                 Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Cash Register No. should not be empty", Toast.LENGTH_LONG).show();
             }
             if (!(transactionSettingFragmentBinding.cashRegisterNoEt.length() >= Constant.EIGHT)) {
                 Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Cash Register No. length should be 8 digits", Toast.LENGTH_LONG).show();
             } else {
+
+                if (ActiveTxnData.getInstance().getCashRegisterNo() != null && transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString().equals(ActiveTxnData.getInstance().getCashRegisterNo())) {
+                    ActiveTxnData.getInstance().setRegistered(false);
+                    ActiveTxnData.getInstance().setSessionStarted(false);
+                }
+
+                ActiveTxnData.getInstance().setCashRegisterNo(transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString());
                 navController.navigate(R.id.action_transactionSettingFragment_to_homeFragment, null, options);
             }
 
