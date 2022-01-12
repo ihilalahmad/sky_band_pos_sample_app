@@ -66,7 +66,7 @@ public class TransactionSettingFragment extends Fragment {
                 Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Cash Register No. length should be 8 digits", Toast.LENGTH_LONG).show();
             } else {
 
-                if (ActiveTxnData.getInstance().getCashRegisterNo() != null && transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString().equals(ActiveTxnData.getInstance().getCashRegisterNo())) {
+                if (ActiveTxnData.getInstance().getCashRegisterNo() != null && !transactionSettingFragmentBinding.cashRegisterNoEt.getText().toString().equals(ActiveTxnData.getInstance().getCashRegisterNo())) {
                     ActiveTxnData.getInstance().setRegistered(false);
                     ActiveTxnData.getInstance().setSessionStarted(false);
                 }

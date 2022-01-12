@@ -347,7 +347,7 @@ public class HomeViewModel extends ViewModel {
     @SuppressLint("DefaultLocale")
     public String getTerminalResponse() throws Exception {
 
-        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || ActiveTxnData.getInstance().isLocalHostConnectionType()) {
             ipAddress = GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS);
             portNumber = Integer.parseInt(GeneralParamCache.getInstance().getString(Constant.PORT));
         }
@@ -358,7 +358,7 @@ public class HomeViewModel extends ViewModel {
         StringBuilder terminalResponse;
 
         //  terminalResponse using Bluetooth Connection
-        if (ActiveTxnData.getInstance().getConnectPosition() == 0) {
+        if (ActiveTxnData.getInstance().getConnectPosition() == 0 || ActiveTxnData.getInstance().isLocalHostConnectionType()) {
             terminalResponse = new StringBuilder(ConnectSettingFragment.getEcrCore().doTCPIPTransaction(ipAddress, portNumber, reqData, transactionType, szSignature));
         } else {
             BluetoothDevice device = ActiveTxnData.getInstance().getDevice();

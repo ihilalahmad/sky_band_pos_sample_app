@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -63,6 +64,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private int divider = 100;
     private String amountFormat = "%.2f";
     private GetPortBroadcastReceiver getPortBroadcastReceiver;
+    private int delay = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -239,6 +241,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
                             intent.putExtra("message", "ecr-txn-event");
                             intent.putExtra("request", packData);
+                            intent.putExtra("packageName", "com.skyband.ecr");
                             startActivity(intent);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -264,8 +267,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.GET_SETTINGS) &&
                                 !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.DUPLICATE) &&
                                 !ActiveTxnData.getInstance().getTransactionType().equals(TransactionType.PRINT_SUMMARY_REPORT)) {
+                            delay = 500;
                             Intent intent = requireActivity().getPackageManager().getLaunchIntentForPackage("com.skyband.pos.app");
-                            intent.putExtra("message", "exr-txn-event");
+                            intent.putExtra("message", "ecr-local-event");
                             startActivity(intent);
                         }
 
@@ -288,7 +292,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                     } else if (selectedItem.equals(getString(R.string.end_session))) {
                                         ActiveTxnData.getInstance().setSessionStarted(false);
                                     }
-                                    navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
+                                        new Handler().postDelayed(() -> navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment), delay);
                                 });
                                 threadPoolExecutorService.remove(startTransaction);
                             }
