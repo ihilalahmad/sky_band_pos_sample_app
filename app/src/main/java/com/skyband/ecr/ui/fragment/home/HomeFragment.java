@@ -177,9 +177,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             navController.navigate(R.id.action_homeFragment_to_bufferResponseFragment);
         }
 
-        if (ActiveTxnData.getInstance().isLocalHostConnectionType()) {
             sendAndReceiveBroadcast();
-        }
 
         logger.info("Inside onResume Home");
     }
@@ -188,9 +186,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onPause() {
         super.onPause();
 
-        if (ActiveTxnData.getInstance().isLocalHostConnectionType()) {
             unRegisterBroadcast();
-        }
     }
 
     private void setupListeners() {

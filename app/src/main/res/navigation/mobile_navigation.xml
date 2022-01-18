@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_navigation_connect_setting_to_connectedFragment2"
             app:destination="@id/connectedFragment" />
+        <action
+            android:id="@+id/action_navigation_connect_setting_to_home_fragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment

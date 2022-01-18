@@ -56,7 +56,7 @@ public class ConnectSettingViewModel extends ViewModel {
                 connectSettingFragmentBinding.connectButton.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.disconnectButton.setVisibility(View.VISIBLE);
                 connectSettingFragmentBinding.ipAddress.setEnabled(false);
-                connectSettingFragmentBinding.portNo.setEnabled(false);
+                connectSettingFragmentBinding.portNo.setEnabled(true);
             default:
                 //For other connection Type
                 break;

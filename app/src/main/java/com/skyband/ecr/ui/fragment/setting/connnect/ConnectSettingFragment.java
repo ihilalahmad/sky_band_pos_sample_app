@@ -126,14 +126,14 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
             //Disable App To App
             GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 0);
 
-            if (!ActiveTxnData.getInstance().isLocalHostConnectionType()) {
+           // if (!ActiveTxnData.getInstance().isLocalHostConnectionType()) {
                 if (ipAddress.equals("") && portNo.equals("")) {
                     Toast.makeText(getContext(), R.string.ip_and_port_empty, Toast.LENGTH_LONG).show();
                     return;
                 } else if (ipAddress.equals("") || portNo.equals("")) {
                     Toast.makeText(getContext(), R.string.ip_or_port_empty, Toast.LENGTH_LONG).show();
                     return;
-                } else if (!validateIp(ipAddress)) {
+                } else if (!ActiveTxnData.getInstance().isLocalHostConnectionType() && !validateIp(ipAddress)) {
                     Toast.makeText(getContext(), R.string.ip_invalid, Toast.LENGTH_LONG).show();
                     return;
                 } else if (!validatePort(portNo)) {
@@ -168,9 +168,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
                     }
                 }).start();
 
-            } else {
-                navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
-            }
+           // }
 
         });
 
@@ -210,7 +208,7 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
             //Enable App To App
             GeneralParamCache.getInstance().putInt(Constant.ENABLE_APP_APP_COMMUNICATION, 1);
 
-            navController.navigate(R.id.action_navigation_connect_setting_to_connectedFragment2);
+            navController.navigate(R.id.action_navigation_connect_setting_to_home_fragment);
         });
 
     }
@@ -251,8 +249,6 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         if (selectedItem.equals("AppToApp(LocalHost)")) {
             ActiveTxnData.getInstance().setLocalHostConnectionType(true);
             GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, "localhost");
-            GeneralParamCache.getInstance().putString(Constant.PORT, "8888");
-
 
         } else if (selectedItem.equals("TC/IP")) {
             ActiveTxnData.getInstance().setLocalHostConnectionType(false);
