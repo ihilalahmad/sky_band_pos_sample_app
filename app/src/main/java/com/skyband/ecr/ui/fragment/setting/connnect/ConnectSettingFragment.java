@@ -249,13 +249,13 @@ public class ConnectSettingFragment extends Fragment implements AdapterView.OnIt
         if (selectedItem.equals("AppToApp(LocalHost)")) {
             ActiveTxnData.getInstance().setLocalHostConnectionType(true);
             GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, "localhost");
+            connectSettingFragmentBinding.ipAddress.setText("localhost");
+            connectSettingFragmentBinding.portNo.setText(GeneralParamCache.getInstance().getString(Constant.PORT));
 
         } else if (selectedItem.equals("TC/IP")) {
             ActiveTxnData.getInstance().setLocalHostConnectionType(false);
 
             if (GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS) != null && GeneralParamCache.getInstance().getString(Constant.IP_ADDRESS).equals("localhost")) {
-                GeneralParamCache.getInstance().putString(Constant.IP_ADDRESS, null);
-                GeneralParamCache.getInstance().putString(Constant.PORT, null);
                 connectSettingFragmentBinding.ipAddress.getText().clear();
                 connectSettingFragmentBinding.portNo.getText().clear();
             }
