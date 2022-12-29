@@ -352,7 +352,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         ActiveTxnData.getInstance().setPosition(position);
         selectedItem = parent.getItemAtPosition(position).toString();
         logger.debug("Dropdown Selected Item>>" + selectedItem);
-        if (selectedItem.equals(TransactionType.PURCHASE_ADVICE_FULL.getTransactionType())) {
+        if (selectedItem.equals(TransactionType.PURCHASE_ADVICE_FULL)) {
             ActiveTxnData.getInstance().setPartialCapture(false);
             selectedItem = "Purchase Advice Full";
         } else if (selectedItem.equals("Purchase Advice(Partial Capture)")) {

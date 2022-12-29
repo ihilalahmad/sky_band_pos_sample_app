@@ -30,6 +30,7 @@ public class ActiveTxnData {
     private String cashRegisterNo;
     private boolean isLastTxnSummary;
 
+
     private static ActiveTxnData activeTxnData;
 
     private ActiveTxnData() {
@@ -45,4 +46,155 @@ public class ActiveTxnData {
         return activeTxnData;
     }
 
+    public String getReqData() {
+        return reqData;
+    }
+
+    public void setReqData(String reqData) {
+        this.reqData = reqData;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public String getTerminalID() {
+        return terminalID;
+    }
+
+    public void setTerminalID(String terminalID) {
+        this.terminalID = terminalID;
+    }
+
+    public String getSzSignature() {
+        return szSignature;
+    }
+
+    public void setSzSignature(String szSignature) {
+        this.szSignature = szSignature;
+    }
+
+    public String getEcrReferenceNo() {
+        return ecrReferenceNo;
+    }
+
+    public void setEcrReferenceNo(String ecrReferenceNo) {
+        this.ecrReferenceNo = ecrReferenceNo;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
+
+    public boolean isSessionStarted() {
+        return sessionStarted;
+    }
+
+    public void setSessionStarted(boolean sessionStarted) {
+        this.sessionStarted = sessionStarted;
+    }
+
+    public String getResData() {
+        return resData;
+    }
+
+    public void setResData(String resData) {
+        this.resData = resData;
+    }
+
+    public String[] getReplacedArray() {
+        return replacedArray;
+    }
+
+    public void setReplacedArray(String[] replacedArray) {
+        this.replacedArray = replacedArray;
+    }
+
+    public String[] getSummaryReportArray() {
+        return summaryReportArray;
+    }
+
+    public void setSummaryReportArray(String[] summaryReportArray) {
+        this.summaryReportArray = summaryReportArray;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getConnectPosition() {
+        return connectPosition;
+    }
+
+    public void setConnectPosition(int connectPosition) {
+        this.connectPosition = connectPosition;
+    }
+
+    public boolean isLocalHostConnectionType() {
+        return isLocalHostConnectionType;
+    }
+
+    public void setLocalHostConnectionType(boolean localHostConnectionType) {
+        isLocalHostConnectionType = localHostConnectionType;
+    }
+
+    public boolean isPartialCapture() {
+        return isPartialCapture;
+    }
+
+    public void setPartialCapture(boolean partialCapture) {
+        isPartialCapture = partialCapture;
+    }
+
+    public BluetoothDevice getDevice() {
+        return device;
+    }
+
+    public void setDevice(BluetoothDevice device) {
+        this.device = device;
+    }
+
+    public String getReceivedIntentData() {
+        return receivedIntentData;
+    }
+
+    public void setReceivedIntentData(String receivedIntentData) {
+        this.receivedIntentData = receivedIntentData;
+    }
+
+    public String getCashRegisterNo() {
+        return cashRegisterNo;
+    }
+
+    public void setCashRegisterNo(String cashRegisterNo) {
+        this.cashRegisterNo = cashRegisterNo;
+    }
+
+    public boolean isLastTxnSummary() {
+        return isLastTxnSummary;
+    }
+
+    public void setLastTxnSummary(boolean lastTxnSummary) {
+        isLastTxnSummary = lastTxnSummary;
+    }
+
+    public static ActiveTxnData getActiveTxnData() {
+        return activeTxnData;
+    }
+
+    public static void setActiveTxnData(ActiveTxnData activeTxnData) {
+        ActiveTxnData.activeTxnData = activeTxnData;
+    }
 }
